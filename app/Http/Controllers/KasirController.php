@@ -180,16 +180,76 @@ class KasirController extends Controller
     }
 
     /**
-     * Tampilkan riwayat penjualan (GET JSON).
+     * Tampilkan riwayat penjualan dengan filter periode.
      */
-    public function riwayat(): View
+    public function riwayat(Request $request): View
     {
-        $riwayat = Penjualan::with(['details.product', 'account'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        $periode    = $request->get('periode', 'semua');
+        $startDate  = $request->get('start_date');
+        $endDate    = $request->get('end_date');
 
-        return view('kasir.riwayat', compact('riwayat'));
+        $now = \Carbon\Carbon::now();
+
+        // Tentukan rentang tanggal berdasarkan preset
+        switch ($periode) {
+            case 'hari_ini':
+                $start = $now->copy()->startOfDay();
+                $end   = $now->copy()->endOfDay();
+                break;
+            case '7_hari':
+                $start = $now->copy()->subDays(6)->startOfDay();
+                $end   = $now->copy()->endOfDay();
+                break;
+            case 'bulan_ini':
+                $start = $now->copy()->startOfMonth();
+                $end   = $now->copy()->endOfMonth();
+                break;
+            case 'bulan_lalu':
+                $start = $now->copy()->subMonth()->startOfMonth();
+                $end   = $now->copy()->subMonth()->endOfMonth();
+                break;
+            case 'tahun_ini':
+                $start = $now->copy()->startOfYear();
+                $end   = $now->copy()->endOfYear();
+                break;
+            case 'custom':
+                $start = $startDate ? \Carbon\Carbon::parse($startDate)->startOfDay() : $now->copy()->subDays(30)->startOfDay();
+                $end   = $endDate   ? \Carbon\Carbon::parse($endDate)->endOfDay()     : $now->copy()->endOfDay();
+                break;
+            default: // semua
+                $start = null;
+                $end   = null;
+                break;
+        }
+
+        $query = Penjualan::with(['details.product', 'account'])
+            ->orderBy('created_at', 'desc');
+
+        if ($start && $end) {
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        $riwayat    = $query->paginate(20)->withQueryString();
+        $totalOmzet = $query->sum('total_bayar');
+
+        // Format label periode untuk tampilan
+        $periodeLabel = match($periode) {
+            'hari_ini'    => 'Hari Ini',
+            '7_hari'      => '7 Hari Terakhir',
+            'bulan_ini'   => 'Bulan Ini',
+            'bulan_lalu'  => 'Bulan Lalu',
+            'tahun_ini'   => 'Tahun Ini',
+            'custom'      => 'Kustom',
+            default       => 'Semua Waktu',
+        };
+
+        return view('kasir.riwayat', compact(
+            'riwayat', 'periode', 'periodeLabel',
+            'startDate', 'endDate', 'totalOmzet',
+            'start', 'end'
+        ));
     }
+
 
     /**
      * Cetak Struk Belanja Kasir (Format Thermal Paper 58mm / 80mm).

@@ -46,7 +46,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                             <th class="py-3.5 px-6">ID</th>
                             <th class="py-3.5 px-6">Nama Pengguna</th>
                             <th class="py-3.5 px-6">Email</th>
@@ -75,23 +75,30 @@
                                         {{ ucfirst($item->role ?? 'User') }}
                                     </span>
                                 </td>
-                                <td class="py-4 px-6 text-right space-x-2">
-                                    <button
-                                        type="button"
-                                        class="text-xs font-medium text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer btn-edit"
-                                        data-id="{{ $item->id_akun }}"
-                                        data-nama="{{ $item->nama_akun }}"
-                                        data-email="{{ $item->email_akun }}"
-                                        data-telepon="{{ $item->no_telepon }}"
-                                        data-role="{{ $item->role }}"
-                                    >Edit</button>
-                                    <span class="text-slate-300">|</span>
-                                    <button
-                                        type="button"
-                                        class="text-xs font-medium text-rose-600 hover:text-rose-800 hover:underline cursor-pointer btn-hapus"
-                                        data-id="{{ $item->id_akun }}"
-                                        data-nama="{{ $item->nama_akun }}"
-                                    >Hapus</button>
+                                <td class="py-4 px-6 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <button
+                                            type="button"
+                                            class="btn-edit w-8 h-8 rounded-lg flex items-center justify-center text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition cursor-pointer"
+                                            title="Edit akun"
+                                            data-id="{{ $item->id_akun }}"
+                                            data-nama="{{ $item->nama_akun }}"
+                                            data-email="{{ $item->email_akun }}"
+                                            data-telepon="{{ $item->no_telepon }}"
+                                            data-role="{{ $item->role }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn-hapus w-8 h-8 rounded-lg flex items-center justify-center text-rose-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                                            title="Hapus akun"
+                                            data-id="{{ $item->id_akun }}"
+                                            data-nama="{{ $item->nama_akun }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -143,7 +150,7 @@
             </div>
 
             <!-- Form -->
-            <form action="{{ route('account.store') }}" method="POST" class="p-6 space-y-4">
+            <form action="{{ route('account.store') }}" method="POST" class="p-6 space-y-4" onsubmit="return validatePhoneOnSubmit('no_telepon','phone-hint-create')">
                 @csrf
 
                 <!-- Nama Lengkap / Akun -->
@@ -195,8 +202,14 @@
                             id="no_telepon" 
                             value="{{ old('no_telepon') }}"
                             placeholder="08xxxxxxxxxx"
+                            inputmode="numeric"
+                            pattern="^08\d{9,10}$"
+                            minlength="11"
+                            maxlength="12"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                             class="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition {{ $errors->has('no_telepon') ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200' }}"
                         >
+                        <p id="phone-hint-create" class="text-[11px] mt-1 text-rose-500 font-semibold hidden"></p>
                         @error('no_telepon')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -306,7 +319,7 @@
             </div>
 
             <!-- Form -->
-            <form id="edit-form" action="" method="POST" class="p-6 space-y-4">
+            <form id="edit-form" action="" method="POST" class="p-6 space-y-4" onsubmit="return validatePhoneOnSubmit('edit_no_telepon','phone-hint-edit')">
                 @csrf
                 @method('PUT')
 
@@ -350,8 +363,14 @@
                             name="no_telepon" 
                             id="edit_no_telepon" 
                             placeholder="08xxxxxxxxxx"
+                            inputmode="numeric"
+                            pattern="^08\d{9,10}$"
+                            minlength="11"
+                            maxlength="12"
+                            oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                         >
+                        <p id="phone-hint-edit" class="text-[11px] mt-1 text-rose-500 font-semibold hidden"></p>
                     </div>
                 </div>
 
@@ -592,6 +611,47 @@
             }
         }
         window.togglePasswordVisibility = togglePasswordVisibility;
+
+        // Phone validation — only on form submit
+        function validatePhoneOnSubmit(inputId, hintId) {
+            const input = document.getElementById(inputId);
+            const hint = document.getElementById(hintId);
+            if (!input || !hint) return true;
+
+            const val = input.value.trim();
+
+            // Kosong = wajib diisi
+            if (val.length === 0) {
+                hint.textContent = '✕ No. telepon wajib diisi';
+                hint.classList.remove('hidden');
+                input.classList.add('border-rose-400');
+                input.focus();
+                return false;
+            }
+
+            if (!val.startsWith('08')) {
+                hint.textContent = '✕ Nomor harus diawali dengan 08';
+                hint.classList.remove('hidden');
+                input.classList.add('border-rose-400');
+                input.classList.remove('border-slate-200');
+                input.focus();
+                return false;
+            }
+
+            if (val.length < 11 || val.length > 12) {
+                hint.textContent = '✕ Nomor harus 11-12 digit (' + val.length + ' digit dimasukkan)';
+                hint.classList.remove('hidden');
+                input.classList.add('border-rose-400');
+                input.classList.remove('border-slate-200');
+                input.focus();
+                return false;
+            }
+
+            // Valid
+            hint.classList.add('hidden');
+            input.classList.remove('border-rose-400');
+            return true;
+        }
     </script>
 </x-layout>
 

@@ -86,7 +86,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                             <th class="py-3.5 px-6">Kode & Nama Produk</th>
                             <th class="py-3.5 px-6">Kategori</th>
                             <th class="py-3.5 px-6">Stok Saat Ini</th>
@@ -101,16 +101,35 @@
                             <tr class="hover:bg-slate-50/60 transition {{ request('edit') == $item->id_produk ? 'bg-amber-50/70 border-l-4 border-amber-500' : '' }}">
                                 <!-- Kode & Nama -->
                                 <td class="py-4 px-6">
-                                    <div class="flex flex-col">
-                                        <span class="font-bold text-slate-900">{{ $item->nama_produk }}</span>
-                                        <span class="text-xs font-mono text-indigo-600 font-medium">{{ $item->kode_produk }}</span>
+                                    <div class="flex flex-col gap-1">
+                                        <span class="font-bold text-slate-900 text-[15px] leading-tight">{{ $item->nama_produk }}</span>
+                                        <span class="inline-flex items-center gap-1 font-mono text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md w-fit">
+                                            <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                                            {{ $item->kode_produk }}
+                                        </span>
                                     </div>
                                 </td>
 
                                 <!-- Kategori -->
-                                <td class="py-4 px-6 text-slate-600">
+                                <td class="py-4 px-6">
                                     @if($item->category)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                                        @php
+                                            $catColors = [
+                                                ['bg-violet-50 text-violet-700 border-violet-200'],
+                                                ['bg-sky-50 text-sky-700 border-sky-200'],
+                                                ['bg-emerald-50 text-emerald-700 border-emerald-200'],
+                                                ['bg-amber-50 text-amber-700 border-amber-200'],
+                                                ['bg-rose-50 text-rose-700 border-rose-200'],
+                                                ['bg-indigo-50 text-indigo-700 border-indigo-200'],
+                                                ['bg-teal-50 text-teal-700 border-teal-200'],
+                                                ['bg-orange-50 text-orange-700 border-orange-200'],
+                                                ['bg-pink-50 text-pink-700 border-pink-200'],
+                                                ['bg-cyan-50 text-cyan-700 border-cyan-200'],
+                                            ];
+                                            $ci = $item->id_kategori % count($catColors);
+                                        @endphp
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border {{ $catColors[$ci][0] }}">
+                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                                             {{ $item->category->nama_kategori }}
                                         </span>
                                     @else
@@ -155,36 +174,39 @@
                                 </td>
 
                                 <!-- Tombol Aksi -->
-                                <td class="py-4 px-6 text-right space-x-2">
-                                    <!-- Button Edit -->
-                                    <button 
-                                        type="button" 
-                                        class="btn-open-edit-modal text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
-                                        data-id="{{ $item->id_produk }}"
-                                        data-kode="{{ $item->kode_produk }}"
-                                        data-nama="{{ $item->nama_produk }}"
-                                        data-kategori="{{ $item->id_kategori }}"
-                                        data-satuan-terkecil="{{ $item->satuan_terkecil }}"
-                                        data-satuan-besar="{{ $item->satuan_besar }}"
-                                        data-isi="{{ $item->isi_per_satuan_besar }}"
-                                        data-lokasi="{{ $item->lokasi_produk }}"
-                                        data-stok-min="{{ $item->stok_minimum }}"
-                                        data-stok="{{ $item->stok_produk }}"
-                                        data-harga-beli="{{ $item->harga_beli_terakhir }}"
-                                        data-harga-jual="{{ $item->harga_jual }}"
-                                    >
-                                        Edit
-                                    </button>
-                                    <span class="text-slate-200">|</span>
-                                    <!-- Button Hapus -->
-                                    <button 
-                                        type="button" 
-                                        class="btn-open-delete-modal text-xs font-semibold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
-                                        data-id="{{ $item->id_produk }}"
-                                        data-nama="{{ $item->nama_produk }}"
-                                    >
-                                        Hapus
-                                    </button>
+                                <td class="py-4 px-6 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <!-- Icon Edit -->
+                                        <button 
+                                            type="button" 
+                                            class="btn-open-edit-modal w-8 h-8 rounded-lg flex items-center justify-center text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition cursor-pointer"
+                                            title="Edit produk"
+                                            data-id="{{ $item->id_produk }}"
+                                            data-kode="{{ $item->kode_produk }}"
+                                            data-nama="{{ $item->nama_produk }}"
+                                            data-kategori="{{ $item->id_kategori }}"
+                                            data-satuan-terkecil="{{ $item->satuan_terkecil }}"
+                                            data-satuan-besar="{{ $item->satuan_besar }}"
+                                            data-isi="{{ $item->isi_per_satuan_besar }}"
+                                            data-lokasi="{{ $item->lokasi_produk }}"
+                                            data-stok-min="{{ $item->stok_minimum }}"
+                                            data-stok="{{ $item->stok_produk }}"
+                                            data-harga-beli="{{ $item->harga_beli_terakhir }}"
+                                            data-harga-jual="{{ $item->harga_jual }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        </button>
+                                        <!-- Icon Hapus -->
+                                        <button 
+                                            type="button" 
+                                            class="btn-open-delete-modal w-8 h-8 rounded-lg flex items-center justify-center text-rose-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                                            title="Hapus produk"
+                                            data-id="{{ $item->id_produk }}"
+                                            data-nama="{{ $item->nama_produk }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

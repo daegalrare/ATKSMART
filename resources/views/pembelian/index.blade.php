@@ -220,7 +220,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                             <th class="py-3.5 px-6">ID & Tanggal Masuk</th>
                             <th class="py-3.5 px-6">Produk / Barang</th>
                             <th class="py-3.5 px-6">Stok Master Saat Ini</th>
@@ -287,10 +287,7 @@
 
                                 <!-- Jumlah Masuk -->
                                 <td class="py-4 px-6">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
-                                        </svg>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                         +{{ number_format($item->jumlah_barang_masuk) }} {{ $item->product->satuan_terkecil ?? 'unit' }}
                                     </span>
                                 </td>
@@ -306,32 +303,35 @@
                                 </td>
 
                                 <!-- Tombol Aksi -->
-                                <td class="py-4 px-6 text-right space-x-2">
-                                    <!-- Button Edit -->
-                                    <button 
-                                        type="button" 
-                                        class="btn-open-edit-modal text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
-                                        data-id="{{ $item->id_pembelian }}"
-                                        data-produk-id="{{ $item->id_produk }}"
-                                        data-tanggal="{{ $item->tanggal_masuk ? \Carbon\Carbon::parse($item->tanggal_masuk)->format('Y-m-d') : '' }}"
-                                        data-jumlah="{{ $item->jumlah_barang_masuk }}"
-                                        data-harga="{{ $item->harga_beli_satuan }}"
-                                        data-total="{{ $item->total_harga_beli }}"
-                                    >
-                                        Edit
-                                    </button>
-                                    <span class="text-slate-200">|</span>
-                                    <!-- Button Hapus -->
-                                    <button 
-                                        type="button" 
-                                        class="btn-open-delete-modal text-xs font-semibold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
-                                        data-id="{{ $item->id_pembelian }}"
-                                        data-nama="{{ $item->product->nama_produk ?? 'Pembelian #' . $item->id_pembelian }}"
-                                        data-jumlah="{{ $item->jumlah_barang_masuk }}"
-                                        data-tanggal="{{ $item->tanggal_masuk ? \Carbon\Carbon::parse($item->tanggal_masuk)->format('d/m/Y') : '-' }}"
-                                    >
-                                        Hapus
-                                    </button>
+                                <td class="py-4 px-6 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <!-- Icon Edit -->
+                                        <button 
+                                            type="button" 
+                                            class="btn-open-edit-modal w-8 h-8 rounded-lg flex items-center justify-center text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition cursor-pointer"
+                                            title="Edit pembelian"
+                                            data-id="{{ $item->id_pembelian }}"
+                                            data-produk-id="{{ $item->id_produk }}"
+                                            data-tanggal="{{ $item->tanggal_masuk ? \Carbon\Carbon::parse($item->tanggal_masuk)->format('Y-m-d') : '' }}"
+                                            data-jumlah="{{ $item->jumlah_barang_masuk }}"
+                                            data-harga="{{ $item->harga_beli_satuan }}"
+                                            data-total="{{ $item->total_harga_beli }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        </button>
+                                        <!-- Icon Hapus -->
+                                        <button 
+                                            type="button" 
+                                            class="btn-open-delete-modal w-8 h-8 rounded-lg flex items-center justify-center text-rose-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                                            title="Hapus pembelian"
+                                            data-id="{{ $item->id_pembelian }}"
+                                            data-nama="{{ $item->product->nama_produk ?? 'Pembelian #' . $item->id_pembelian }}"
+                                            data-jumlah="{{ $item->jumlah_barang_masuk }}"
+                                            data-tanggal="{{ $item->tanggal_masuk ? \Carbon\Carbon::parse($item->tanggal_masuk)->format('d/m/Y') : '-' }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -473,7 +473,7 @@
                 <!-- Total Estimasi Pembelian (Live Calculation Banner) -->
                 <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Biaya Pembelian</p>
+                        <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Total Biaya Pembelian</p>
                         <p id="create_total_label" class="text-xl font-black text-indigo-700 mt-0.5">Rp 0</p>
                     </div>
                     <div class="text-right">
@@ -588,7 +588,7 @@
                 <!-- Total Estimasi Pembelian -->
                 <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Biaya Pembelian</p>
+                        <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Total Biaya Pembelian</p>
                         <p id="edit_total_label" class="text-xl font-black text-indigo-700 mt-0.5">Rp 0</p>
                     </div>
                     <div class="text-right">

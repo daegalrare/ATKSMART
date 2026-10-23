@@ -215,7 +215,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                             <th class="py-3.5 px-6">ID & Tanggal Cek</th>
                             <th class="py-3.5 px-6">Produk / Barang</th>
                             <th class="py-3.5 px-6">Stok Master Saat Ini</th>
@@ -306,31 +306,34 @@
                                 </td>
 
                                 <!-- Tombol Aksi -->
-                                <td class="py-4 px-6 text-right space-x-2">
-                                    <!-- Button Edit -->
-                                    <button 
-                                        type="button" 
-                                        class="btn-open-edit-modal text-xs font-semibold text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
-                                        data-id="{{ $item->id_penyesuaian }}"
-                                        data-produk-id="{{ $item->id_produk }}"
-                                        data-tanggal="{{ $item->tanggal_cek ? \Carbon\Carbon::parse($item->tanggal_cek)->format('Y-m-d') : '' }}"
-                                        data-selisih="{{ $item->jumlah_selisih }}"
-                                        data-keterangan="{{ $item->keterangan ?? '' }}"
-                                    >
-                                        Edit
-                                    </button>
-                                    <span class="text-slate-200">|</span>
-                                    <!-- Button Hapus -->
-                                    <button 
-                                        type="button" 
-                                        class="btn-open-delete-modal text-xs font-semibold text-rose-600 hover:text-rose-800 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
-                                        data-id="{{ $item->id_penyesuaian }}"
-                                        data-nama="{{ $item->product->nama_produk ?? 'Penyesuaian #' . $item->id_penyesuaian }}"
-                                        data-selisih="{{ $item->jumlah_selisih > 0 ? '+' . $item->jumlah_selisih : $item->jumlah_selisih }}"
-                                        data-tanggal="{{ $item->tanggal_cek ? \Carbon\Carbon::parse($item->tanggal_cek)->format('d/m/Y') : '-' }}"
-                                    >
-                                        Hapus
-                                    </button>
+                                <td class="py-4 px-6 text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <!-- Icon Edit -->
+                                        <button 
+                                            type="button" 
+                                            class="btn-open-edit-modal w-8 h-8 rounded-lg flex items-center justify-center text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 border border-transparent hover:border-indigo-200 transition cursor-pointer"
+                                            title="Edit penyesuaian"
+                                            data-id="{{ $item->id_penyesuaian }}"
+                                            data-produk-id="{{ $item->id_produk }}"
+                                            data-tanggal="{{ $item->tanggal_cek ? \Carbon\Carbon::parse($item->tanggal_cek)->format('Y-m-d') : '' }}"
+                                            data-selisih="{{ $item->jumlah_selisih }}"
+                                            data-keterangan="{{ $item->keterangan ?? '' }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        </button>
+                                        <!-- Icon Hapus -->
+                                        <button 
+                                            type="button" 
+                                            class="btn-open-delete-modal w-8 h-8 rounded-lg flex items-center justify-center text-rose-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition cursor-pointer"
+                                            title="Hapus penyesuaian"
+                                            data-id="{{ $item->id_penyesuaian }}"
+                                            data-nama="{{ $item->product->nama_produk ?? 'Penyesuaian #' . $item->id_penyesuaian }}"
+                                            data-selisih="{{ $item->jumlah_selisih > 0 ? '+' . $item->jumlah_selisih : $item->jumlah_selisih }}"
+                                            data-tanggal="{{ $item->tanggal_cek ? \Carbon\Carbon::parse($item->tanggal_cek)->format('d/m/Y') : '-' }}"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -505,7 +508,7 @@
                 <!-- Preview Dampak Stok (Live Box) -->
                 <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Estimasi Stok Akhir</p>
+                        <p class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Estimasi Stok Akhir</p>
                         <p id="create_preview_akhir" class="text-xl font-black text-indigo-700 mt-0.5">0 unit</p>
                     </div>
                     <div class="text-right">

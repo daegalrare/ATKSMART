@@ -11,11 +11,11 @@
         <!-- ======================================================== -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
 
-            <!-- Card 1: Total Patients / Total Transaksi -->
-            <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xs p-5 flex items-center justify-between hover:shadow-md transition-shadow">
+            <!-- Card 1: Total Penjualan -->
+            <div onclick="openModalCard('penjualan')" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xs p-5 flex items-center justify-between hover:shadow-md hover:border-purple-200 transition-all cursor-pointer group" title="Klik untuk melihat rincian penjualan">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-                        <!-- Bed / Shopping Bag Icon -->
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 group-hover:bg-purple-100 flex items-center justify-center shrink-0 transition-colors">
+                        <!-- Shopping Bag Icon -->
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
@@ -25,15 +25,15 @@
                         <p class="text-xs font-medium text-slate-400 mt-0.5">Total Penjualan</p>
                     </div>
                 </div>
-                <button type="button" onclick="openModalCard('penjualan')" class="text-slate-300 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition p-1.5 cursor-pointer" title="Lihat Riwayat Penjualan">
+                <button type="button" class="text-slate-300 group-hover:text-purple-600 group-hover:bg-purple-50 rounded-xl transition p-1.5" title="Lihat Riwayat Penjualan">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
                 </button>
             </div>
 
-            <!-- Card 2: Available Staff / Total Produk -->
-            <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xs p-5 flex items-center justify-between hover:shadow-md transition-shadow">
+            <!-- Card 2: Produk Aktif -->
+            <div onclick="openModalCard('produk')" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xs p-5 flex items-center justify-between hover:shadow-md hover:border-sky-200 transition-all cursor-pointer group" title="Klik untuk melihat daftar produk aktif">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-500 flex items-center justify-center shrink-0">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-500 group-hover:bg-sky-100 flex items-center justify-center shrink-0 transition-colors">
                         <!-- Staff / Products Icon -->
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
@@ -44,15 +44,15 @@
                         <p class="text-xs font-medium text-slate-400 mt-0.5">Produk Aktif</p>
                     </div>
                 </div>
-                <button type="button" onclick="openModalCard('produk')" class="text-slate-300 hover:text-sky-600 hover:bg-sky-50 rounded-xl transition p-1.5 cursor-pointer" title="Lihat Daftar Produk Aktif">
+                <button type="button" class="text-slate-300 group-hover:text-sky-600 group-hover:bg-sky-50 rounded-xl transition p-1.5" title="Lihat Daftar Produk Aktif">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
                 </button>
             </div>
 
-            <!-- Card 3: Avg Treat. Costs / Rata-rata Transaksi -->
-            <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xs p-5 flex items-center justify-between hover:shadow-md transition-shadow">
+            <!-- Card 3: Rata-rata Transaksi -->
+            <div onclick="openModalCard('analisis')" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-xs p-5 flex items-center justify-between hover:shadow-md hover:border-amber-200 transition-all cursor-pointer group" title="Klik untuk melihat analisis transaksi">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 group-hover:bg-amber-100 flex items-center justify-center shrink-0 transition-colors">
                         <!-- Wallet / Cash Icon -->
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M21 11.25V7.5a1.5 1.5 0 00-1.5-1.5H4.5A1.5 1.5 0 003 7.5v3.75m18 0H3m12 4.5h3" />
@@ -69,7 +69,7 @@
                         <p class="text-xs font-medium text-slate-400 mt-0.5">Rata-rata Transaksi</p>
                     </div>
                 </div>
-                <button type="button" onclick="openModalCard('analisis')" class="text-slate-300 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition p-1.5 cursor-pointer" title="Lihat Analisis Transaksi">
+                <button type="button" class="text-slate-300 group-hover:text-amber-600 group-hover:bg-amber-50 rounded-xl transition p-1.5" title="Lihat Analisis Transaksi">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
                 </button>
             </div>
@@ -139,16 +139,18 @@
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-2">
                     
                     <!-- Dual Bar Chart -->
-                    <div class="md:col-span-8 h-64 relative">
-                        <canvas id="trendBarChart"></canvas>
+                    <div class="md:col-span-8 flex flex-col justify-between">
+                        <div class="h-56 relative w-full">
+                            <canvas id="trendBarChart"></canvas>
+                        </div>
                         <!-- Legend bawah bar -->
-                        <div class="flex items-center justify-center gap-6 mt-3 text-xs">
+                        <div class="flex items-center justify-center gap-6 pt-4 pb-1 text-xs">
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block shadow-2xs"></span>
                                 <span class="text-slate-600 font-medium">Pendapatan</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-2xs"></span>
                                 <span class="text-slate-600 font-medium">Transaksi</span>
                             </div>
                         </div>
@@ -225,10 +227,34 @@
                 <div class="flex items-center justify-between pb-3">
                     <div>
                         <h3 class="text-base font-bold text-slate-800">Waktu Transaksi</h3>
-                        <p id="time-filter-desc" class="text-xs text-slate-400 mt-0.5">Mengikuti filter Tren Penjualan</p>
+                        <p id="time-filter-desc" class="text-xs text-slate-400 mt-0.5">Frekuensi transaksi 6 bulan terakhir</p>
                     </div>
-                    <!-- Label periode sinkron dari Tren Penjualan (tidak ada dropdown sendiri) -->
-                    <span id="time-filter-label" class="text-xs text-slate-600 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl font-medium shadow-2xs">6 Bulan Terakhir</span>
+                    <!-- Dropdown Filter Waktu Transaksi -->
+                    <div class="relative inline-block text-left" id="time-filter-wrapper">
+                        <button id="time-filter-btn" type="button" class="flex items-center gap-1.5 text-xs text-slate-600 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl font-medium cursor-pointer hover:bg-slate-100 transition shadow-2xs">
+                            <span id="time-filter-label">6 Bulan Terakhir</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="time-filter-menu" class="absolute right-0 mt-1 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 hidden z-30 text-xs">
+                            <button type="button" onclick="switchTimeMode('today')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700 cursor-pointer flex items-center justify-between">
+                                <span>Hari Ini</span>
+                            </button>
+                            <button type="button" onclick="switchTimeMode('week')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700 cursor-pointer flex items-center justify-between">
+                                <span>Seminggu Terakhir</span>
+                            </button>
+                            <button type="button" onclick="switchTimeMode('month')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700 cursor-pointer flex items-center justify-between">
+                                <span>1 Bulan Terakhir</span>
+                            </button>
+                            <button type="button" onclick="switchTimeMode('months_6')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700 cursor-pointer flex items-center justify-between">
+                                <span>6 Bulan Terakhir</span>
+                            </button>
+                            <button type="button" onclick="switchTimeMode('year')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700 cursor-pointer flex items-center justify-between">
+                                <span>1 Tahun Terakhir</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Orange Spline Wave Chart -->
@@ -290,8 +316,8 @@
             <div class="lg:col-span-3 bg-gradient-to-br from-indigo-700 via-purple-700 to-violet-800 rounded-3xl p-6 text-white shadow-xl shadow-purple-600/20 relative overflow-hidden flex flex-col justify-between">
                 <!-- Top Stat -->
                 <div class="relative z-10">
-                    <h2 class="text-4xl font-extrabold tracking-tight">{{ number_format($bulanIniTotal) }}</h2>
-                    <p class="text-xs text-purple-200 mt-1 font-medium">Transaksi bulan ini</p>
+                    <h2 id="purple-card-count" class="text-4xl font-extrabold tracking-tight">{{ number_format($purpleData['months_6']['total'] ?? $bulanIniTotal) }}</h2>
+                    <p id="purple-card-desc" class="text-xs text-purple-200 mt-1 font-medium">{{ $purpleData['months_6']['desc'] ?? 'Transaksi 6 bulan terakhir' }}</p>
                 </div>
 
                 <!-- Sparkline Wave in White -->
@@ -300,8 +326,8 @@
                 </div>
 
                 <!-- Bottom X-axis Dates -->
-                <div class="flex items-center justify-between text-[11px] font-semibold text-purple-200/80 px-1 relative z-10">
-                    @foreach ($sparklineLabels as $sLabel)
+                <div id="purple-card-labels" class="flex items-center justify-between text-[11px] font-semibold text-purple-200/80 px-1 relative z-10">
+                    @foreach (($purpleData['months_6']['labels'] ?? $sparklineLabels) as $sLabel)
                         <span>{{ $sLabel }}</span>
                     @endforeach
                 </div>
@@ -641,6 +667,7 @@
             // 1. TREN BAR CHART (Dual Bars: Transaksi & Pendapatan)
             // ==========================================
             const trendDatasets = @json($trendData);
+            const purpleDatasets = @json($purpleData);
             const currentTrendMode = 'months_6';
             const initialTrend = trendDatasets[currentTrendMode] || trendDatasets['months_6'];
 
@@ -742,21 +769,77 @@
                 });
             }
 
-            window.switchTrendMode = function(mode) {
-                const selected = trendDatasets[mode];
-                if (!selected) return;
+            window.switchDashboardPeriod = function(mode) {
+                // 1. Update Tren Penjualan & Pendapatan
+                const trendSelected = trendDatasets[mode];
+                if (trendSelected) {
+                    trendBarChart.data.labels = trendSelected.labels;
+                    trendBarChart.data.datasets[0].data = trendSelected.penjualan;
+                    trendBarChart.data.datasets[1].data = trendSelected.pendapatan;
+                    trendBarChart.update();
+                    if (trendFilterLabel) trendFilterLabel.textContent = trendSelected.label;
+                }
 
-                trendBarChart.data.labels = selected.labels;
-                trendBarChart.data.datasets[0].data = selected.penjualan;
-                trendBarChart.data.datasets[1].data = selected.pendapatan;
-                trendBarChart.update();
+                // 2. Update Waktu Transaksi
+                const timeSelected = timeDatasets[mode];
+                if (timeSelected) {
+                    const dataArr = timeSelected.penjualan;
+                    const maxVal = Math.max(...dataArr);
+                    const peakIndex = maxVal > 0 ? dataArr.indexOf(maxVal) : -1;
+                    const pointRadii = dataArr.map((v, i) => i === peakIndex ? 5 : 0);
 
-                if (trendFilterLabel) trendFilterLabel.textContent = selected.label;
+                    timeAdmittedChart.data.labels = timeSelected.labels;
+                    timeAdmittedChart.data.datasets[0].data = dataArr;
+                    timeAdmittedChart.data.datasets[0].pointRadius = pointRadii;
+                    timeAdmittedChart.options.scales.x.ticks.font = (ctx) => ({
+                        weight: (peakIndex !== -1 && ctx.index === peakIndex) ? 'bold' : 'normal',
+                        size: 10
+                    });
+                    timeAdmittedChart.options.scales.x.ticks.color = (ctx) => (peakIndex !== -1 && ctx.index === peakIndex) ? ORANGE : '#94a3b8';
+                    timeAdmittedChart.options.scales.y.suggestedMax = Math.max(3, maxVal + 1);
+                    timeAdmittedChart.options.scales.y.ticks.stepSize = maxVal > 4 ? Math.ceil(maxVal / 4) : 1;
+                    timeAdmittedChart.update();
+
+                    const timeFilterLabelEl = document.getElementById('time-filter-label');
+                    const timeFilterDescEl = document.getElementById('time-filter-desc');
+                    if (timeFilterLabelEl) timeFilterLabelEl.textContent = timeSelected.label;
+                    if (timeFilterDescEl && timeSelected.desc) timeFilterDescEl.textContent = timeSelected.desc;
+                }
+
+                // 3. Update Kartu Transaksi Kanan Bawah (Ungu)
+                const purpleSelected = purpleDatasets[mode];
+                if (purpleSelected) {
+                    const purpleCountEl = document.getElementById('purple-card-count');
+                    const purpleDescEl = document.getElementById('purple-card-desc');
+                    const purpleLabelsEl = document.getElementById('purple-card-labels');
+
+                    if (purpleCountEl) purpleCountEl.textContent = Number(purpleSelected.total).toLocaleString('id-ID');
+                    if (purpleDescEl) purpleDescEl.textContent = purpleSelected.desc;
+
+                    const pData = purpleSelected.series;
+                    const maxP = Math.max(...pData);
+                    const peakP = maxP > 0 ? pData.lastIndexOf(maxP) : -1;
+                    const radiiP = pData.map((v, i) => i === peakP ? 4 : 0);
+
+                    purpleChart.data.labels = purpleSelected.labels;
+                    purpleChart.data.datasets[0].data = pData;
+                    purpleChart.data.datasets[0].pointRadius = radiiP;
+                    purpleChart.update();
+
+                    if (purpleLabelsEl && purpleSelected.labels) {
+                        purpleLabelsEl.innerHTML = purpleSelected.labels.map(l => `<span>${l}</span>`).join('');
+                    }
+                }
+
+                // Tutup semua menu
                 if (trendFilterMenu) trendFilterMenu.classList.add('hidden');
-
-                // Sinkronkan Waktu Transaksi dengan periode yang sama
-                switchTimeMode(mode);
+                const timeMenu = document.getElementById('time-filter-menu');
+                if (timeMenu) timeMenu.classList.add('hidden');
             };
+
+            // Sambungkan kedua tombol filter ke fungsi yang sama
+            window.switchTrendMode = window.switchDashboardPeriod;
+            window.switchTimeMode = window.switchDashboardPeriod;
 
             // ==========================================
             // 2. CIRCULAR GAUGE (Target Penjualan Donut)
@@ -818,8 +901,8 @@
             // 4. TIME ADMITTED / WAKTU TRANSAKSI
             // ==========================================
             const timeDatasets = @json($timeData);
-            const currentTimeMode = 'today';
-            const initialTime = timeDatasets[currentTimeMode] || timeDatasets['today'];
+            const currentTimeMode = 'months_6';
+            const initialTime = timeDatasets[currentTimeMode] || timeDatasets['months_6'];
 
             const ctxTime = document.getElementById('timeAdmittedChart').getContext('2d');
             const gradientOrange = ctxTime.createLinearGradient(0, 0, 0, 160);
@@ -892,57 +975,46 @@
                 }
             });
 
-            // Waktu Transaksi: ambil elemen label saja (tidak ada dropdown lagi)
-            const timeFilterLabel = document.getElementById('time-filter-label');
-            const timeFilterDesc = document.getElementById('time-filter-desc');
+            // Dropdown listener untuk Waktu Transaksi
+            const timeFilterBtn = document.getElementById('time-filter-btn');
+            const timeFilterMenuEl = document.getElementById('time-filter-menu');
 
-            window.switchTimeMode = function(mode) {
-                const selected = timeDatasets[mode];
-                if (!selected) return;
-
-                const dataArr = selected.penjualan;
-                const maxVal = Math.max(...dataArr);
-                const peakIndex = maxVal > 0 ? dataArr.indexOf(maxVal) : -1;
-                const pointRadii = dataArr.map((v, i) => i === peakIndex ? 5 : 0);
-
-                timeAdmittedChart.data.labels = selected.labels;
-                timeAdmittedChart.data.datasets[0].data = dataArr;
-                timeAdmittedChart.data.datasets[0].pointRadius = pointRadii;
-
-                timeAdmittedChart.options.scales.x.ticks.font = (ctx) => ({
-                    weight: (peakIndex !== -1 && ctx.index === peakIndex) ? 'bold' : 'normal',
-                    size: 10
+            if (timeFilterBtn && timeFilterMenuEl) {
+                timeFilterBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    timeFilterMenuEl.classList.toggle('hidden');
+                    if (trendFilterMenu) trendFilterMenu.classList.add('hidden');
                 });
-                timeAdmittedChart.options.scales.x.ticks.color = (ctx) => (peakIndex !== -1 && ctx.index === peakIndex) ? ORANGE : '#94a3b8';
-                timeAdmittedChart.options.scales.y.suggestedMax = Math.max(3, maxVal + 1);
-                timeAdmittedChart.options.scales.y.ticks.stepSize = maxVal > 4 ? Math.ceil(maxVal / 4) : 1;
-                timeAdmittedChart.update();
+            }
 
-                if (timeFilterLabel) timeFilterLabel.textContent = selected.label;
-            };
+            window.switchTimeMode = window.switchDashboardPeriod;
 
-            // Global listener to close Tren Penjualan dropdown when clicking outside
+            // Global listener untuk menutup semua menu saat klik di luar
             document.addEventListener('click', (e) => {
                 if (trendFilterBtn && trendFilterMenu && !trendFilterBtn.contains(e.target) && !trendFilterMenu.contains(e.target)) {
                     trendFilterMenu.classList.add('hidden');
                 }
+                if (timeFilterBtn && timeFilterMenuEl && !timeFilterBtn.contains(e.target) && !timeFilterMenuEl.contains(e.target)) {
+                    timeFilterMenuEl.classList.add('hidden');
+                }
             });
 
             // ==========================================
-            // 5. PURPLE CARD SPARKLINE (Transaksi Harian)
+            // 5. PURPLE CARD SPARKLINE (Default: 6 Bulan Terakhir)
             // ==========================================
             const ctxSpark = document.getElementById('purpleSparklineChart').getContext('2d');
-            const sparkData = @json($sparklineSeries);
-            const maxSpark = Math.max(...sparkData);
-            const peakSparkIndex = maxSpark > 0 ? sparkData.lastIndexOf(maxSpark) : -1;
-            const sparkRadii = sparkData.map((v, i) => i === peakSparkIndex ? 4 : 0);
+            const initialSparkData = purpleDatasets['months_6'].series;
+            const initialSparkLabels = purpleDatasets['months_6'].labels;
+            const maxSpark = Math.max(...initialSparkData);
+            const peakSparkIndex = maxSpark > 0 ? initialSparkData.lastIndexOf(maxSpark) : -1;
+            const sparkRadii = initialSparkData.map((v, i) => i === peakSparkIndex ? 4 : 0);
 
-            new Chart(ctxSpark, {
+            const purpleChart = new Chart(ctxSpark, {
                 type: 'line',
                 data: {
-                    labels: @json($sparklineLabels),
+                    labels: initialSparkLabels,
                     datasets: [{
-                        data: sparkData,
+                        data: initialSparkData,
                         borderColor: '#ffffff',
                         borderWidth: 2.2,
                         tension: 0.45,

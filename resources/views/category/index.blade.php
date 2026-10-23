@@ -112,7 +112,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead>
-                        <tr class="border-b border-slate-100 text-slate-400 uppercase tracking-wider font-semibold text-[10px] bg-slate-50/70">
+                        <tr class="border-b border-slate-100 text-slate-700 uppercase tracking-wider font-extrabold text-[11px] bg-slate-50/70">
                             <th class="px-5 py-3.5 text-center w-16">No</th>
                             <th class="px-5 py-3.5">Nama Kategori</th>
                             <th class="px-5 py-3.5 text-center">Jumlah Produk</th>

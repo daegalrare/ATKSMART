@@ -20,6 +20,65 @@
             </div>
         </div>
 
+        <!-- Filter Periode Waktu -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <!-- Preset Buttons -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider shrink-0">Periode:</span>
+                    @foreach([
+                        'semua'      => 'Semua',
+                        'hari_ini'   => 'Hari Ini',
+                        '7_hari'     => '7 Hari',
+                        'bulan_ini'  => 'Bulan Ini',
+                        'bulan_lalu' => 'Bulan Lalu',
+                        'tahun_ini'  => 'Tahun Ini',
+                    ] as $key => $label)
+                        <a href="{{ route('kasir.riwayat', ['periode' => $key]) }}"
+                           class="px-3 py-1.5 rounded-xl text-xs font-semibold transition
+                                  {{ $periode === $key
+                                     ? 'bg-indigo-600 text-white shadow-sm'
+                                     : 'bg-slate-100 hover:bg-slate-200 text-slate-600' }}">
+                            {{ $label }}
+                        </a>
+                    @endforeach
+                </div>
+
+                <!-- Custom Date Range -->
+                <form action="{{ route('kasir.riwayat') }}" method="GET" class="flex flex-wrap items-center gap-2">
+                    <input type="hidden" name="periode" value="custom">
+                    <span class="text-xs text-slate-500 font-medium">Dari:</span>
+                    <input type="date" name="start_date"
+                           value="{{ $startDate ?? ($start ? $start->format('Y-m-d') : '') }}"
+                           class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/20 focus:outline-none">
+                    <span class="text-xs text-slate-500">s/d</span>
+                    <input type="date" name="end_date"
+                           value="{{ $endDate ?? ($end ? $end->format('Y-m-d') : '') }}"
+                           class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/20 focus:outline-none">
+                    <button type="submit"
+                            class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition cursor-pointer">
+                        Terapkan
+                    </button>
+                </form>
+            </div>
+
+            <!-- Info Periode Aktif -->
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100">
+                <p class="text-xs text-slate-400">
+                    Periode: <strong class="text-slate-700">{{ $periodeLabel }}</strong>
+                    @if($start && $end)
+                        — <span class="text-slate-500">{{ $start->translatedFormat('d M Y') }} s/d {{ $end->translatedFormat('d M Y') }}</span>
+                    @endif
+                </p>
+                <div class="flex items-center gap-4 text-xs">
+                    <span class="text-slate-500">Total transaksi: <strong class="text-slate-800">{{ $riwayat->total() }}</strong></span>
+                    @if($totalOmzet > 0)
+                        <span class="text-slate-500">Omzet: <strong class="text-emerald-600">Rp {{ number_format($totalOmzet, 0, ',', '.') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         <!-- Table Card -->
         <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
             <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/50">
@@ -42,7 +101,7 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs">
                     <thead>
-                        <tr class="border-b border-slate-100 text-slate-400 uppercase tracking-wider font-semibold text-[10px] bg-slate-50/70">
+                        <tr class="border-b border-slate-100 text-slate-700 uppercase tracking-wider font-extrabold text-[11px] bg-slate-50/70">
                             <th class="px-5 py-3.5">No. Invoice</th>
                             <th class="px-5 py-3.5">Waktu Transaksi</th>
                             <th class="px-5 py-3.5">Kasir</th>

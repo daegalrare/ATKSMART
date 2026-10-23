@@ -251,15 +251,42 @@ class DashboardController extends Controller
             ->count();
         $targetPercentage = $targetTransaksi > 0 ? min(100, (int) round(($bulanIniTotal / $targetTransaksi) * 100)) : 0;
 
-        // 5. Data Sparkline Ungu Kanan Bawah (6 Hari Terakhir)
-        $sparklineLabels = [];
-        $sparklineSeries = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $day = Carbon::now()->subDays($i);
-            $sparklineLabels[] = $day->format('d');
-            $count = Penjualan::whereDate('tanggal_penjualan', $day->toDateString())->count();
-            $sparklineSeries[] = (int) $count;
-        }
+        // 5. Data Sparkline Ungu Kanan Bawah (Tersinkronisasi per periode)
+        $purpleData = [
+            'today' => [
+                'total' => (int) array_sum($hariIniPenjualan),
+                'desc'  => 'Transaksi hari ini',
+                'series' => $hariIniPenjualan,
+                'labels' => $hariIniLabels,
+            ],
+            'week' => [
+                'total' => (int) array_sum($semingguPenjualan),
+                'desc'  => 'Transaksi seminggu terakhir',
+                'series' => $semingguPenjualan,
+                'labels' => $semingguLabels,
+            ],
+            'month' => [
+                'total' => (int) array_sum($sebulanPenjualan),
+                'desc'  => 'Transaksi 1 bulan terakhir',
+                'series' => $sebulanPenjualan,
+                'labels' => $sebulanLabels,
+            ],
+            'months_6' => [
+                'total' => (int) array_sum($enamBulanPenjualan),
+                'desc'  => 'Transaksi 6 bulan terakhir',
+                'series' => $enamBulanPenjualan,
+                'labels' => $enamBulanLabels,
+            ],
+            'year' => [
+                'total' => (int) array_sum($setahunPenjualan),
+                'desc'  => 'Transaksi 1 tahun terakhir',
+                'series' => $setahunPenjualan,
+                'labels' => $setahunLabels,
+            ],
+        ];
+
+        $sparklineLabels = $enamBulanLabels;
+        $sparklineSeries = $enamBulanPenjualan;
 
         // 6. Kategori Populer / Terlaris Berdasarkan Jumlah Terjual
         $kategoriPopuler = Category::all()->map(function ($cat) {
@@ -313,6 +340,7 @@ class DashboardController extends Controller
             'jamSeries',
             'trendData',
             'timeData',
+            'purpleData',
             'targetTransaksi',
             'targetPercentage',
             'sparklineLabels',

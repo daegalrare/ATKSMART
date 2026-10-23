@@ -23,6 +23,9 @@ Route::get('/', function () {
 Route::middleware('guest.app')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+    Route::get('/lupa-kata-sandi', [AuthController::class, 'showForgotPasswordForm'])->name('password.forgot');
+    Route::post('/lupa-kata-sandi', [AuthController::class, 'forgotPassword'])->name('password.forgot.post');
 });
 
 // --- Protected routes (harus login dulu) ---

@@ -59,6 +59,36 @@ class AuthController extends Controller
         ]);
     }
 
+    public function showForgotPasswordForm(): View
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function forgotPassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ], [
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email'    => 'Format email tidak valid.',
+        ]);
+
+        $email   = $request->input('email');
+        $account = Account::where('email_akun', $email)->first();
+
+        if (! $account) {
+            return back()
+                ->withInput()
+                ->withErrors(['email' => 'Email tidak terdaftar dalam sistem kami.']);
+        }
+
+        // Email ditemukan — redirect langsung ke WhatsApp dengan pesan otomatis
+        $waMessage = 'Tolong reset password email saya: ' . $email;
+        $waUrl     = 'https://wa.me/6282232857302?text=' . urlencode($waMessage);
+
+        return redirect()->away($waUrl);
+    }
+
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();

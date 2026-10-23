@@ -366,16 +366,13 @@
             <!-- Centered Form Container with Entrance Animation -->
             <div class="w-full max-w-md mx-auto my-8 lg:my-auto fade-in-up relative z-10">
                 
-                <!-- Welcome Title & Subtitle -->
+                <!-- Title & Subtitle -->
                 <div class="mb-8">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-3 border border-blue-100">
-                        <span class="animate-pulse">👋</span> Selamat Datang
-                    </div>
                     <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">
                         Masuk ke Akun Anda
                     </h2>
                     <p class="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed">
-                        Masukkan email dan password akun staf atau admin untuk mulai mengelola kasir dan inventaris toko.
+                        Masukkan email dan password akun anda untuk mulai mengelola kasir dan inventaris toko.
                     </p>
                 </div>
 
@@ -482,19 +479,16 @@
                         </button>
                     </div>
 
-                    <!-- WhatsApp Forgot Password Box -->
+                    <!-- Forgot Password Link -->
                     <div class="pt-3 border-t border-slate-100 text-center">
-                        <p class="text-xs text-slate-500 mb-2">Lupa kata sandi akun toko Anda?</p>
-                        <a 
-                            href="https://wa.me/6282232857302?text=Halo%20Admin%20ATK%20SMART,%20saya%20lupa%20password%20akun%20saya.%20Mohon%20bantuan%20reset%20password." 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            class="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100/90 text-emerald-800 rounded-xl border border-emerald-200 text-xs font-bold transition duration-200 cursor-pointer shadow-2xs hover:scale-[1.01]"
+                        <a
+                            href="{{ route('password.forgot') }}"
+                            class="inline-flex items-center justify-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-semibold transition-colors group"
                         >
-                            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.276-.1-.476-.15-.676.15-.2.301-.777.978-.952 1.179-.175.2-.351.226-.652.075-.301-.15-1.27-.468-2.42-1.494-.895-.798-1.5-1.785-1.675-2.086-.175-.301-.019-.464.132-.614.136-.135.301-.351.451-.527.15-.175.2-.301.301-.501.1-.2.05-.376-.025-.526-.075-.15-.676-1.63-.927-2.232-.244-.587-.492-.507-.676-.516l-.576-.01c-.2 0-.526.075-.802.376-.276.301-1.053 1.028-1.053 2.508 0 1.48 1.078 2.909 1.228 3.11.15.2 2.12 3.238 5.136 4.542.717.311 1.278.497 1.714.636.72.229 1.376.196 1.895.119.578-.086 1.78-.727 2.03-1.43.251-.702.251-1.304.176-1.43-.075-.126-.276-.201-.577-.351zM12.042 2C6.502 2 2.01 6.49 2.01 12.029c0 1.947.556 3.766 1.521 5.31L2 22l4.825-1.503c1.478.887 3.203 1.391 5.217 1.391 5.54 0 10.032-4.49 10.032-10.03C22.074 6.49 17.582 2 12.042 2zm0 18.238c-1.748 0-3.37-.502-4.747-1.368l-.34-.213-2.868.893.91-2.793-.234-.373a8.163 8.163 0 01-1.25-4.355c0-4.542 3.696-8.238 8.239-8.238 4.543 0 8.239 3.696 8.239 8.238 0 4.543-3.696 8.238-8.239 8.238z"/>
+                            <svg class="w-3.5 h-3.5 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
-                            <span>Hubungi Admin via WhatsApp (082232857302)</span>
+                            Lupa kata sandi akun toko Anda?
                         </a>
                     </div>
                 </form>

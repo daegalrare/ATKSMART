@@ -200,12 +200,15 @@
                     </div>
 
                     <!-- Shortcut bayar cepat -->
-                    <div class="grid grid-cols-4 gap-1.5 pt-1">
+                    <div class="grid grid-cols-5 gap-1.5 pt-1">
                         @foreach([5000, 10000, 20000, 50000] as $nominal)
                             <button type="button" class="btn-quick-pay text-xs font-semibold py-1.5 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-700 rounded-lg transition cursor-pointer" data-amount="{{ $nominal }}">
                                 {{ number_format($nominal/1000, 0) }}rb
                             </button>
                         @endforeach
+                        <button type="button" id="btn-bayar-lunas" class="text-xs font-bold py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg transition cursor-pointer" title="Bayar Uang Pas / Lunas">
+                            Lunas
+                        </button>
                     </div>
                 </div>
 
@@ -493,6 +496,18 @@
                 updateKembalian();
             });
         });
+
+        // ---- Tombol Lunas (Uang Pas: uang diterima = total bayar) ----
+        const btnLunas = document.getElementById('btn-bayar-lunas');
+        if (btnLunas) {
+            btnLunas.addEventListener('click', () => {
+                const total = getTotal();
+                if (total > 0) {
+                    uangInput.value = total;
+                    updateKembalian();
+                }
+            });
+        }
 
         // ---- Uang diterima input ----
         uangInput.addEventListener('input', updateKembalian);

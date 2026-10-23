@@ -30,7 +30,7 @@ class AccountController extends Controller
         $validated = $request->validate([
             'nama_akun' => 'required|string|max:255',
             'email_akun' => 'required|email|max:255|unique:account,email_akun',
-            'no_telepon' => 'nullable|string|max:20',
+            'no_telepon' => ['required', 'string', 'regex:/^08\d{9,10}$/'],
             'role' => 'required|string|in:kasir,owner',
             'password' => 'required|string|min:6',
         ], [
@@ -38,6 +38,7 @@ class AccountController extends Controller
             'email_akun.required' => 'Email akun wajib diisi.',
             'email_akun.email' => 'Format email tidak valid.',
             'email_akun.unique' => 'Email ini sudah terdaftar.',
+            'no_telepon.regex' => 'No. telepon harus diawali 08 dan terdiri dari 11-12 digit angka.',
             'role.required' => 'Role wajib dipilih.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 6 karakter.',
@@ -61,7 +62,7 @@ class AccountController extends Controller
         $validated = $request->validate([
             'nama_akun' => 'required|string|max:255',
             'email_akun' => 'required|email|max:255|unique:account,email_akun,' . $id . ',id_akun',
-            'no_telepon' => 'nullable|string|max:20',
+            'no_telepon' => ['required', 'string', 'regex:/^08\d{9,10}$/'],
             'role' => 'required|string|in:kasir,owner',
             'password' => 'nullable|string|min:6',
         ], [
@@ -69,6 +70,7 @@ class AccountController extends Controller
             'email_akun.required' => 'Email akun wajib diisi.',
             'email_akun.email' => 'Format email tidak valid.',
             'email_akun.unique' => 'Email ini sudah terdaftar oleh akun lain.',
+            'no_telepon.regex' => 'No. telepon harus diawali 08 dan terdiri dari 11-12 digit angka.',
             'role.required' => 'Role wajib dipilih.',
             'password.min' => 'Password minimal 6 karakter.',
         ]);
