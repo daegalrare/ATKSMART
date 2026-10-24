@@ -427,7 +427,7 @@
                                 type="email" 
                                 name="email" 
                                 id="email" 
-                                value="{{ old('email', 'admin@saleskip.com') }}"
+                                value="{{ old('email') }}"
                                 placeholder="Masukkan email terdaftar..." 
                                 class="custom-input w-full px-4 py-3.5 text-sm font-medium text-slate-900 placeholder-slate-400 {{ old('email') ? 'active' : '' }}"
                                 required
