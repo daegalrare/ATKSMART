@@ -212,11 +212,11 @@
                     <div class="relative w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center">
                         <div class="absolute inset-0 rounded-full bg-blue-300/30 blur-md pulse-slow"></div>
                         <div class="absolute inset-1 rounded-full border border-dashed border-white/40 spin-slow"></div>
-                        <svg class="w-10 h-10 text-white relative z-10 drop-shadow-md" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <line x1="24" y1="2" x2="24" y2="46" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
-                            <line x1="2" y1="24" x2="46" y2="24" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
-                            <line x1="8.44" y1="8.44" x2="39.56" y2="39.56" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
-                            <line x1="39.56" y1="8.44" x2="8.44" y2="39.56" stroke="white" stroke-width="4.5" stroke-linecap="round"/>
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white relative z-10 drop-shadow-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/>
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                            <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/>
+                            <path d="M2 7h20"/>
                         </svg>
                     </div>
                     <div class="flex flex-col">
@@ -293,12 +293,12 @@
 
             {{-- Top Logo --}}
             <div class="flex items-center justify-between relative z-10">
-                <a href="{{ url('/') }}" class="text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2 group">
-                    <span class="w-9 h-9 rounded-xl bg-blue-600 group-hover:bg-blue-700 text-white flex items-center justify-center text-sm font-black shadow-md shadow-blue-500/30 transition-transform group-hover:scale-105">
+                <div class="text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2 select-none">
+                    <span class="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center text-sm font-black shadow-md shadow-blue-500/30">
                         A
                     </span>
-                    <span class="group-hover:text-blue-600 transition-colors">ATK SMART</span>
-                </a>
+                    <span>ATK SMART</span>
+                </div>
                 <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full border border-slate-200">
                     Pemulihan Akun
                 </span>

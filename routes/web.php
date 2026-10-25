@@ -16,7 +16,10 @@ Route::get('/', function () {
     if (session('account_role') === 'kasir') {
         return redirect()->route('kasir.index');
     }
-    return redirect()->route('dashboard');
+    if (session()->has('account_id') || \Illuminate\Support\Facades\Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
 });
 
 // --- Guest only routes (redirect ke dashboard jika sudah login) ---
