@@ -221,7 +221,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
-                            <th class="py-3.5 px-6">ID & Tanggal Masuk</th>
+                            <th class="py-3.5 px-6">No & Tanggal Masuk</th>
                             <th class="py-3.5 px-6">Produk / Barang</th>
                             <th class="py-3.5 px-6">Stok Master Saat Ini</th>
                             <th class="py-3.5 px-6">Jumlah Masuk</th>
@@ -233,11 +233,11 @@
                     <tbody class="divide-y divide-slate-100 text-sm">
                         @forelse ($pembelian as $item)
                             <tr class="hover:bg-slate-50/60 transition-colors">
-                                <!-- ID & Tanggal Masuk -->
+                                <!-- No & Tanggal Masuk -->
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-2.5">
                                         <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs shrink-0">
-                                            #{{ $item->id_pembelian }}
+                                            #{{ $pembelian->firstItem() + $loop->index }}
                                         </div>
                                         <div>
                                             <p class="font-semibold text-slate-800">
@@ -259,8 +259,9 @@
                                                 {{ $item->product->kode_produk }}
                                             </span>
                                             @if ($item->product->category)
-                                                <span class="text-[11px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full font-medium">
-                                                    {{ $item->product->category->nama_kategori }}
+                                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-50 border border-slate-200/60 text-[11px] font-medium text-slate-700">
+                                                    <x-category-icon :name="$item->product->category->nama_kategori" class="w-3.5 h-3.5 rounded-xs" icon-class="w-2.5 h-2.5" />
+                                                    <span>{{ $item->product->category->nama_kategori }}</span>
                                                 </span>
                                             @endif
                                         </div>

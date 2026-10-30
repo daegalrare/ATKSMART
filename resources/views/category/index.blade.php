@@ -128,9 +128,7 @@
                                 </td>
                                 <td class="px-5 py-4 font-bold text-slate-900 text-sm">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs">
-                                            {{ strtoupper(substr($c->nama_kategori, 0, 1)) }}
-                                        </div>
+                                        <x-category-icon :name="$c->nama_kategori" class="w-8 h-8 rounded-xl" icon-class="w-4 h-4" />
                                         <span>{{ $c->nama_kategori }}</span>
                                     </div>
                                 </td>

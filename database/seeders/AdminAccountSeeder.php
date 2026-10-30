@@ -25,6 +25,9 @@ class AdminAccountSeeder extends Seeder
             ]
         );
 
+        // Hapus akun selain admin utama agar fresh
+        Account::where('email_akun', '!=', 'admin@saleskip.com')->delete();
+
         // 2. Seed akun admin di tabel users bawaan Laravel
         User::updateOrCreate(
             ['email' => 'admin@saleskip.com'],
@@ -33,6 +36,8 @@ class AdminAccountSeeder extends Seeder
                 'password' => Hash::make('admin123'),
             ]
         );
+
+        User::where('email', '!=', 'admin@saleskip.com')->delete();
 
         $this->command->info('Akun bawaan admin@saleskip.com (password: admin123) berhasil di-seed.');
     }

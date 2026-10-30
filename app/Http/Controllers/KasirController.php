@@ -223,7 +223,8 @@ class KasirController extends Controller
         }
 
         $query = Penjualan::with(['details.product', 'account'])
-            ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'asc')
+            ->orderBy('id_penjualan', 'asc');
 
         if ($start && $end) {
             $query->whereBetween('created_at', [$start, $end]);

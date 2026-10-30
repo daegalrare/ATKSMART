@@ -47,8 +47,8 @@ class PembelianStokController extends Controller
         $pembelianBulanIni = PembelianStok::whereBetween('tanggal_masuk', [$startOfMonth, $endOfMonth])
             ->sum('total_harga_beli') ?? 0;
 
-        $pembelian = $query->orderBy('tanggal_masuk', 'desc')
-            ->orderBy('id_pembelian', 'desc')
+        $pembelian = $query->orderBy('tanggal_masuk', 'asc')
+            ->orderBy('id_pembelian', 'asc')
             ->paginate(15)
             ->withQueryString();
 

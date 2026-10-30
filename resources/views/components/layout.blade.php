@@ -13,6 +13,8 @@
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    @stack('styles')
+
     <style>
         * {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -416,5 +418,7 @@
             }
         })();
     </script>
+
+    @stack('scripts')
 </body>
 </html>

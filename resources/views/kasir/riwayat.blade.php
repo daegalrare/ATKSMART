@@ -102,6 +102,7 @@
                 <table class="w-full text-left text-xs">
                     <thead>
                         <tr class="border-b border-slate-100 text-slate-700 uppercase tracking-wider font-extrabold text-[11px] bg-slate-50/70">
+                            <th class="px-5 py-3.5 text-center w-16">No</th>
                             <th class="px-5 py-3.5">No. Invoice</th>
                             <th class="px-5 py-3.5">Waktu Transaksi</th>
                             <th class="px-5 py-3.5">Kasir</th>
@@ -115,6 +116,11 @@
                     <tbody class="divide-y divide-slate-100 text-slate-700" id="transaction-rows">
                         @forelse ($riwayat as $p)
                             <tr class="hover:bg-slate-50/70 transition-colors transaction-row" data-invoice="{{ strtolower($p->no_invoice) }}">
+                                <td class="px-5 py-4 text-center">
+                                    <div class="w-8 h-8 mx-auto rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs shrink-0">
+                                        #{{ $riwayat->firstItem() + $loop->index }}
+                                    </div>
+                                </td>
                                 <td class="px-5 py-4 font-mono font-bold text-indigo-600">
                                     {{ $p->no_invoice }}
                                 </td>
@@ -171,7 +177,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-5 py-12 text-center text-slate-400">
+                                <td colspan="9" class="px-5 py-12 text-center text-slate-400">
                                     <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
                                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                                     </div>

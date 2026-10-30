@@ -55,8 +55,8 @@ class PenyesuaianStokController extends Controller
         $endOfMonth = Carbon::now()->endOfMonth()->toDateString();
         $opnameBulanIni = PenyesuaianStok::whereBetween('tanggal_cek', [$startOfMonth, $endOfMonth])->count();
 
-        $penyesuaian = $query->orderBy('tanggal_cek', 'desc')
-            ->orderBy('id_penyesuaian', 'desc')
+        $penyesuaian = $query->orderBy('tanggal_cek', 'asc')
+            ->orderBy('id_penyesuaian', 'asc')
             ->paginate(15)
             ->withQueryString();
 

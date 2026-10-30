@@ -76,7 +76,7 @@
                 @forelse ($products as $p)
                     <button
                         type="button"
-                        class="product-card bg-white rounded-2xl border border-slate-200 p-3 text-left hover:border-indigo-300 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer flex flex-col gap-1.5 group"
+                        class="product-card bg-white rounded-2xl border border-slate-200 text-left hover:border-indigo-300 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all cursor-pointer flex flex-col group overflow-hidden"
                         data-id="{{ $p->id_produk }}"
                         data-nama="{{ $p->nama_produk }}"
                         data-kode="{{ $p->kode_produk }}"
@@ -87,26 +87,43 @@
                         data-stok="{{ $p->stok_produk }}"
                         data-satuan="{{ $p->satuan_terkecil ?? 'pcs' }}"
                     >
-                        <!-- Icon Produk & Tag Kategori -->
-                        <div class="flex items-start justify-between gap-1 mb-1">
-                            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center group-hover:bg-indigo-100 transition shrink-0">
-                                <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 8-7-4-7 4v8l7 4 7-4zM12 22V12m9-4-9 4-9-4"/>
-                                </svg>
-                            </div>
+                        <!-- Foto Produk -->
+                        <div class="w-full h-24 bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center relative">
+                            @if($p->foto_produk)
+                                <img
+                                    src="{{ Storage::url($p->foto_produk) }}"
+                                    alt="{{ $p->nama_produk }}"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                >
+                            @else
+                                <div class="w-full h-full bg-indigo-50 flex items-center justify-center group-hover:bg-indigo-100 transition">
+                                    <svg class="w-8 h-8 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 8-7-4-7 4v8l7 4 7-4zM12 22V12m9-4-9 4-9-4"/>
+                                    </svg>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Info Produk -->
+                        <div class="p-3 flex flex-col gap-1 flex-1">
+                            <!-- Kategori -->
                             @if ($p->category)
-                                <span class="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-lg truncate max-w-[90px]" title="{{ $p->category->nama_kategori }}">
+                                <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md self-start truncate max-w-full" title="{{ $p->category->nama_kategori }}">
                                     {{ $p->category->nama_kategori }}
                                 </span>
                             @endif
-                        </div>
-                        <p class="text-xs font-bold text-slate-800 leading-snug line-clamp-2">{{ $p->nama_produk }}</p>
-                        <p class="text-[10px] font-mono text-indigo-500 font-semibold">{{ $p->kode_produk }}</p>
-                        <div class="mt-auto pt-1 border-t border-slate-100 flex items-end justify-between">
-                            <p class="text-sm font-extrabold text-slate-900">Rp {{ number_format($p->harga_jual, 0, ',', '.') }}</p>
-                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full {{ $p->stok_produk <= ($p->stok_minimum ?? 0) ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600' }}">
-                                {{ $p->stok_produk }} {{ $p->satuan_terkecil ?? 'pcs' }}
-                            </span>
+
+                            <!-- Nama & Kode -->
+                            <p class="text-xs font-bold text-slate-800 leading-snug line-clamp-2">{{ $p->nama_produk }}</p>
+                            <p class="text-[10px] font-mono text-indigo-500 font-semibold">{{ $p->kode_produk }}</p>
+
+                            <!-- Harga & Stok -->
+                            <div class="mt-auto pt-1.5 border-t border-slate-100 flex items-end justify-between gap-1">
+                                <p class="text-sm font-extrabold text-slate-900">Rp {{ number_format($p->harga_jual, 0, ',', '.') }}</p>
+                                <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full {{ $p->stok_produk <= ($p->stok_minimum ?? 0) ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600' }} shrink-0">
+                                    {{ $p->stok_produk }} {{ $p->satuan_terkecil ?? 'pcs' }}
+                                </span>
+                            </div>
                         </div>
                     </button>
                 @empty

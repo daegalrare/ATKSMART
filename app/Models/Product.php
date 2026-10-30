@@ -22,6 +22,7 @@ class Product extends Model
         'satuan_besar',
         'isi_per_satuan_besar',
         'lokasi_produk',
+        'foto_produk',
         'stok_minimum',
         'stok_produk',
         'harga_jual',

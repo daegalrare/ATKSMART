@@ -113,25 +113,12 @@
                                 <!-- Kategori -->
                                 <td class="py-4 px-6">
                                     @if($item->category)
-                                        @php
-                                            $catColors = [
-                                                ['bg-violet-50 text-violet-700 border-violet-200'],
-                                                ['bg-sky-50 text-sky-700 border-sky-200'],
-                                                ['bg-emerald-50 text-emerald-700 border-emerald-200'],
-                                                ['bg-amber-50 text-amber-700 border-amber-200'],
-                                                ['bg-rose-50 text-rose-700 border-rose-200'],
-                                                ['bg-indigo-50 text-indigo-700 border-indigo-200'],
-                                                ['bg-teal-50 text-teal-700 border-teal-200'],
-                                                ['bg-orange-50 text-orange-700 border-orange-200'],
-                                                ['bg-pink-50 text-pink-700 border-pink-200'],
-                                                ['bg-cyan-50 text-cyan-700 border-cyan-200'],
-                                            ];
-                                            $ci = $item->id_kategori % count($catColors);
-                                        @endphp
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border {{ $catColors[$ci][0] }}">
-                                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                                            {{ $item->category->nama_kategori }}
-                                        </span>
+                                        <div class="inline-flex items-center gap-1.5">
+                                            <x-category-icon :name="$item->category->nama_kategori" class="w-6 h-6 rounded-lg" icon-class="w-3.5 h-3.5" />
+                                            <span class="text-xs font-semibold text-slate-800">
+                                                {{ $item->category->nama_kategori }}
+                                            </span>
+                                        </div>
                                     @else
                                         <span class="text-xs text-slate-400 italic">Tanpa Kategori</span>
                                     @endif
@@ -193,6 +180,7 @@
                                             data-stok="{{ $item->stok_produk }}"
                                             data-harga-beli="{{ $item->harga_beli_terakhir }}"
                                             data-harga-jual="{{ $item->harga_jual }}"
+                                            data-foto="{{ $item->foto_produk ? Storage::url($item->foto_produk) : '' }}"
                                         >
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -268,7 +256,7 @@
             </div>
 
             <!-- Modal Form Body -->
-            <form action="{{ route('product.store') }}" method="POST" class="p-6 space-y-4 overflow-y-auto">
+            <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 overflow-y-auto">
                 @csrf
 
                 <!-- Kode & Kategori -->
@@ -426,6 +414,68 @@
                     </div>
                 </details>
 
+                <!-- Foto Produk (Wajib) -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                            Foto Produk <span class="text-rose-500">*</span>
+                        </label>
+                        <span class="text-[11px] font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+                            </svg>
+                            Fitur Zoom &amp; Crop
+                        </span>
+                    </div>
+
+                    <!-- Placeholder / Upload Box -->
+                    <div
+                        id="create-foto-placeholder"
+                        class="border-2 border-dashed rounded-2xl cursor-pointer transition-all p-6 text-center {{ $errors->has('foto_produk') ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200 bg-slate-50/70 hover:border-indigo-400 hover:bg-indigo-50/30' }}"
+                        onclick="document.getElementById('foto_produk_input').click()"
+                    >
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-100/70 text-indigo-600 flex items-center justify-center mx-auto mb-2 shadow-xs">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs font-bold text-slate-700">Klik untuk upload foto produk</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">JPG, PNG, WEBP — Setelah dipilih, Anda bisa atur posisi, zoom in/out &amp; crop</p>
+                    </div>
+
+                    <!-- Preview Area with Action Buttons -->
+                    <div id="create-foto-preview" class="hidden border border-slate-200 rounded-2xl p-3 bg-white shadow-xs">
+                        <div class="w-full h-44 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center relative">
+                            <img id="create-foto-img" src="" alt="Preview" class="max-w-full max-h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-2 mt-2.5">
+                            <button
+                                type="button"
+                                id="btn-recrop-create"
+                                class="flex-1 py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+                                </svg>
+                                Atur &amp; Crop Foto
+                            </button>
+                            <button
+                                type="button"
+                                onclick="document.getElementById('foto_produk_input').click()"
+                                class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition flex items-center gap-1 cursor-pointer"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+                                </svg>
+                                Ganti
+                            </button>
+                        </div>
+                    </div>
+
+                    <input type="file" name="foto_produk" id="foto_produk_input" accept="image/*" class="hidden" required>
+                    @error('foto_produk') <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p> @enderror
+                </div>
+
                 <!-- Modal Actions -->
                 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                     <button type="button" class="btn-close-create px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition cursor-pointer">
@@ -466,7 +516,7 @@
             </div>
 
             <!-- Modal Form Body -->
-            <form id="edit-product-form" action="" method="POST" class="p-6 space-y-4 overflow-y-auto">
+            <form id="edit-product-form" action="" method="POST" enctype="multipart/form-data" class="p-6 space-y-4 overflow-y-auto">
                 @csrf
                 @method('PUT')
 
@@ -615,6 +665,67 @@
                     </div>
                 </details>
 
+                <!-- Foto Produk (Opsional saat edit) -->
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                            Foto Produk <span class="text-slate-400 font-normal text-[10px] normal-case">(kosongkan jika tidak ingin mengganti)</span>
+                        </label>
+                        <span class="text-[11px] font-medium text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+                            </svg>
+                            Fitur Zoom &amp; Crop
+                        </span>
+                    </div>
+
+                    <!-- Placeholder / Upload Box when no photo -->
+                    <div
+                        id="edit-foto-placeholder"
+                        class="border-2 border-dashed border-slate-200 bg-slate-50/70 hover:border-indigo-400 hover:bg-indigo-50/30 rounded-2xl cursor-pointer transition-all p-6 text-center"
+                        onclick="document.getElementById('edit_foto_produk_input').click()"
+                    >
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs font-bold text-slate-700" id="edit-foto-label">Klik untuk upload foto produk</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">JPG, PNG, WEBP — Maks. 2MB</p>
+                    </div>
+
+                    <!-- Preview Area with Action Buttons -->
+                    <div id="edit-foto-preview" class="hidden border border-slate-200 rounded-2xl p-3 bg-white shadow-xs">
+                        <div class="w-full h-44 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center relative">
+                            <img id="edit-foto-img" src="" alt="Preview" class="max-w-full max-h-full object-contain">
+                        </div>
+                        <div class="flex items-center gap-2 mt-2.5">
+                            <button
+                                type="button"
+                                id="btn-recrop-edit"
+                                class="flex-1 py-2 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+                            >
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+                                </svg>
+                                Atur &amp; Crop Foto
+                            </button>
+                            <button
+                                type="button"
+                                onclick="document.getElementById('edit_foto_produk_input').click()"
+                                class="py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-semibold transition flex items-center gap-1 cursor-pointer"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+                                </svg>
+                                Ganti
+                            </button>
+                        </div>
+                    </div>
+
+                    <input type="file" name="foto_produk" id="edit_foto_produk_input" accept="image/*" class="hidden">
+                </div>
+
                 <!-- Modal Actions -->
                 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                     <button type="button" class="btn-close-edit px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition cursor-pointer">
@@ -676,7 +787,116 @@
         </div>
     </div>
 
-    <!-- Interactive Modals Script -->
+    <!-- ====================================================== -->
+    <!-- 4. MODAL CROP & ZOOM FOTO PRODUK (CROPPER.JS)          -->
+    <!-- ====================================================== -->
+    <div id="cropper-modal-overlay" class="fixed inset-0 z-[9999] hidden items-center justify-center p-3 sm:p-5 bg-slate-900/80 backdrop-blur-sm">
+        <div class="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col" style="max-height: 92vh;">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Sesuaikan &amp; Crop Foto Produk</h3>
+                        <p class="text-xs text-slate-500">Geser untuk pindah posisi • Gunakan tombol / scroll untuk zoom in &amp; zoom out</p>
+                    </div>
+                </div>
+                <button id="cropper-btn-cancel" type="button" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Cropper Canvas Area -->
+            <div class="cropper-modal-box overflow-hidden bg-slate-900 flex items-center justify-center" style="height: 380px; max-height: 50vh;">
+                <img id="cropper-image" src="" alt="Foto Produk" style="max-width: 100%; display: block;">
+            </div>
+
+            <!-- Toolbar Buttons -->
+            <div class="px-5 py-3 border-t border-b border-slate-100 bg-slate-50 shrink-0">
+                <div class="flex items-center justify-center gap-2 flex-wrap">
+                    <!-- Zoom In -->
+                    <button id="cropper-btn-zoom-in" type="button" class="cropper-toolbar-btn" title="Perbesar (Zoom In)">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6"/>
+                        </svg>
+                    </button>
+                    <!-- Zoom Out -->
+                    <button id="cropper-btn-zoom-out" type="button" class="cropper-toolbar-btn" title="Perkecil (Zoom Out)">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6"/>
+                        </svg>
+                    </button>
+
+                    <div class="w-px h-6 bg-slate-200"></div>
+
+                    <!-- Ratio 1:1 -->
+                    <button id="cropper-btn-ratio-1-1" type="button" class="cropper-ratio-btn px-2.5 h-[38px] rounded-xl text-xs font-bold border border-indigo-200 bg-indigo-50 text-indigo-600 transition cursor-pointer" title="Rasio 1:1 (Kotak - Rekomendasi Kasir)">
+                        1:1 Kotak
+                    </button>
+                    <!-- Ratio 4:3 -->
+                    <button id="cropper-btn-ratio-4-3" type="button" class="cropper-ratio-btn px-2.5 h-[38px] rounded-xl text-xs font-semibold border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition cursor-pointer" title="Rasio 4:3 (Landscape)">
+                        4:3
+                    </button>
+                    <!-- Ratio Free -->
+                    <button id="cropper-btn-ratio-free" type="button" class="cropper-ratio-btn px-2.5 h-[38px] rounded-xl text-xs font-semibold border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition cursor-pointer" title="Rasio Bebas">
+                        Bebas
+                    </button>
+
+                    <div class="w-px h-6 bg-slate-200"></div>
+
+                    <!-- Rotate Left -->
+                    <button id="cropper-btn-rotate-left" type="button" class="cropper-toolbar-btn" title="Putar Kiri 90°">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/>
+                        </svg>
+                    </button>
+                    <!-- Rotate Right -->
+                    <button id="cropper-btn-rotate-right" type="button" class="cropper-toolbar-btn" title="Putar Kanan 90°">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3"/>
+                        </svg>
+                    </button>
+                    <!-- Flip Horizontal -->
+                    <button id="cropper-btn-flip-h" type="button" class="cropper-toolbar-btn" title="Balik Horizontal">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/>
+                        </svg>
+                    </button>
+
+                    <div class="w-px h-6 bg-slate-200"></div>
+
+                    <!-- Reset -->
+                    <button id="cropper-btn-reset" type="button" class="cropper-toolbar-btn" title="Reset ke Awal">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-end gap-3 px-5 py-4 shrink-0">
+                <button id="cropper-btn-cancel-bottom" type="button" class="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition cursor-pointer">
+                    Batal
+                </button>
+                <button id="cropper-btn-confirm" type="button" class="px-6 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs shadow-indigo-500/25 transition cursor-pointer flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                    </svg>
+                    Gunakan Foto Ini
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals & Cropper Script -->
     <script>
         // Modal references
         const createModal = document.getElementById('create-product-modal');
@@ -718,6 +938,22 @@
                 document.getElementById('edit_stok_produk').value = btn.dataset.stok || '';
                 document.getElementById('edit_harga_beli_terakhir').value = btn.dataset.hargaBeli || '';
                 document.getElementById('edit_harga_jual').value = btn.dataset.hargaJual || '';
+
+                // Reset foto input & show existing photo if available
+                document.getElementById('edit_foto_produk_input').value = '';
+                const existingFoto = btn.dataset.foto || '';
+                const editPreview = document.getElementById('edit-foto-preview');
+                const editPlaceholder = document.getElementById('edit-foto-placeholder');
+                const editImg = document.getElementById('edit-foto-img');
+                if (existingFoto) {
+                    editImg.src = existingFoto;
+                    editPreview.classList.remove('hidden');
+                    editPlaceholder.classList.add('hidden');
+                } else {
+                    editImg.src = '';
+                    editPreview.classList.add('hidden');
+                    editPlaceholder.classList.remove('hidden');
+                }
 
                 editModal.classList.remove('hidden');
                 document.body.classList.add('overflow-hidden');
@@ -774,11 +1010,264 @@
         // Close on Escape Key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
+                const cropperOverlay = document.getElementById('cropper-modal-overlay');
+                if (!cropperOverlay.classList.contains('hidden')) {
+                    cropperOverlay.classList.add('hidden');
+                    cropperOverlay.classList.remove('flex');
+                    return;
+                }
                 createModal.classList.add('hidden');
                 editModal.classList.add('hidden');
                 deleteModal.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden');
             }
         });
+
+        // ============================================================
+        // ADVANCED IMAGE CROPPER & ZOOM ENGINE (CROPPER.JS)
+        // ============================================================
+        let cropperInstance  = null;
+        let cropperFileInput = null;
+        let cropperMode      = null;   // 'create' | 'edit'
+        let cropperScaleX    = 1;
+        let currentImgSource = '';
+
+        const overlay = document.getElementById('cropper-modal-overlay');
+        const cropImg = document.getElementById('cropper-image');
+
+        function startCropper(imageSrc, fileInput, mode) {
+            cropperFileInput = fileInput;
+            cropperMode      = mode;
+            currentImgSource = imageSrc;
+
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
+
+            cropImg.src = imageSrc;
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+
+            cropperInstance = new Cropper(cropImg, {
+                aspectRatio: 1,             // 1:1 default (kotak untuk kasir)
+                viewMode: 0,                // viewMode 0: bebas zoom in & zoom out tanpa batas
+                dragMode: 'move',
+                autoCropArea: 0.88,
+                responsive: true,
+                restore: false,
+                guides: true,
+                center: true,
+                highlight: true,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                toggleDragModeOnDblclick: false,
+            });
+            cropperScaleX = 1;
+        }
+
+        function closeCropper() {
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
+            cropImg.src = '';
+            cropperScaleX = 1;
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function applyCroppedResult(blob, originalName) {
+            const mimeType = blob.type || 'image/jpeg';
+            const ext = mimeType.split('/')[1] || 'jpg';
+            const fileName = (originalName || 'foto-produk').replace(/\.[^.]+$/, '') + '-crop.' + ext;
+            const croppedFile = new File([blob], fileName, { type: mimeType });
+
+            if (cropperFileInput) {
+                try {
+                    const dt = new DataTransfer();
+                    dt.items.add(croppedFile);
+                    cropperFileInput.files = dt.files;
+                } catch (e) {
+                    console.warn('DataTransfer unavailable:', e);
+                }
+            }
+
+            const objectUrl = URL.createObjectURL(blob);
+
+            if (cropperMode === 'create') {
+                document.getElementById('create-foto-img').src = objectUrl;
+                document.getElementById('create-foto-preview').classList.remove('hidden');
+                document.getElementById('create-foto-placeholder').classList.add('hidden');
+            } else {
+                document.getElementById('edit-foto-img').src = objectUrl;
+                document.getElementById('edit-foto-preview').classList.remove('hidden');
+                document.getElementById('edit-foto-placeholder').classList.add('hidden');
+            }
+        }
+
+        // Toolbar: Zoom In & Out
+        document.getElementById('cropper-btn-zoom-in').addEventListener('click', () => {
+            if (cropperInstance) cropperInstance.zoom(0.1);
+        });
+        document.getElementById('cropper-btn-zoom-out').addEventListener('click', () => {
+            if (cropperInstance) cropperInstance.zoom(-0.1);
+        });
+
+        // Toolbar: Rotate
+        document.getElementById('cropper-btn-rotate-left').addEventListener('click', () => {
+            if (cropperInstance) cropperInstance.rotate(-90);
+        });
+        document.getElementById('cropper-btn-rotate-right').addEventListener('click', () => {
+            if (cropperInstance) cropperInstance.rotate(90);
+        });
+
+        // Toolbar: Flip
+        document.getElementById('cropper-btn-flip-h').addEventListener('click', () => {
+            if (!cropperInstance) return;
+            cropperScaleX = (cropperScaleX === 1) ? -1 : 1;
+            cropperInstance.scaleX(cropperScaleX);
+        });
+
+        // Toolbar: Reset
+        document.getElementById('cropper-btn-reset').addEventListener('click', () => {
+            if (cropperInstance) cropperInstance.reset();
+        });
+
+        // Toolbar: Ratio Buttons
+        const ratioBtns = document.querySelectorAll('.cropper-ratio-btn');
+        function setActiveRatioBtn(activeBtn) {
+            ratioBtns.forEach(b => {
+                b.classList.remove('border-indigo-200', 'bg-indigo-50', 'text-indigo-600', 'font-bold');
+                b.classList.add('border-slate-200', 'bg-white', 'text-slate-600', 'font-semibold');
+            });
+            activeBtn.classList.add('border-indigo-200', 'bg-indigo-50', 'text-indigo-600', 'font-bold');
+            activeBtn.classList.remove('border-slate-200', 'bg-white', 'text-slate-600', 'font-semibold');
+        }
+
+        document.getElementById('cropper-btn-ratio-1-1').addEventListener('click', function () {
+            if (cropperInstance) cropperInstance.setAspectRatio(1);
+            setActiveRatioBtn(this);
+        });
+        document.getElementById('cropper-btn-ratio-4-3').addEventListener('click', function () {
+            if (cropperInstance) cropperInstance.setAspectRatio(4 / 3);
+            setActiveRatioBtn(this);
+        });
+        document.getElementById('cropper-btn-ratio-free').addEventListener('click', function () {
+            if (cropperInstance) cropperInstance.setAspectRatio(NaN);
+            setActiveRatioBtn(this);
+        });
+
+        // Close Cropper
+        document.getElementById('cropper-btn-cancel').addEventListener('click', closeCropper);
+        document.getElementById('cropper-btn-cancel-bottom').addEventListener('click', closeCropper);
+
+        // Confirm & Apply Cropped Image
+        document.getElementById('cropper-btn-confirm').addEventListener('click', () => {
+            if (!cropperInstance) return;
+            const canvas = cropperInstance.getCroppedCanvas({
+                maxWidth: 1200,
+                maxHeight: 1200,
+                fillColor: '#ffffff',
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high',
+            });
+            canvas.toBlob(function (blob) {
+                const origName = (cropperFileInput && cropperFileInput.files && cropperFileInput.files[0])
+                    ? cropperFileInput.files[0].name
+                    : 'foto-produk.jpg';
+                applyCroppedResult(blob, origName);
+                closeCropper();
+            }, 'image/jpeg', 0.92);
+        });
+
+        // File Input Handlers
+        const createFileInput = document.getElementById('foto_produk_input');
+        if (createFileInput) {
+            createFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => startCropper(e.target.result, createFileInput, 'create');
+                reader.readAsDataURL(file);
+            });
+        }
+
+        const editFileInput = document.getElementById('edit_foto_produk_input');
+        if (editFileInput) {
+            editFileInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => startCropper(e.target.result, editFileInput, 'edit');
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Re-crop buttons
+        const btnRecropCreate = document.getElementById('btn-recrop-create');
+        if (btnRecropCreate) {
+            btnRecropCreate.addEventListener('click', () => {
+                const currentImg = document.getElementById('create-foto-img');
+                if (currentImg && currentImg.src) {
+                    startCropper(currentImg.src, createFileInput, 'create');
+                }
+            });
+        }
+
+        const btnRecropEdit = document.getElementById('btn-recrop-edit');
+        if (btnRecropEdit) {
+            btnRecropEdit.addEventListener('click', () => {
+                const currentImg = document.getElementById('edit-foto-img');
+                if (currentImg && currentImg.src) {
+                    startCropper(currentImg.src, editFileInput, 'edit');
+                }
+            });
+        }
+
+        // Reset create modal
+        document.querySelectorAll('.btn-close-create').forEach(el => {
+            el.addEventListener('click', () => {
+                if (createFileInput) createFileInput.value = '';
+                const prev = document.getElementById('create-foto-preview');
+                const ph   = document.getElementById('create-foto-placeholder');
+                if (prev) prev.classList.add('hidden');
+                if (ph)   ph.classList.remove('hidden');
+            });
+        });
     </script>
+
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('vendor/cropperjs/cropper.min.css') }}">
+    <style>
+        .cropper-toolbar-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #475569;
+        }
+        .cropper-toolbar-btn:hover {
+            background: #eef2ff;
+            color: #4f46e5;
+            border-color: #c7d2fe;
+            transform: translateY(-1px);
+        }
+        .cropper-toolbar-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script src="{{ asset('vendor/cropperjs/cropper.min.js') }}"></script>
+    @endpush
 </x-layout>
