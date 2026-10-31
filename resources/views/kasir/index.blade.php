@@ -64,7 +64,7 @@
             </div>
 
             <!-- Produk Grid -->
-            <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 overflow-y-auto" style="max-height: calc(100vh - 220px);">
+            <div id="product-grid" class="grid grid-cols-3 gap-3 sm:gap-4 overflow-y-auto" style="max-height: calc(100vh - 220px);">
                 @forelse ($products as $p)
                     <button
                         type="button"
@@ -80,12 +80,12 @@
                         data-satuan="{{ $p->satuan_terkecil ?? 'pcs' }}"
                     >
                         <!-- Foto Produk -->
-                        <div class="w-full h-24 bg-slate-100 overflow-hidden shrink-0 flex items-center justify-center relative">
+                        <div class="w-full aspect-[4/3] bg-slate-50 overflow-hidden shrink-0 flex items-center justify-center relative">
                             @if($p->foto_produk)
                                 <img
                                     src="{{ Storage::url($p->foto_produk) }}"
                                     alt="{{ $p->nama_produk }}"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 p-1"
                                 >
                             @else
                                 <div class="w-full h-full bg-indigo-50 flex items-center justify-center group-hover:bg-indigo-100 transition">
@@ -105,9 +105,8 @@
                                 </span>
                             @endif
 
-                            <!-- Nama & Kode -->
+                            <!-- Nama -->
                             <p class="text-xs font-bold text-slate-800 leading-snug line-clamp-2">{{ $p->nama_produk }}</p>
-                            <p class="text-[10px] font-mono text-indigo-500 font-semibold">{{ $p->kode_produk }}</p>
 
                             <!-- Harga & Stok -->
                             <div class="mt-auto pt-1.5 border-t border-slate-100 flex items-end justify-between gap-1">

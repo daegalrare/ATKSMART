@@ -448,6 +448,32 @@
                         <div class="w-full h-44 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center relative">
                             <img id="create-foto-img" src="" alt="Preview" class="max-w-full max-h-full object-contain">
                         </div>
+
+                        <!-- Preview Tampilan Kasir -->
+                        <div class="mt-3 p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                            <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-2">🛒 Preview Tampilan Kasir</p>
+                            <div class="flex items-start gap-3">
+                                <div class="w-28 shrink-0">
+                                    <div class="w-full aspect-[4/3] bg-white rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center shadow-xs">
+                                        <img id="create-kasir-preview-img" src="" class="w-full h-full object-contain p-1 hidden">
+                                        <div id="create-kasir-preview-placeholder" class="flex items-center justify-center w-full h-full text-slate-300">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 6h16.5"/></svg>
+                                        </div>
+                                    </div>
+                                    <p class="text-center text-[9px] text-slate-400 mt-1">Foto Produk</p>
+                                </div>
+                                <div class="flex-1 min-w-0 py-0.5">
+                                    <span class="text-[9px] font-semibold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md inline-block mb-1">Kategori</span>
+                                    <p class="text-[11px] font-bold text-slate-800 leading-snug truncate">Nama Produk</p>
+                                    <div class="mt-1.5 pt-1 border-t border-slate-100 flex items-end justify-between gap-1">
+                                        <p class="text-xs font-extrabold text-slate-900">Rp 0</p>
+                                        <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600">0 pcs</span>
+                                    </div>
+                                    <p class="text-[9px] text-slate-400 mt-1.5 italic">Tampilan di halaman kasir</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex items-center gap-2 mt-2.5">
                             <button
                                 type="button"
@@ -1051,7 +1077,7 @@
             document.body.classList.add('overflow-hidden');
 
             cropperInstance = new Cropper(cropImg, {
-                aspectRatio: 1,             // 1:1 default (kotak untuk kasir)
+                aspectRatio: 4 / 3,         // 4:3 sesuai tampilan kasir
                 viewMode: 0,                // viewMode 0: bebas zoom in & zoom out tanpa batas
                 dragMode: 'move',
                 autoCropArea: 0.88,
@@ -1101,6 +1127,14 @@
                 document.getElementById('create-foto-img').src = objectUrl;
                 document.getElementById('create-foto-preview').classList.remove('hidden');
                 document.getElementById('create-foto-placeholder').classList.add('hidden');
+                // Update preview kasir
+                const kasirImg = document.getElementById('create-kasir-preview-img');
+                const kasirPh  = document.getElementById('create-kasir-preview-placeholder');
+                if (kasirImg) {
+                    kasirImg.src = objectUrl;
+                    kasirImg.classList.remove('hidden');
+                    if (kasirPh) kasirPh.classList.add('hidden');
+                }
             } else {
                 document.getElementById('edit-foto-img').src = objectUrl;
                 document.getElementById('edit-foto-preview').classList.remove('hidden');
@@ -1235,6 +1269,11 @@
                 const ph   = document.getElementById('create-foto-placeholder');
                 if (prev) prev.classList.add('hidden');
                 if (ph)   ph.classList.remove('hidden');
+                // Reset preview kasir
+                const kasirImg = document.getElementById('create-kasir-preview-img');
+                const kasirPh  = document.getElementById('create-kasir-preview-placeholder');
+                if (kasirImg) { kasirImg.src = ''; kasirImg.classList.add('hidden'); }
+                if (kasirPh)  kasirPh.classList.remove('hidden');
             });
         });
     </script>
