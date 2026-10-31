@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LaporanController extends Controller
 {
@@ -269,7 +268,7 @@ class LaporanController extends Controller
     /**
      * Ekspor Laporan Transaksi & Keuntungan ke format CSV (Excel).
      */
-    public function exportCsv(Request $request): StreamedResponse|\Illuminate\Http\RedirectResponse
+    public function exportCsv(Request $request): Response|\Illuminate\Http\RedirectResponse
     {
         if (session('account_role') === 'kasir') {
             return redirect()->route('kasir.index');
