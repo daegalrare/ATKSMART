@@ -146,23 +146,27 @@
         @else
 
         {{-- ========================================================= --}}
-        {{-- FILTER BAR                                                 --}}
+        {{-- FILTER & SEARCH BAR                                        --}}
         {{-- ========================================================= --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-xs p-3 flex flex-wrap gap-2 items-center float-in">
-            <span class="text-xs text-slate-400 font-medium px-2">Filter:</span>
-            <button onclick="filterRisk('all')" id="btn-all" class="filter-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all bg-indigo-600 text-white border-indigo-600">Semua</button>
-            <button onclick="filterRisk('out')" id="btn-out" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all border-red-200 text-red-600 hover:bg-red-50">Stok Habis</button>
-            <button onclick="filterRisk('critical')" id="btn-critical" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all border-orange-200 text-orange-600 hover:bg-orange-50">Kritis</button>
-            <button onclick="filterRisk('warning')" id="btn-warning" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all border-amber-200 text-amber-600 hover:bg-amber-50">Waspada</button>
-            <button onclick="filterRisk('safe')" id="btn-safe" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all border-emerald-200 text-emerald-600 hover:bg-emerald-50">Aman</button>
-            <button onclick="filterRisk('fast')" id="btn-fast" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all border-violet-200 text-violet-600 hover:bg-violet-50">🚀 Fast Moving</button>
-            <button onclick="filterRisk('slow')" id="btn-slow" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border transition-all border-slate-200 text-slate-500 hover:bg-slate-50">📦 Slow Moving</button>
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-xs p-2.5 sm:p-3 flex flex-col lg:flex-row gap-2.5 items-stretch lg:items-center float-in">
+            {{-- Search di paling kiri --}}
+            <div class="relative w-full lg:w-72 shrink-0">
+                <input type="text" id="search-product" placeholder="Cari nama atau kode produk..." oninput="searchProduct(this.value)"
+                    class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
 
-            {{-- Search --}}
-            <div class="ml-auto relative">
-                <input type="text" id="search-product" placeholder="Cari produk..." oninput="searchProduct(this.value)"
-                    class="pl-8 pr-4 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 w-40 sm:w-52 transition">
-                <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            {{-- Tombol Filter di sebelah kanan (memenuhi seluruh sisa border) --}}
+            <div class="flex flex-wrap sm:flex-nowrap items-center gap-1.5 w-full flex-1">
+                <button onclick="filterRisk('all')" id="btn-all" class="filter-btn active flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap bg-indigo-600 text-white border-indigo-600">Semua</button>
+                <button onclick="filterRisk('out')" id="btn-out" class="filter-btn flex-1 min-w-[85px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-red-200 text-red-600 bg-white hover:bg-red-50">Stok Habis</button>
+                <button onclick="filterRisk('critical')" id="btn-critical" class="filter-btn flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-orange-200 text-orange-600 bg-white hover:bg-orange-50">Kritis</button>
+                <button onclick="filterRisk('warning')" id="btn-warning" class="filter-btn flex-1 min-w-[75px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-amber-200 text-amber-600 bg-white hover:bg-amber-50">Waspada</button>
+                <button onclick="filterRisk('safe')" id="btn-safe" class="filter-btn flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-emerald-200 text-emerald-600 bg-white hover:bg-emerald-50">Aman</button>
+                <button onclick="filterRisk('fast')" id="btn-fast" class="filter-btn flex-1 min-w-[100px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-violet-200 text-violet-600 bg-white hover:bg-violet-50">🚀 Fast Moving</button>
+                <button onclick="filterRisk('slow')" id="btn-slow" class="filter-btn flex-1 min-w-[100px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-slate-200 text-slate-500 bg-white hover:bg-slate-50">📦 Slow Moving</button>
             </div>
         </div>
 
@@ -199,7 +203,8 @@
                  data-risk="{{ $risk }}"
                  data-fast="{{ $isFast ? '1' : '0' }}"
                  data-slow="{{ $isSlow ? '1' : '0' }}"
-                 data-name="{{ strtolower($p->nama_produk) }}">
+                 data-name="{{ strtolower($p->nama_produk) }}"
+                 data-code="{{ strtolower($p->kode_produk) }}">
 
                 <div class="flex flex-col sm:flex-row gap-4">
 
@@ -343,6 +348,7 @@
                 const fast = card.dataset.fast === '1';
                 const slow = card.dataset.slow === '1';
                 const name = card.dataset.name;
+                const code = card.dataset.code || '';
 
                 let matchFilter = true;
                 if (activeFilter === 'all')      matchFilter = true;
@@ -350,7 +356,7 @@
                 else if (activeFilter === 'slow') matchFilter = slow;
                 else                             matchFilter = risk === activeFilter;
 
-                const matchSearch = searchQuery === '' || name.includes(searchQuery);
+                const matchSearch = searchQuery === '' || name.includes(searchQuery) || code.includes(searchQuery);
 
                 if (matchFilter && matchSearch) {
                     card.style.display = '';
@@ -365,3 +371,4 @@
     </script>
     @endpush
 </x-layout>
+
