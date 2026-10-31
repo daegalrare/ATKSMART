@@ -227,25 +227,6 @@
         </div>
 
         {{-- ============================================================ --}}
-        {{-- GRAFIK TREN OMZET + LABA                                      --}}
-        {{-- ============================================================ --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-xs p-5 sm:p-6 fade-in fade-in-2">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h2 class="text-sm font-bold text-slate-800">Tren Omzet &amp; Laba</h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Pergerakan keuangan selama periode yang dipilih</p>
-                </div>
-                <div class="flex items-center gap-4 text-xs text-slate-500">
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-indigo-500 rounded-full inline-block"></span>Omzet</span>
-                    <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-emerald-500 rounded-full inline-block"></span>Laba</span>
-                </div>
-            </div>
-            <div class="relative h-52 sm:h-64">
-                <canvas id="chartTrenLaporan"></canvas>
-            </div>
-        </div>
-
-        {{-- ============================================================ --}}
         {{-- TABS: RINCIAN DATA                                            --}}
         {{-- ============================================================ --}}
         <div class="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden fade-in fade-in-3">
@@ -635,7 +616,6 @@
     </div>
 
     @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // ── Tabs ──────────────────────────────────────────────────────
         const tabIds = ['penjualan','produk','pembelian','penyesuaian'];
@@ -670,73 +650,6 @@
             const icon = btn.querySelector('.toggle-icon');
             list.classList.toggle('open');
             icon.style.transform = list.classList.contains('open') ? 'rotate(180deg)' : '';
-        }
-
-        // ── Chart Tren Omzet & Laba ───────────────────────────────────
-        const ctx = document.getElementById('chartTrenLaporan');
-        if (ctx) {
-            const labels = @json($chartLabels);
-            const omzetData = @json($chartOmzet);
-            const labaData  = @json($chartLaba);
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Omzet',
-                            data: omzetData,
-                            borderColor: '#6366f1',
-                            backgroundColor: 'rgba(99,102,241,0.08)',
-                            borderWidth: 2.5,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#6366f1',
-                            tension: 0.4,
-                            fill: true,
-                        },
-                        {
-                            label: 'Laba Kotor',
-                            data: labaData,
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16,185,129,0.06)',
-                            borderWidth: 2,
-                            pointRadius: 3,
-                            pointBackgroundColor: '#10b981',
-                            tension: 0.4,
-                            fill: true,
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            callbacks: {
-                                label: ctx => ctx.dataset.label + ': Rp ' + new Intl.NumberFormat('id-ID').format(ctx.parsed.y)
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false },
-                            ticks: { font: { size: 10 }, color: '#94a3b8', maxTicksLimit: 10 }
-                        },
-                        y: {
-                            grid: { color: '#f1f5f9', drawBorder: false },
-                            ticks: {
-                                font: { size: 10 }, color: '#94a3b8',
-                                callback: v => 'Rp ' + new Intl.NumberFormat('id-ID',{notation:'compact'}).format(v)
-                            }
-                        }
-                    },
-                    interaction: { mode: 'index', intersect: false }
-                }
-            });
         }
     </script>
     @endpush
