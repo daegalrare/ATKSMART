@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AiStockController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -77,5 +78,8 @@ Route::middleware('auth.app')->group(function () {
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/print', [LaporanController::class, 'print'])->name('laporan.print');
         Route::get('/laporan/export-csv', [LaporanController::class, 'exportCsv'])->name('laporan.export');
+
+        // AI Smart Stock Alert
+        Route::get('/ai-stock', [AiStockController::class, 'index'])->name('ai.stock.index');
     });
 });

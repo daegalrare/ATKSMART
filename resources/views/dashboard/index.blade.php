@@ -96,6 +96,69 @@
         </div>
 
         <!-- ======================================================== -->
+        <!-- AI SMART STOCK ALERT WIDGET                              -->
+        <!-- ======================================================== -->
+        @php
+            $aiStokKritis = \App\Models\Product::whereRaw('stok_produk <= COALESCE(stok_minimum, 5)')->orderBy('stok_produk','asc')->take(4)->get();
+            $aiStokHabis  = \App\Models\Product::where('stok_produk', '<=', 0)->count();
+        @endphp
+        @if($aiStokKritis->count() > 0)
+        <div class="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 rounded-2xl sm:rounded-3xl p-5 sm:p-6 text-white shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                            <circle cx="7.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/>
+                            <circle cx="16.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/>
+                            <path d="M7 18h10"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-bold text-sm sm:text-base">AI Smart Stock Alert</h3>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 border border-white/30 text-[10px] font-bold uppercase">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse"></span>
+                                Live
+                            </span>
+                        </div>
+                        <p class="text-indigo-200 text-xs">{{ $aiStokKritis->count() }} produk membutuhkan perhatian segera</p>
+                    </div>
+                </div>
+                <a href="{{ route('ai.stock.index') }}" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/20 hover:bg-white/30 border border-white/30 text-xs font-semibold transition">
+                    Lihat Semua
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                @foreach($aiStokKritis as $kritis)
+                <div class="bg-white/10 border border-white/20 rounded-xl p-3.5 hover:bg-white/20 transition">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <p class="text-xs font-semibold leading-tight line-clamp-2">{{ $kritis->nama_produk }}</p>
+                        @if($kritis->stok_produk <= 0)
+                            <span class="shrink-0 px-1.5 py-0.5 rounded-md bg-red-500/80 text-[9px] font-bold uppercase">Habis</span>
+                        @else
+                            <span class="shrink-0 px-1.5 py-0.5 rounded-md bg-orange-500/80 text-[9px] font-bold uppercase">Kritis</span>
+                        @endif
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <p class="text-2xl font-extrabold leading-none {{ $kritis->stok_produk <= 0 ? 'text-red-300' : 'text-amber-300' }}">{{ $kritis->stok_produk }}</p>
+                            <p class="text-[10px] text-indigo-200 mt-0.5">Min. {{ $kritis->stok_minimum ?? 5 }} {{ $kritis->satuan_terkecil ?? 'pcs' }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] text-indigo-200">AI saran reorder</p>
+                            <p class="text-xs font-bold text-white">{{ max(($kritis->stok_minimum ?? 5) * 3, 10) }} {{ $kritis->satuan_terkecil ?? 'pcs' }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <!-- ======================================================== -->
         <!-- ROW 2: BAR CHART (Outpatients vs Inpatients) & GENDER    -->
         <!-- ======================================================== -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">

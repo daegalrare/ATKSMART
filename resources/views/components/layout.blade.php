@@ -78,6 +78,23 @@
                                 <span>Dashboard</span>
                             </a>
 
+                            <!-- AI Smart Stock Alert -->
+                            <a href="{{ route('ai.stock.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors {{ request()->is('ai-stock*') ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                                    <circle cx="7.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/>
+                                    <circle cx="16.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/>
+                                    <path d="M7 18h10"/>
+                                </svg>
+                                <span>AI Stock Alert</span>
+                                @php
+                                    $aiCritical = \App\Models\Product::where('stok_produk', '<=', \Illuminate\Support\Facades\DB::raw('stok_minimum'))->count();
+                                @endphp
+                                @if($aiCritical > 0)
+                                <span class="ml-auto inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold">{{ $aiCritical > 9 ? '9+' : $aiCritical }}</span>
+                                @endif
+                            </a>
+
                             <!-- Laporan & Analisis Keuangan -->
                             <a href="{{ route('laporan.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors {{ request()->is('laporan*') ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/30' : 'text-slate-300 hover:bg-slate-800/80 hover:text-white' }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
