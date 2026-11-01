@@ -191,7 +191,7 @@
                 </div>
                 <p class="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight">Rp {{ number_format($totalPembelian, 0, ',', '.') }}</p>
                 <p class="text-[10px] font-semibold text-slate-400 mt-1">Beli Stok</p>
-                <p class="text-[10px] text-amber-500 mt-0.5 font-medium">Kulakan dari supplier</p>
+                <p class="text-[10px] text-amber-500 mt-0.5 font-medium">Pembelian dari toko</p>
             </div>
 
             {{-- 5. Laba Bersih --}}
@@ -226,7 +226,7 @@
 
             {{-- Tab Navigation --}}
             <div class="bg-slate-50/80 border-b border-slate-100 p-1.5">
-                <div class="flex gap-1 overflow-x-auto thin-scroll">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
                     @php
                         $tabs = [
                             ['id' => 'penjualan',   'label' => 'Rincian Penjualan', 'count' => $penjualanList->total(),   'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>'],
@@ -237,12 +237,12 @@
                     @endphp
                     @foreach($tabs as $idx => $tab)
                     <button type="button" onclick="switchReportTab('tab-{{ $tab['id'] }}')" id="btn-tab-{{ $tab['id'] }}"
-                            class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer shrink-0
+                            class="tab-btn flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer w-full
                                    {{ $idx === 0 ? 'tab-btn-active' : 'tab-btn-inactive' }}">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">{!! $tab['icon'] !!}</svg>
-                        <span>{{ $tab['label'] }}</span>
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">{!! $tab['icon'] !!}</svg>
+                        <span class="truncate">{{ $tab['label'] }}</span>
                         <span id="badge-{{ $tab['id'] }}"
-                              class="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full text-[10px] font-black
+                              class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black shrink-0
                                      {{ $idx === 0 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600' }}">
                             {{ $tab['count'] > 99 ? '99+' : $tab['count'] }}
                         </span>
