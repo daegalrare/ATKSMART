@@ -493,34 +493,42 @@
                 <div class="overflow-x-auto thin-scroll">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider border-b border-slate-100">
-                                <th class="py-3 px-5">ID &amp; Tanggal</th>
-                                <th class="py-3 px-5">Produk</th>
-                                <th class="py-3 px-5 text-center">Unit Masuk</th>
-                                <th class="py-3 px-5">Harga Satuan</th>
-                                <th class="py-3 px-5 text-right">Total Biaya</th>
+                            <tr class="text-xs font-bold text-slate-600 uppercase tracking-wider border-b border-slate-100 bg-slate-50/60">
+                                <th class="py-3.5 px-6 w-36">ID &amp; Tanggal</th>
+                                <th class="py-3.5 px-6">Produk</th>
+                                <th class="py-3.5 px-6 text-center w-36">Unit Masuk</th>
+                                <th class="py-3.5 px-6 w-40">Harga Satuan</th>
+                                <th class="py-3.5 px-6 text-right w-44">Total Biaya</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50">
+                        <tbody class="divide-y divide-slate-100">
                         @forelse ($pembelianList as $beli)
                             <tr class="hover:bg-slate-50/60 transition-colors">
-                                <td class="py-3.5 px-5">
-                                    <span class="font-mono font-bold text-slate-800 text-xs">#{{ $beli->id_pembelian }}</span>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">{{ $beli->tanggal_masuk ? \Carbon\Carbon::parse($beli->tanggal_masuk)->translatedFormat('d M Y') : '-' }}</p>
+                                <td class="py-4 px-6">
+                                    <span class="font-mono font-bold text-slate-900 text-sm">#{{ $beli->id_pembelian }}</span>
+                                    <p class="text-xs text-slate-400 font-medium mt-0.5">{{ $beli->tanggal_masuk ? \Carbon\Carbon::parse($beli->tanggal_masuk)->translatedFormat('d M Y') : '-' }}</p>
                                 </td>
-                                <td class="py-3.5 px-5">
-                                    <p class="font-semibold text-slate-900">{{ $beli->product->nama_produk ?? 'Produk Dihapus' }}</p>
+                                <td class="py-4 px-6">
+                                    <p class="font-bold text-slate-900 text-sm leading-snug">{{ $beli->product->nama_produk ?? 'Produk Dihapus' }}</p>
                                     @if($beli->product)
-                                    <p class="text-[10px] text-slate-400 font-mono mt-0.5">{{ $beli->product->kode_produk }}</p>
+                                    <div class="flex items-center gap-1.5 mt-1">
+                                        <span class="text-xs text-slate-400 font-mono">{{ $beli->product->kode_produk }}</span>
+                                        @if($beli->product->category)
+                                        <span class="text-xs text-slate-300">•</span>
+                                        <span class="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                                            {{ $beli->product->category->nama_kategori }}
+                                        </span>
+                                        @endif
+                                    </div>
                                     @endif
                                 </td>
-                                <td class="py-3.5 px-5 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-50 text-emerald-700 border border-emerald-100">
-                                        +{{ number_format($beli->jumlah_barang_masuk) }} {{ $beli->product->satuan_terkecil ?? 'unit' }}
+                                <td class="py-4 px-6 text-center">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-black bg-emerald-50 text-emerald-700 border border-emerald-100 shadow-2xs">
+                                        +{{ number_format($beli->jumlah_barang_masuk) }} {{ $beli->product->satuan_terkecil ?? 'pcs' }}
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-5 text-slate-500">Rp {{ number_format($beli->harga_beli_satuan, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-5 text-right font-bold text-slate-900">Rp {{ number_format($beli->total_harga_beli, 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-600">Rp {{ number_format($beli->harga_beli_satuan, 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 text-right font-extrabold text-slate-900 text-sm sm:text-base">Rp {{ number_format($beli->total_harga_beli, 0, ',', '.') }}</td>
                             </tr>
                         @empty
                             <tr>
@@ -564,47 +572,53 @@
                 <div class="overflow-x-auto thin-scroll">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider border-b border-slate-100">
-                                <th class="py-3 px-5">ID &amp; Tanggal</th>
-                                <th class="py-3 px-5">Produk</th>
-                                <th class="py-3 px-5 text-center">Unit Selisih</th>
-                                <th class="py-3 px-5">Harga Satuan</th>
-                                <th class="py-3 px-5">Total Estimasi</th>
-                                <th class="py-3 px-5 text-right">Keterangan</th>
+                            <tr class="text-xs font-bold text-slate-600 uppercase tracking-wider border-b border-slate-100 bg-slate-50/60">
+                                <th class="py-3.5 px-6 w-36">ID &amp; Tanggal</th>
+                                <th class="py-3.5 px-6">Produk</th>
+                                <th class="py-3.5 px-6 text-center w-36">Unit Selisih</th>
+                                <th class="py-3.5 px-6 w-40">Harga Satuan</th>
+                                <th class="py-3.5 px-6 text-right w-44">Total Biaya</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50">
+                        <tbody class="divide-y divide-slate-100">
                         @forelse ($penyesuaianList as $adj)
                             @php 
                                 $hargaSatuan = $adj->product->harga_beli_terakhir ?? 0;
                                 $nilaiRp = $adj->jumlah_selisih * $hargaSatuan; 
                             @endphp
                             <tr class="hover:bg-slate-50/60 transition-colors">
-                                <td class="py-3.5 px-5">
-                                    <span class="font-mono font-bold text-slate-800 text-xs">#{{ $adj->id_penyesuaian }}</span>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">{{ $adj->tanggal_cek ? \Carbon\Carbon::parse($adj->tanggal_cek)->translatedFormat('d M Y') : '-' }}</p>
+                                <td class="py-4 px-6">
+                                    <span class="font-mono font-bold text-slate-900 text-sm">#{{ $adj->id_penyesuaian }}</span>
+                                    <p class="text-xs text-slate-400 font-medium mt-0.5">{{ $adj->tanggal_cek ? \Carbon\Carbon::parse($adj->tanggal_cek)->translatedFormat('d M Y') : '-' }}</p>
                                 </td>
-                                <td class="py-3.5 px-5">
-                                    <p class="font-semibold text-slate-900">{{ $adj->product->nama_produk ?? 'Produk Dihapus' }}</p>
-                                    @if($adj->product)
-                                    <p class="text-[10px] text-slate-400 font-mono mt-0.5">{{ $adj->product->kode_produk }}</p>
-                                    @endif
+                                <td class="py-4 px-6">
+                                    <p class="font-bold text-slate-900 text-sm leading-snug">{{ $adj->product->nama_produk ?? 'Produk Dihapus' }}</p>
+                                    <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                                        @if($adj->product)
+                                        <span class="text-xs text-slate-400 font-mono">{{ $adj->product->kode_produk }}</span>
+                                        @endif
+                                        @if($adj->keterangan)
+                                        <span class="text-xs text-slate-300">•</span>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200/50">
+                                            {{ $adj->keterangan }}
+                                        </span>
+                                        @endif
+                                    </div>
                                 </td>
-                                <td class="py-3.5 px-5 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-black border
+                                <td class="py-4 px-6 text-center">
+                                    <span class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-black border shadow-2xs
                                                  {{ $adj->jumlah_selisih < 0 ? 'bg-rose-50 text-rose-700 border-rose-100' : ($adj->jumlah_selisih > 0 ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-slate-50 text-slate-600 border-slate-100') }}">
                                         {{ $adj->jumlah_selisih > 0 ? '+' : '' }}{{ number_format($adj->jumlah_selisih) }} {{ $adj->product->satuan_terkecil ?? 'pcs' }}
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-5 text-slate-500">Rp {{ number_format($hargaSatuan, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-5 font-bold {{ $nilaiRp < 0 ? 'text-rose-600' : ($nilaiRp > 0 ? 'text-emerald-600' : 'text-slate-900') }}">
+                                <td class="py-4 px-6 text-sm font-semibold text-slate-600">Rp {{ number_format($hargaSatuan, 0, ',', '.') }}</td>
+                                <td class="py-4 px-6 text-right font-extrabold text-sm sm:text-base {{ $nilaiRp < 0 ? 'text-rose-600' : ($nilaiRp > 0 ? 'text-emerald-600' : 'text-slate-900') }}">
                                     {{ $nilaiRp < 0 ? '-' : ($nilaiRp > 0 ? '+' : '') }}Rp {{ number_format(abs($nilaiRp), 0, ',', '.') }}
                                 </td>
-                                <td class="py-3.5 px-5 text-right text-xs text-slate-400 italic">{{ $adj->keterangan ?: '—' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-16 text-center">
+                                <td colspan="5" class="py-16 text-center">
                                     <div class="flex flex-col items-center gap-2 text-slate-300">
                                         <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                                         <p class="text-sm font-semibold text-slate-400">Tidak ada catatan opname pada periode ini</p>

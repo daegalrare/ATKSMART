@@ -170,13 +170,13 @@ class LaporanController extends Controller
         // 10. TABEL 3: REKAP PEMBELIAN STOK (KULAKAN)
         $pembelianList = PembelianStok::with(['product.category'])
             ->whereBetween('tanggal_masuk', [$startDate, $endDate])
-            ->orderBy('tanggal_masuk', 'desc')
+            ->orderBy('id_pembelian', 'asc')
             ->get();
 
         // 11. TABEL 4: REKAP PENYESUAIAN STOK (LOSS / OPNAME)
         $penyesuaianList = PenyesuaianStok::with(['product.category'])
             ->whereBetween('tanggal_cek', [$startDate, $endDate])
-            ->orderBy('tanggal_cek', 'desc')
+            ->orderBy('id_penyesuaian', 'asc')
             ->get();
 
         return view('laporan.index', compact(
@@ -247,7 +247,7 @@ class LaporanController extends Controller
 
         $pembelianList = PembelianStok::with('product')
             ->whereBetween('tanggal_masuk', [$startDate, $endDate])
-            ->orderBy('tanggal_masuk', 'desc')
+            ->orderBy('id_pembelian', 'asc')
             ->get();
 
         return view('laporan.print', compact(
