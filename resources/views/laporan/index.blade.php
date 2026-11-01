@@ -565,33 +565,46 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider border-b border-slate-100">
-                                <th class="py-3 px-5">Tanggal</th>
+                                <th class="py-3 px-5">ID &amp; Tanggal</th>
                                 <th class="py-3 px-5">Produk</th>
-                                <th class="py-3 px-5 text-center">Selisih Stok</th>
-                                <th class="py-3 px-5 text-right">Nilai Estimasi</th>
+                                <th class="py-3 px-5 text-center">Unit Selisih</th>
+                                <th class="py-3 px-5 text-right">Harga Satuan</th>
+                                <th class="py-3 px-5 text-right">Total Estimasi</th>
                                 <th class="py-3 px-5">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
                         @forelse ($penyesuaianList as $adj)
-                            @php $nilaiRp = $adj->jumlah_selisih * ($adj->product->harga_beli_terakhir ?? 0); @endphp
+                            @php 
+                                $hargaSatuan = $adj->product->harga_beli_terakhir ?? 0;
+                                $nilaiRp = $adj->jumlah_selisih * $hargaSatuan; 
+                            @endphp
                             <tr class="hover:bg-slate-50/60 transition-colors">
-                                <td class="py-3.5 px-5 text-xs font-semibold text-slate-600">{{ $adj->tanggal_cek ? \Carbon\Carbon::parse($adj->tanggal_cek)->translatedFormat('d M Y') : '-' }}</td>
-                                <td class="py-3.5 px-5 font-semibold text-slate-900">{{ $adj->product->nama_produk ?? 'Produk Dihapus' }}</td>
+                                <td class="py-3.5 px-5">
+                                    <span class="font-mono font-bold text-slate-800 text-xs">#{{ $adj->id_penyesuaian }}</span>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">{{ $adj->tanggal_cek ? \Carbon\Carbon::parse($adj->tanggal_cek)->translatedFormat('d M Y') : '-' }}</p>
+                                </td>
+                                <td class="py-3.5 px-5">
+                                    <p class="font-semibold text-slate-900">{{ $adj->product->nama_produk ?? 'Produk Dihapus' }}</p>
+                                    @if($adj->product)
+                                    <p class="text-[10px] text-slate-400 font-mono mt-0.5">{{ $adj->product->kode_produk }}</p>
+                                    @endif
+                                </td>
                                 <td class="py-3.5 px-5 text-center">
                                     <span class="inline-flex items-center px-2.5 py-1 rounded-xl text-xs font-black border
-                                                 {{ $adj->jumlah_selisih >= 0 ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200' }}">
-                                        {{ $adj->jumlah_selisih > 0 ? '+' : '' }}{{ $adj->jumlah_selisih }} unit
+                                                 {{ $adj->jumlah_selisih < 0 ? 'bg-rose-50 text-rose-700 border-rose-100' : ($adj->jumlah_selisih > 0 ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-slate-50 text-slate-600 border-slate-100') }}">
+                                        {{ $adj->jumlah_selisih > 0 ? '+' : '' }}{{ number_format($adj->jumlah_selisih) }} {{ $adj->product->satuan_terkecil ?? 'pcs' }}
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-5 text-right font-bold {{ $nilaiRp >= 0 ? 'text-emerald-600' : 'text-rose-600' }}">
-                                    {{ $nilaiRp >= 0 ? '+' : '' }}Rp {{ number_format($nilaiRp, 0, ',', '.') }}
+                                <td class="py-3.5 px-5 text-right text-slate-500">Rp {{ number_format($hargaSatuan, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 text-right font-bold {{ $nilaiRp < 0 ? 'text-rose-600' : ($nilaiRp > 0 ? 'text-emerald-600' : 'text-slate-900') }}">
+                                    {{ $nilaiRp < 0 ? '-' : ($nilaiRp > 0 ? '+' : '') }}Rp {{ number_format(abs($nilaiRp), 0, ',', '.') }}
                                 </td>
                                 <td class="py-3.5 px-5 text-xs text-slate-400 italic">{{ $adj->keterangan ?: '—' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-16 text-center">
+                                <td colspan="6" class="py-16 text-center">
                                     <div class="flex flex-col items-center gap-2 text-slate-300">
                                         <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
                                         <p class="text-sm font-semibold text-slate-400">Tidak ada catatan opname pada periode ini</p>
