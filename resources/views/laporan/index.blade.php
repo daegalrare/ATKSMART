@@ -296,9 +296,9 @@
                                 <th class="py-3 px-5">Invoice &amp; Waktu</th>
                                 <th class="py-3 px-5">Kasir</th>
                                 <th class="py-3 px-5">Item</th>
-                                <th class="py-3 px-5 text-right">Omzet</th>
-                                <th class="py-3 px-5 text-right">Modal HPP</th>
-                                <th class="py-3 px-5 text-right">Laba</th>
+                                <th class="py-3 px-5">Omzet</th>
+                                <th class="py-3 px-5">Modal HPP</th>
+                                <th class="py-3 px-5">Laba</th>
                                 <th class="py-3 px-5 text-center min-w-[120px]">Margin</th>
                                 <th class="py-3 px-5 text-center">Status</th>
                             </tr>
@@ -349,9 +349,9 @@
                                         @endforeach
                                     </div>
                                 </td>
-                                <td class="py-3.5 px-5 text-right font-bold text-slate-900 text-sm">Rp {{ number_format($omzet, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-5 text-right text-slate-500 text-sm">Rp {{ number_format($hpp, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-5 text-right font-bold text-emerald-600 text-sm">+Rp {{ number_format($laba, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 font-bold text-slate-900 text-sm">Rp {{ number_format($omzet, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 text-slate-500 text-sm">Rp {{ number_format($hpp, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 font-bold text-emerald-600 text-sm">+Rp {{ number_format($laba, 0, ',', '.') }}</td>
                                 <td class="py-3.5 px-5">
                                     <div class="flex flex-col items-center gap-1.5">
                                         <span class="px-2.5 py-0.5 rounded-full text-xs font-black {{ $bdgC }}">{{ number_format($margin, 1) }}%</span>
@@ -408,9 +408,9 @@
                                 <th class="py-3 px-5 w-12">#</th>
                                 <th class="py-3 px-5">Produk &amp; Kategori</th>
                                 <th class="py-3 px-5 text-center">Terjual</th>
-                                <th class="py-3 px-5 text-right">Omzet</th>
-                                <th class="py-3 px-5 text-right">Modal HPP</th>
-                                <th class="py-3 px-5 text-right">Laba</th>
+                                <th class="py-3 px-5">Omzet</th>
+                                <th class="py-3 px-5">Modal HPP</th>
+                                <th class="py-3 px-5">Laba</th>
                                 <th class="py-3 px-5 text-center min-w-[120px]">Margin</th>
                             </tr>
                         </thead>
@@ -444,9 +444,9 @@
                                     <span class="font-black text-slate-800">{{ number_format($prod->total_qty) }}</span>
                                     <span class="text-slate-400 text-xs ml-0.5">unit</span>
                                 </td>
-                                <td class="py-3.5 px-5 text-right font-semibold text-slate-900">Rp {{ number_format($prod->total_omzet, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-5 text-right text-slate-400">Rp {{ number_format($prod->total_modal, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-5 text-right font-bold text-emerald-600">+Rp {{ number_format($prod->total_laba, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 font-semibold text-slate-900">Rp {{ number_format($prod->total_omzet, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 text-slate-400">Rp {{ number_format($prod->total_modal, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 font-bold text-emerald-600">+Rp {{ number_format($prod->total_laba, 0, ',', '.') }}</td>
                                 <td class="py-3.5 px-5">
                                     <div class="flex flex-col items-center gap-1.5">
                                         <span class="px-2.5 py-0.5 rounded-full text-xs font-black {{ $pb }}">{{ number_format($mp, 1) }}%</span>
@@ -497,7 +497,7 @@
                                 <th class="py-3 px-5">ID &amp; Tanggal</th>
                                 <th class="py-3 px-5">Produk</th>
                                 <th class="py-3 px-5 text-center">Unit Masuk</th>
-                                <th class="py-3 px-5 text-right">Harga Satuan</th>
+                                <th class="py-3 px-5">Harga Satuan</th>
                                 <th class="py-3 px-5 text-right">Total Biaya</th>
                             </tr>
                         </thead>
@@ -519,7 +519,7 @@
                                         +{{ number_format($beli->jumlah_barang_masuk) }} {{ $beli->product->satuan_terkecil ?? 'unit' }}
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-5 text-right text-slate-500">Rp {{ number_format($beli->harga_beli_satuan, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 text-slate-500">Rp {{ number_format($beli->harga_beli_satuan, 0, ',', '.') }}</td>
                                 <td class="py-3.5 px-5 text-right font-bold text-slate-900">Rp {{ number_format($beli->total_harga_beli, 0, ',', '.') }}</td>
                             </tr>
                         @empty
@@ -568,9 +568,9 @@
                                 <th class="py-3 px-5">ID &amp; Tanggal</th>
                                 <th class="py-3 px-5">Produk</th>
                                 <th class="py-3 px-5 text-center">Unit Selisih</th>
-                                <th class="py-3 px-5 text-right">Harga Satuan</th>
-                                <th class="py-3 px-5 text-right">Total Estimasi</th>
-                                <th class="py-3 px-5">Keterangan</th>
+                                <th class="py-3 px-5">Harga Satuan</th>
+                                <th class="py-3 px-5">Total Estimasi</th>
+                                <th class="py-3 px-5 text-right">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
@@ -596,11 +596,11 @@
                                         {{ $adj->jumlah_selisih > 0 ? '+' : '' }}{{ number_format($adj->jumlah_selisih) }} {{ $adj->product->satuan_terkecil ?? 'pcs' }}
                                     </span>
                                 </td>
-                                <td class="py-3.5 px-5 text-right text-slate-500">Rp {{ number_format($hargaSatuan, 0, ',', '.') }}</td>
-                                <td class="py-3.5 px-5 text-right font-bold {{ $nilaiRp < 0 ? 'text-rose-600' : ($nilaiRp > 0 ? 'text-emerald-600' : 'text-slate-900') }}">
+                                <td class="py-3.5 px-5 text-slate-500">Rp {{ number_format($hargaSatuan, 0, ',', '.') }}</td>
+                                <td class="py-3.5 px-5 font-bold {{ $nilaiRp < 0 ? 'text-rose-600' : ($nilaiRp > 0 ? 'text-emerald-600' : 'text-slate-900') }}">
                                     {{ $nilaiRp < 0 ? '-' : ($nilaiRp > 0 ? '+' : '') }}Rp {{ number_format(abs($nilaiRp), 0, ',', '.') }}
                                 </td>
-                                <td class="py-3.5 px-5 text-xs text-slate-400 italic">{{ $adj->keterangan ?: '—' }}</td>
+                                <td class="py-3.5 px-5 text-right text-xs text-slate-400 italic">{{ $adj->keterangan ?: '—' }}</td>
                             </tr>
                         @empty
                             <tr>
