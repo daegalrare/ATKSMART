@@ -9,6 +9,7 @@
         <!-- ======================================================== -->
         <!-- ROW 1: 4 TOP STAT CARDS (Sesuai Referensi H-care)        -->
         <!-- ======================================================== -->
+        <div class="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-purple-50 via-sky-50 via-amber-50 to-rose-50 p-4 sm:p-5 border border-slate-200/60 shadow-xs">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
 
             <!-- Card 1: Total Penjualan -->
@@ -94,6 +95,7 @@
             </div>
 
         </div>
+        </div><!-- end stat cards wrapper -->
 
         <!-- ======================================================== -->
         <!-- AI SMART STOCK ALERT WIDGET                              -->
