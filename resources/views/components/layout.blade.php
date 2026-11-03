@@ -228,7 +228,7 @@
         </aside>
 
         <!-- MAIN CONTENT AREA -->
-        <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50 ring-1 ring-inset ring-blue-200/70">
             @php
                 // Query real-time data untuk notifikasi sistem
                 $notifStokMenipis = \App\Models\Product::whereRaw('stok_produk <= COALESCE(stok_minimum, 5)')
@@ -244,7 +244,7 @@
             @endphp
 
             <!-- TOPBAR / HEADER -->
-            <header class="relative z-40 h-16 bg-white border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between shadow-xs shrink-0">
+            <header class="relative z-40 h-16 bg-white border-b border-blue-200/60 px-4 sm:px-6 flex items-center justify-between shadow-xs shrink-0">
                 <div class="flex items-center gap-3">
                     <!-- Toggle Mobile Sidebar -->
                     <button id="open-sidebar-btn" type="button" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 md:hidden focus:outline-hidden">
@@ -373,7 +373,7 @@
             </main>
 
             <!-- FOOTER -->
-            <footer class="h-12 border-t border-slate-200/80 bg-white px-6 flex items-center justify-between text-xs text-slate-500 shrink-0">
+            <footer class="h-12 border-t border-blue-200/60 bg-white px-6 flex items-center justify-between text-xs text-slate-500 shrink-0">
                 <span>&copy; {{ date('Y') }} ATK SMART. All rights reserved.</span>
                 <span class="flex items-center gap-1.5 font-medium text-slate-500">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
