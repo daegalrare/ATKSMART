@@ -142,11 +142,19 @@
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">
                                         @if($item->foto_produk && file_exists(public_path('storage/' . $item->foto_produk)))
-                                            <div class="w-11 h-11 rounded-xl overflow-hidden border border-rose-200 shadow-2xs shrink-0 opacity-70">
+                                            <button type="button" 
+                                                    onclick="openImageModal('{{ asset('storage/' . $item->foto_produk) }}', '{{ addslashes($item->nama_produk) }}')" 
+                                                    class="group relative w-11 h-11 rounded-xl overflow-hidden border border-rose-200 shadow-2xs hover:ring-2 hover:ring-rose-400 hover:scale-105 transition-all shrink-0 cursor-pointer"
+                                                    title="Klik untuk melihat foto lebih besar">
                                                 <img src="{{ asset('storage/' . $item->foto_produk) }}"
                                                      alt="{{ $item->nama_produk }}"
-                                                     class="w-full h-full object-cover grayscale">
-                                            </div>
+                                                     class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition">
+                                                <span class="absolute inset-0 bg-slate-900/35 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+                                                    </svg>
+                                                </span>
+                                            </button>
                                         @else
                                             <div class="w-11 h-11 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-300 shrink-0">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
@@ -926,8 +934,8 @@
                 Apakah Anda yakin ingin menghapus produk <br>
                 <strong id="delete-product-name" class="text-slate-800 font-semibold"></strong>?
             </p>
-            <p class="text-xs text-rose-500 bg-rose-50/60 border border-rose-100 p-2.5 rounded-xl mb-6">
-                Peringatan: Data yang telah dihapus tidak dapat dipulihkan kembali.
+            <p class="text-xs text-amber-600 bg-amber-50/80 border border-amber-200 p-2.5 rounded-xl mb-6">
+                Catatan: Produk akan dipindahkan ke tab <strong>Produk Dihapus</strong> dan riwayat transaksi tetap terjaga. Anda dapat memulihkannya kapan saja.
             </p>
 
             <!-- Form Action -->
