@@ -217,6 +217,7 @@
                                 </td>
                             </tr>
                             @else
+                            <tr class="hover:bg-slate-50/60 transition {{ request('edit') == $item->id_produk ? 'bg-amber-50/70 border-l-4 border-amber-500' : '' }}">
                                 <!-- Foto, Kode & Nama -->
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">
@@ -340,6 +341,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            @endif
                         @empty
                             <tr>
                                 <td colspan="7" class="py-12 text-center text-slate-500">
