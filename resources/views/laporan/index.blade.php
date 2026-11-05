@@ -18,17 +18,28 @@
         .item-list  { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
         .item-list.open { max-height: 500px; }
 
+        .tab-btn {
+            border-width: 1.5px;
+            border-style: solid;
+        }
         .tab-btn-active {
-            background: white;
-            color: #4f46e5;
-            font-weight: 700;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            background: white !important;
+            color: #4f46e5 !important;
+            border-color: #6366f1 !important;
+            font-weight: 700 !important;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15) !important;
         }
         .tab-btn-inactive {
-            color: #94a3b8;
-            font-weight: 500;
+            background: white !important;
+            color: #64748b !important;
+            border-color: #e2e8f0 !important;
+            font-weight: 600 !important;
         }
-        .tab-btn-inactive:hover { color: #475569; background: rgba(255,255,255,0.5); }
+        .tab-btn-inactive:hover {
+            color: #1e293b !important;
+            background: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+        }
 
         .tab-content { animation: fadeSlideIn 0.25s ease; }
 
@@ -225,8 +236,8 @@
         <div class="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden fade-in fade-in-3">
 
             {{-- Tab Navigation --}}
-            <div class="bg-slate-50/80 border-b border-slate-100 p-1.5">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full">
+            <div class="bg-slate-50/80 border-b border-slate-200/80 p-2">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full">
                     @php
                         $tabs = [
                             ['id' => 'penjualan',   'label' => 'Rincian Penjualan', 'count' => $penjualanList->total(),   'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>'],
@@ -237,13 +248,13 @@
                     @endphp
                     @foreach($tabs as $idx => $tab)
                     <button type="button" onclick="switchReportTab('tab-{{ $tab['id'] }}')" id="btn-tab-{{ $tab['id'] }}"
-                            class="tab-btn flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer w-full
+                            class="tab-btn flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl text-xs whitespace-nowrap transition-all cursor-pointer w-full shadow-2xs
                                    {{ $idx === 0 ? 'tab-btn-active' : 'tab-btn-inactive' }}">
                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">{!! $tab['icon'] !!}</svg>
-                        <span class="truncate">{{ $tab['label'] }}</span>
+                        <span class="truncate font-semibold">{{ $tab['label'] }}</span>
                         <span id="badge-{{ $tab['id'] }}"
                               class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-black shrink-0
-                                     {{ $idx === 0 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600' }}">
+                                     {{ $idx === 0 ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
                             {{ $tab['count'] > 99 ? '99+' : $tab['count'] }}
                         </span>
                     </button>
@@ -649,7 +660,7 @@
                 btn.classList.add('tab-btn-inactive');
                 if (badge) {
                     badge.classList.remove('bg-indigo-100','text-indigo-700');
-                    badge.classList.add('bg-slate-200','text-slate-600');
+                    badge.classList.add('bg-slate-100','text-slate-600','border','border-slate-200');
                 }
             });
             const active = tabId.replace('tab-','');
@@ -660,7 +671,7 @@
             btn.classList.remove('tab-btn-inactive');
             if (badge) {
                 badge.classList.add('bg-indigo-100','text-indigo-700');
-                badge.classList.remove('bg-slate-200','text-slate-600');
+                badge.classList.remove('bg-slate-100','text-slate-600','border','border-slate-200');
             }
         }
 
