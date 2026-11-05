@@ -151,16 +151,6 @@
             75%      { transform: scale(1.08) rotate(5deg); }
         }
 
-        /* Progress Stepper */
-        .step-connector {
-            flex: 1;
-            height: 2px;
-            background: #e2e8f0;
-            margin: 0 6px;
-            position: relative;
-            top: -14px;
-        }
-
         /* Success checkmark pop */
         .success-checkmark { animation: checkmarkPop 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
         @keyframes checkmarkPop {
@@ -306,33 +296,6 @@
 
             {{-- Main Form Area --}}
             <div class="w-full max-w-md mx-auto my-8 lg:my-auto fade-in-up relative z-10">
-
-                {{-- Progress Stepper --}}
-                <div class="flex items-start mb-8">
-                    {{-- Step 1 --}}
-                    <div class="flex flex-col items-center gap-1.5">
-                        <div class="w-8 h-8 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center shadow-md shadow-blue-600/30 ring-4 ring-blue-100">
-                            1
-                        </div>
-                        <span class="text-[10px] font-bold text-blue-600 text-center whitespace-nowrap">Verifikasi<br>Email</span>
-                    </div>
-                    <div class="step-connector"></div>
-                    {{-- Step 2 --}}
-                    <div class="flex flex-col items-center gap-1.5">
-                        <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-xs font-bold flex items-center justify-center border-2 border-slate-200">
-                            2
-                        </div>
-                        <span class="text-[10px] font-semibold text-slate-400 text-center whitespace-nowrap">Konfirmasi<br>Admin</span>
-                    </div>
-                    <div class="step-connector"></div>
-                    {{-- Step 3 --}}
-                    <div class="flex flex-col items-center gap-1.5">
-                        <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 text-xs font-bold flex items-center justify-center border-2 border-slate-200">
-                            3
-                        </div>
-                        <span class="text-[10px] font-semibold text-slate-400 text-center whitespace-nowrap">Reset<br>Sandi</span>
-                    </div>
-                </div>
 
                 {{-- Title --}}
                 <div class="mb-8">
