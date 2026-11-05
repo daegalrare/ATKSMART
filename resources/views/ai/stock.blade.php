@@ -26,6 +26,169 @@
         .float-in-delay-2 { animation-delay: 0.10s; }
         .float-in-delay-3 { animation-delay: 0.15s; }
         .float-in-delay-4 { animation-delay: 0.20s; }
+
+        /* TAB FILTER BUTTONS (STATE ACTIVE & INACTIVE) */
+        .tab-filter-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Inactive states */
+        .tab-filter-btn[data-filter="all"].is-inactive {
+            background-color: #ffffff;
+            color: #475569;
+            border-color: #cbd5e1;
+        }
+        .tab-filter-btn[data-filter="all"].is-inactive:hover {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            border-color: #94a3b8;
+        }
+
+        .tab-filter-btn[data-filter="out"].is-inactive {
+            background-color: #ffffff;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+        .tab-filter-btn[data-filter="out"].is-inactive:hover {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border-color: #f87171;
+        }
+
+        .tab-filter-btn[data-filter="critical"].is-inactive {
+            background-color: #ffffff;
+            color: #ea580c;
+            border-color: #fed7aa;
+        }
+        .tab-filter-btn[data-filter="critical"].is-inactive:hover {
+            background-color: #fff7ed;
+            color: #c2410c;
+            border-color: #fb923c;
+        }
+
+        .tab-filter-btn[data-filter="warning"].is-inactive {
+            background-color: #ffffff;
+            color: #d97706;
+            border-color: #fde68a;
+        }
+        .tab-filter-btn[data-filter="warning"].is-inactive:hover {
+            background-color: #fffbeb;
+            color: #b45309;
+            border-color: #f59e0b;
+        }
+
+        .tab-filter-btn[data-filter="safe"].is-inactive {
+            background-color: #ffffff;
+            color: #059669;
+            border-color: #a7f3d0;
+        }
+        .tab-filter-btn[data-filter="safe"].is-inactive:hover {
+            background-color: #ecfdf5;
+            color: #047857;
+            border-color: #34d399;
+        }
+
+        .tab-filter-btn[data-filter="fast"].is-inactive {
+            background-color: #ffffff;
+            color: #7c3aed;
+            border-color: #ddd6fe;
+        }
+        .tab-filter-btn[data-filter="fast"].is-inactive:hover {
+            background-color: #f5f3ff;
+            color: #6d28d9;
+            border-color: #a78bfa;
+        }
+
+        .tab-filter-btn[data-filter="slow"].is-inactive {
+            background-color: #ffffff;
+            color: #475569;
+            border-color: #cbd5e1;
+        }
+        .tab-filter-btn[data-filter="slow"].is-inactive:hover {
+            background-color: #f8fafc;
+            color: #1e293b;
+            border-color: #94a3b8;
+        }
+
+        /* Active states (Saat diklik/terpilih) - Jelas, Kontras Tinggi & Teks Tetap Terbaca Sangat Terang */
+        .tab-filter-btn[data-filter="all"].is-active {
+            background-color: #4f46e5 !important;
+            color: #ffffff !important;
+            border-color: #4338ca !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+        .tab-filter-btn[data-filter="all"].is-active:hover {
+            background-color: #4338ca !important;
+            color: #ffffff !important;
+        }
+
+        .tab-filter-btn[data-filter="out"].is-active {
+            background-color: #dc2626 !important;
+            color: #ffffff !important;
+            border-color: #b91c1c !important;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+        }
+        .tab-filter-btn[data-filter="out"].is-active:hover {
+            background-color: #b91c1c !important;
+            color: #ffffff !important;
+        }
+
+        .tab-filter-btn[data-filter="critical"].is-active {
+            background-color: #ea580c !important;
+            color: #ffffff !important;
+            border-color: #c2410c !important;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35);
+        }
+        .tab-filter-btn[data-filter="critical"].is-active:hover {
+            background-color: #c2410c !important;
+            color: #ffffff !important;
+        }
+
+        .tab-filter-btn[data-filter="warning"].is-active {
+            background-color: #d97706 !important;
+            color: #ffffff !important;
+            border-color: #b45309 !important;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+        }
+        .tab-filter-btn[data-filter="warning"].is-active:hover {
+            background-color: #b45309 !important;
+            color: #ffffff !important;
+        }
+
+        .tab-filter-btn[data-filter="safe"].is-active {
+            background-color: #059669 !important;
+            color: #ffffff !important;
+            border-color: #047857 !important;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);
+        }
+        .tab-filter-btn[data-filter="safe"].is-active:hover {
+            background-color: #047857 !important;
+            color: #ffffff !important;
+        }
+
+        .tab-filter-btn[data-filter="fast"].is-active {
+            background-color: #7c3aed !important;
+            color: #ffffff !important;
+            border-color: #6d28d9 !important;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+        }
+        .tab-filter-btn[data-filter="fast"].is-active:hover {
+            background-color: #6d28d9 !important;
+            color: #ffffff !important;
+        }
+
+        .tab-filter-btn[data-filter="slow"].is-active {
+            background-color: #334155 !important;
+            color: #ffffff !important;
+            border-color: #1e293b !important;
+            box-shadow: 0 4px 12px rgba(51, 65, 85, 0.35);
+        }
+        .tab-filter-btn[data-filter="slow"].is-active:hover {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+        }
     </style>
     @endpush
 
@@ -108,7 +271,7 @@
 
             <div class="float-in float-in-delay-2 bg-white rounded-2xl border border-amber-100 shadow-xs p-4 text-center hover:shadow-md transition-all">
                 <p class="text-2xl font-extrabold text-amber-600">{{ $summary['warning'] }}</p>
-                <p class="text-xs text-slate-400 mt-0.5">Perlu Perhatian</p>
+                <p class="text-xs text-slate-400 mt-0.5">Waspada</p>
                 <div class="mt-2 w-8 h-1 bg-amber-400 rounded-full mx-auto"></div>
             </div>
 
@@ -160,13 +323,13 @@
 
             {{-- Tombol Filter di sebelah kanan (memenuhi seluruh sisa border) --}}
             <div class="flex flex-wrap sm:flex-nowrap items-center gap-1.5 w-full flex-1">
-                <button onclick="filterRisk('all')" id="btn-all" class="filter-btn active flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap bg-indigo-600 text-white border-indigo-600">Semua</button>
-                <button onclick="filterRisk('out')" id="btn-out" class="filter-btn flex-1 min-w-[85px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-red-200 text-red-600 bg-white hover:bg-red-50">Stok Habis</button>
-                <button onclick="filterRisk('critical')" id="btn-critical" class="filter-btn flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-orange-200 text-orange-600 bg-white hover:bg-orange-50">Kritis</button>
-                <button onclick="filterRisk('warning')" id="btn-warning" class="filter-btn flex-1 min-w-[75px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-amber-200 text-amber-600 bg-white hover:bg-amber-50">Waspada</button>
-                <button onclick="filterRisk('safe')" id="btn-safe" class="filter-btn flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-emerald-200 text-emerald-600 bg-white hover:bg-emerald-50">Aman</button>
-                <button onclick="filterRisk('fast')" id="btn-fast" class="filter-btn flex-1 min-w-[100px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-violet-200 text-violet-600 bg-white hover:bg-violet-50">🚀 Fast Moving</button>
-                <button onclick="filterRisk('slow')" id="btn-slow" class="filter-btn flex-1 min-w-[100px] py-2 px-2 rounded-xl text-xs font-semibold border transition-all text-center whitespace-nowrap border-slate-200 text-slate-500 bg-white hover:bg-slate-50">📦 Slow Moving</button>
+                <button type="button" onclick="filterRisk('all')" id="btn-all" data-filter="all" class="tab-filter-btn is-active flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-bold border text-center whitespace-nowrap">Semua</button>
+                <button type="button" onclick="filterRisk('out')" id="btn-out" data-filter="out" class="tab-filter-btn is-inactive flex-1 min-w-[85px] py-2 px-2 rounded-xl text-xs font-bold border text-center whitespace-nowrap">Stok Habis</button>
+                <button type="button" onclick="filterRisk('critical')" id="btn-critical" data-filter="critical" class="tab-filter-btn is-inactive flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-bold border text-center whitespace-nowrap">Kritis</button>
+                <button type="button" onclick="filterRisk('warning')" id="btn-warning" data-filter="warning" class="tab-filter-btn is-inactive flex-1 min-w-[75px] py-2 px-2 rounded-xl text-xs font-bold border text-center whitespace-nowrap">Waspada</button>
+                <button type="button" onclick="filterRisk('safe')" id="btn-safe" data-filter="safe" class="tab-filter-btn is-inactive flex-1 min-w-[65px] py-2 px-2 rounded-xl text-xs font-bold border text-center whitespace-nowrap">Aman</button>
+                <button type="button" onclick="filterRisk('fast')" id="btn-fast" data-filter="fast" class="tab-filter-btn is-inactive flex-1 min-w-[100px] py-2 px-2 rounded-xl text-xs font-bold border text-center whitespace-nowrap">🚀 Fast Moving</button>
+                <button type="button" onclick="filterRisk('slow')" id="btn-slow" data-filter="slow" class="tab-filter-btn is-inactive flex-1 min-w-[100px] py-2 px-2 rounded-xl text-xs font-bold border text-center whitespace-nowrap">📦 Slow Moving</button>
             </div>
         </div>
 
@@ -323,14 +486,14 @@
 
         function filterRisk(risk) {
             activeFilter = risk;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
-                btn.classList.add('bg-white');
+            document.querySelectorAll('.tab-filter-btn').forEach(btn => {
+                btn.classList.remove('is-active');
+                btn.classList.add('is-inactive');
             });
             const btn = document.getElementById('btn-' + risk);
             if (btn) {
-                btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
-                btn.classList.remove('bg-white');
+                btn.classList.remove('is-inactive');
+                btn.classList.add('is-active');
             }
             applyFilters();
         }
