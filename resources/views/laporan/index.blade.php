@@ -443,7 +443,12 @@
                                     @endif
                                 </td>
                                 <td class="py-3.5 px-5">
-                                    <p class="font-bold text-slate-900 text-sm">{{ $prod->nama_produk }}</p>
+                                    <div class="flex items-center gap-2">
+                                        <p class="font-bold text-slate-900 text-sm">{{ $prod->nama_produk }}</p>
+                                        @if($prod->product_deleted_at)
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">Dihapus</span>
+                                        @endif
+                                    </div>
                                     <div class="flex items-center gap-1.5 mt-0.5">
                                         <span class="font-mono text-[10px] text-slate-400">{{ $prod->kode_produk }}</span>
                                         @if($prod->nama_kategori)
@@ -520,7 +525,12 @@
                                     <p class="text-xs text-slate-400 font-medium mt-0.5">{{ $beli->tanggal_masuk ? \Carbon\Carbon::parse($beli->tanggal_masuk)->translatedFormat('d M Y') : '-' }}</p>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <p class="font-bold text-slate-900 text-sm leading-snug">{{ $beli->product->nama_produk ?? 'Produk Dihapus' }}</p>
+                                    <div class="flex items-center gap-2">
+                                        <p class="font-bold text-slate-900 text-sm leading-snug">{{ $beli->product->nama_produk ?? '(Produk dihapus permanen)' }}</p>
+                                        @if($beli->product && $beli->product->trashed())
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">Dihapus</span>
+                                        @endif
+                                    </div>
                                     @if($beli->product)
                                     <div class="flex items-center gap-1.5 mt-1">
                                         <span class="text-xs text-slate-400 font-mono">{{ $beli->product->kode_produk }}</span>
@@ -603,7 +613,12 @@
                                     <p class="text-xs text-slate-400 font-medium mt-0.5">{{ $adj->tanggal_cek ? \Carbon\Carbon::parse($adj->tanggal_cek)->translatedFormat('d M Y') : '-' }}</p>
                                 </td>
                                 <td class="py-4 px-6">
-                                    <p class="font-bold text-slate-900 text-sm leading-snug">{{ $adj->product->nama_produk ?? 'Produk Dihapus' }}</p>
+                                    <div class="flex items-center gap-2">
+                                        <p class="font-bold text-slate-900 text-sm leading-snug">{{ $adj->product->nama_produk ?? '(Produk dihapus permanen)' }}</p>
+                                        @if($adj->product && $adj->product->trashed())
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">Dihapus</span>
+                                        @endif
+                                    </div>
                                     <div class="flex flex-wrap items-center gap-1.5 mt-1">
                                         @if($adj->product)
                                         <span class="text-xs text-slate-400 font-mono">{{ $adj->product->kode_produk }}</span>

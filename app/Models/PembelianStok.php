@@ -30,9 +30,10 @@ class PembelianStok extends Model
 
     /**
      * Relasi ke tabel product.
+     * withTrashed() agar produk yang sudah soft-deleted tetap tampil di riwayat beli stok.
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'id_produk', 'id_produk');
+        return $this->belongsTo(Product::class, 'id_produk', 'id_produk')->withTrashed();
     }
 }

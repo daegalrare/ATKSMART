@@ -13,26 +13,55 @@ class ProductController extends Controller
 {
     public function index(Request $request): View
     {
-        $search = $request->query('search');
+        $search   = $request->query('search');
+        $showTrash = $request->boolean('trash');
 
-        $products = Product::with('category')
+        $query = Product::with('category')
             ->leftJoin('categories', 'product.id_kategori', '=', 'categories.id_kategori')
-            ->select('product.*')
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('product.nama_produk', 'like', "%{$search}%")
-                      ->orWhere('product.kode_produk', 'like', "%{$search}%")
-                      ->orWhere('categories.nama_kategori', 'like', "%{$search}%");
+            ->select('product.*');
+
+        if ($showTrash) {
+            $query->onlyTrashed();
+        }
+
+        $query->when($search, function ($q, $search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('product.nama_produk', 'like', "%{$search}%")
+                       ->orWhere('product.kode_produk', 'like', "%{$search}%")
+                       ->orWhere('categories.nama_kategori', 'like', "%{$search}%");
                 });
             })
             ->orderByRaw('CASE WHEN categories.nama_kategori IS NULL THEN 1 ELSE 0 END, categories.nama_kategori ASC')
-            ->orderBy('product.nama_produk', 'asc')
-            ->paginate(15)
-            ->withQueryString();
+            ->orderBy('product.nama_produk', 'asc');
 
+        $products  = $query->paginate(15)->withQueryString();
         $categories = Category::query()->orderBy('nama_kategori', 'asc')->get();
+        $trashedCount = Product::onlyTrashed()->count();
 
-        return view('product.index', compact('products', 'categories', 'search'));
+        return view('product.index', compact('products', 'categories', 'search', 'showTrash', 'trashedCount'));
+    }
+
+    public function restore($id): RedirectResponse
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $product->restore();
+
+        return redirect()->route('product.index', ['trash' => 1])
+            ->with('success', "Produk \"{$product->nama_produk}\" berhasil dipulihkan!");
+    }
+
+    public function forceDelete($id): RedirectResponse
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $nama    = $product->nama_produk;
+
+        if ($product->foto_produk) {
+            Storage::disk('public')->delete($product->foto_produk);
+        }
+        $product->forceDelete();
+
+        return redirect()->route('product.index', ['trash' => 1])
+            ->with('success', "Produk \"{$nama}\" dihapus permanen!");
     }
 
     public function store(Request $request): RedirectResponse

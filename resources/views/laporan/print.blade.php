@@ -248,7 +248,7 @@
                 @forelse ($pembelianList as $beli)
                     <tr>
                         <td>{{ $beli->tanggal_masuk ? \Carbon\Carbon::parse($beli->tanggal_masuk)->format('d/m/Y') : '-' }}</td>
-                        <td>{{ $beli->product->nama_produk ?? 'Produk Dihapus' }}</td>
+                        <td>{{ $beli->product->nama_produk ?? '(Produk dihapus permanen)' }}{{ ($beli->product && $beli->product->trashed()) ? ' [Dihapus]' : '' }}</td>
                         <td class="text-center">+{{ number_format($beli->jumlah_barang_masuk) }} {{ $beli->product->satuan_terkecil ?? 'unit' }}</td>
                         <td class="text-right">Rp {{ number_format($beli->harga_beli_satuan, 0, ',', '.') }}</td>
                         <td class="text-right" style="font-weight: 600;">Rp {{ number_format($beli->total_harga_beli, 0, ',', '.') }}</td>

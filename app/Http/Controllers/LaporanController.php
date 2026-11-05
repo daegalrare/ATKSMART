@@ -149,21 +149,23 @@ class LaporanController extends Controller
             ->withQueryString();
 
         // 9. TABEL 2: PERFORMA & MARGIN PER PRODUK
+        // Gunakan leftJoin ke product + whereNull(product.deleted_at) agar produk soft-deleted tetap muncul di laporan historis
         $produkPerforma = DetailPenjualan::join('penjualan', 'detail_penjualan.id_penjualan', '=', 'penjualan.id_penjualan')
-            ->join('product', 'detail_penjualan.id_produk', '=', 'product.id_produk')
+            ->join('product', 'detail_penjualan.id_produk', '=', 'product.id_produk') // join ALL (termasuk soft-deleted)
             ->leftJoin('categories', 'product.id_kategori', '=', 'categories.id_kategori')
             ->whereBetween('penjualan.tanggal_penjualan', [$startDateTime, $endDateTime])
             ->select(
                 'product.id_produk',
                 'product.nama_produk',
                 'product.kode_produk',
+                'product.deleted_at as product_deleted_at',
                 'categories.nama_kategori',
                 DB::raw('SUM(detail_penjualan.jumlah) as total_qty'),
                 DB::raw('SUM(detail_penjualan.subtotal) as total_omzet'),
                 DB::raw('SUM(detail_penjualan.jumlah * COALESCE(detail_penjualan.harga_beli_saat_ini, 0)) as total_modal'),
                 DB::raw('SUM(detail_penjualan.subtotal - (detail_penjualan.jumlah * COALESCE(detail_penjualan.harga_beli_saat_ini, 0))) as total_laba')
             )
-            ->groupBy('product.id_produk', 'product.nama_produk', 'product.kode_produk', 'categories.nama_kategori')
+            ->groupBy('product.id_produk', 'product.nama_produk', 'product.kode_produk', 'product.deleted_at', 'categories.nama_kategori')
             ->orderByDesc('total_laba')
             ->get();
 

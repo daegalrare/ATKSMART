@@ -54,8 +54,28 @@
             </div>
 
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <!-- Toggle: Aktif / Dihapus -->
+                <div class="inline-flex rounded-xl border border-slate-200 overflow-hidden text-sm font-semibold">
+                    <a href="{{ route('product.index', array_filter(['search' => request('search')])) }}"
+                       class="px-4 py-2.5 transition {{ !$showTrash ? 'bg-indigo-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-50' }}">
+                        Aktif
+                    </a>
+                    <a href="{{ route('product.index', array_filter(['trash' => 1, 'search' => request('search')])) }}"
+                       class="px-4 py-2.5 transition flex items-center gap-1.5 {{ $showTrash ? 'bg-rose-500 text-white' : 'bg-white text-slate-600 hover:bg-slate-50' }}">
+                        Produk Dihapus
+                        @if($trashedCount > 0)
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold {{ $showTrash ? 'bg-white/30 text-white' : 'bg-rose-100 text-rose-600' }}">
+                                {{ $trashedCount }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
+
                 <!-- Search Form -->
                 <form action="{{ route('product.index') }}" method="GET" class="relative">
+                    @if($showTrash)
+                        <input type="hidden" name="trash" value="1">
+                    @endif
                     <input 
                         type="text" 
                         name="search" 
@@ -67,19 +87,31 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     @if(request('search'))
-                        <a href="{{ route('product.index') }}" class="absolute right-3 top-3 text-xs text-slate-400 hover:text-slate-600">✕</a>
+                        <a href="{{ route('product.index', $showTrash ? ['trash' => 1] : []) }}" class="absolute right-3 top-3 text-xs text-slate-400 hover:text-slate-600">✕</a>
                     @endif
                 </form>
 
-                <!-- Tombol Tambah Produk -->
+                <!-- Tombol Tambah Produk (sembunyikan di tab trash) -->
+                @if(!$showTrash)
                 <button id="btn-open-create-modal" type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-xs transition shadow-indigo-500/20 cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                     </svg>
                     Tambah Produk
                 </button>
+                @endif
             </div>
         </div>
+
+        @if($showTrash)
+        <!-- Banner Info Trash -->
+        <div class="bg-rose-50 border border-rose-200 rounded-2xl px-6 py-3.5 flex items-center gap-3 text-sm text-rose-700">
+            <svg class="w-5 h-5 shrink-0 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
+            </svg>
+            <span>Produk di bawah ini sudah <strong>dihapus</strong> namun data riwayat transaksinya tetap terjaga. Kamu bisa <strong>Pulihkan</strong> atau <strong>Hapus Permanen</strong>.</span>
+        </div>
+        @endif
 
         <!-- Table Card -->
         <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
@@ -89,16 +121,102 @@
                         <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
                             <th class="py-3.5 px-6">Produk</th>
                             <th class="py-3.5 px-6">Kategori</th>
+                            @if(!$showTrash)
                             <th class="py-3.5 px-6">Stok Saat Ini</th>
                             <th class="py-3.5 px-6">Satuan</th>
                             <th class="py-3.5 px-6">Harga Beli</th>
                             <th class="py-3.5 px-6">Harga Jual</th>
+                            @else
+                            <th class="py-3.5 px-6">Harga Jual</th>
+                            <th class="py-3.5 px-6">Dihapus Pada</th>
+                            @endif
                             <th class="py-3.5 px-6 text-center w-36">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-sm">
                         @forelse ($products as $item)
-                            <tr class="hover:bg-slate-50/60 transition {{ request('edit') == $item->id_produk ? 'bg-amber-50/70 border-l-4 border-amber-500' : '' }}">
+                            @if($showTrash)
+                            {{-- Baris Produk Terhapus --}}
+                            <tr class="bg-rose-50/40 hover:bg-rose-50 transition">
+                                <!-- Foto, Kode & Nama -->
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-3">
+                                        @if($item->foto_produk && file_exists(public_path('storage/' . $item->foto_produk)))
+                                            <div class="w-11 h-11 rounded-xl overflow-hidden border border-rose-200 shadow-2xs shrink-0 opacity-70">
+                                                <img src="{{ asset('storage/' . $item->foto_produk) }}"
+                                                     alt="{{ $item->nama_produk }}"
+                                                     class="w-full h-full object-cover grayscale">
+                                            </div>
+                                        @else
+                                            <div class="w-11 h-11 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-300 shrink-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
+                                            </div>
+                                        @endif
+                                        <div class="flex flex-col gap-1 min-w-0">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-bold text-slate-500 text-[15px] leading-tight truncate line-through">{{ $item->nama_produk }}</span>
+                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-600 border border-rose-200">DIHAPUS</span>
+                                            </div>
+                                            <span class="inline-flex items-center gap-1 font-mono text-xs font-bold text-slate-400 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md w-fit">
+                                                {{ $item->kode_produk }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- Kategori -->
+                                <td class="py-4 px-6">
+                                    @if($item->category)
+                                        <div class="inline-flex items-center gap-1.5 opacity-60">
+                                            <x-category-icon :name="$item->category->nama_kategori" class="w-6 h-6 rounded-lg" icon-class="w-3.5 h-3.5" />
+                                            <span class="text-xs font-semibold text-slate-600">{{ $item->category->nama_kategori }}</span>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-slate-400 italic">Tanpa Kategori</span>
+                                    @endif
+                                </td>
+
+                                <!-- Harga Jual -->
+                                <td class="py-4 px-6 font-bold text-slate-400">
+                                    Rp {{ number_format($item->harga_jual ?? 0, 0, ',', '.') }}
+                                </td>
+
+                                <!-- Tanggal Dihapus -->
+                                <td class="py-4 px-6 text-xs text-rose-500 font-medium">
+                                    {{ $item->deleted_at ? $item->deleted_at->format('d M Y, H:i') : '-' }}
+                                </td>
+
+                                <!-- Aksi Trash -->
+                                <td class="py-4 px-6 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <!-- Tombol Pulihkan -->
+                                        <form action="{{ route('product.restore', $item->id_produk) }}" method="POST" onsubmit="return confirm('Pulihkan produk ini?')">
+                                            @csrf @method('PATCH')
+                                            <button type="submit"
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition cursor-pointer"
+                                                title="Pulihkan produk">
+                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"/>
+                                                </svg>
+                                                Pulihkan
+                                            </button>
+                                        </form>
+                                        <!-- Tombol Hapus Permanen -->
+                                        <form action="{{ route('product.forceDelete', $item->id_produk) }}" method="POST" onsubmit="return confirm('PERINGATAN: Hapus produk ini secara permanen? Tindakan ini tidak dapat dibatalkan!')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 rounded-lg hover:bg-rose-100 transition cursor-pointer"
+                                                title="Hapus permanen">
+                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
+                                                </svg>
+                                                Hapus Perm.
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @else
                                 <!-- Foto, Kode & Nama -->
                                 <td class="py-4 px-6">
                                     <div class="flex items-center gap-3">

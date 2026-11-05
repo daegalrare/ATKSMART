@@ -32,6 +32,7 @@ class DetailPenjualan extends Model
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'id_produk', 'id_produk');
+        // withTrashed() agar produk yang sudah soft-deleted tetap tampil di riwayat
+        return $this->belongsTo(Product::class, 'id_produk', 'id_produk')->withTrashed();
     }
 }

@@ -46,6 +46,9 @@ Route::middleware('auth.app')->group(function () {
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
     Route::put('/product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+    // Soft delete: restore & hapus permanen
+    Route::patch('/product/{id}/restore', [ProductController::class, 'restore'])->name('product.restore');
+    Route::delete('/product/{id}/force', [ProductController::class, 'forceDelete'])->name('product.forceDelete');
 
     // Kategori
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
