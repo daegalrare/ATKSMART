@@ -336,23 +336,23 @@
         {{-- ========================================================= --}}
         {{-- AI RECOMMENDATION TABLE                                    --}}
         {{-- ========================================================= --}}
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden float-in">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden float-in">
 
             {{-- Table wrapper dengan scroll horizontal --}}
             <div class="overflow-x-auto">
                 <table class="w-full text-sm border-collapse" id="cards-container">
                     <thead>
-                        <tr class="bg-gradient-to-r from-slate-50 to-indigo-50/40 border-b border-slate-200">
-                            <th class="text-left px-4 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 w-[260px]">Produk</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Status</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Stok Saat Ini</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Stok Min.</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Terjual/30 Hari</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Hari Tersisa</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Kecepatan Jual</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Reorder</th>
-                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Est. Biaya</th>
-                            <th class="text-left px-4 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 min-w-[220px]">Rekomendasi AI</th>
+                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
+                            <th class="text-left py-4 px-6 min-w-[260px]">Produk</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Status</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Stok Saat Ini</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Stok Min.</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Terjual/30 Hari</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Hari Tersisa</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Kecepatan Jual</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Reorder</th>
+                            <th class="text-center py-4 px-4 whitespace-nowrap">Est. Biaya</th>
+                            <th class="text-left py-4 pl-12 pr-6 whitespace-nowrap min-w-[340px]">Rekomendasi AI</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -370,10 +370,10 @@
                                 default    => 'bg-white hover:bg-indigo-50/30',
                             };
                             $leftBorder = match($risk) {
-                                'out'      => 'border-l-4 border-l-red-400',
-                                'critical' => 'border-l-4 border-l-orange-400',
-                                'warning'  => 'border-l-4 border-l-amber-400',
-                                default    => 'border-l-4 border-l-emerald-400',
+                                'out'      => 'border-l-4 border-l-red-500',
+                                'critical' => 'border-l-4 border-l-orange-500',
+                                'warning'  => 'border-l-4 border-l-amber-500',
+                                default    => 'border-l-4 border-l-emerald-500',
                             };
                             $badgeClass = match($risk) {
                                 'out'      => 'bg-red-100 text-red-700 border-red-200',
@@ -388,17 +388,17 @@
                                 default    => '✅ Aman',
                             };
                             $stokColor = $p->stok_produk <= 0
-                                ? 'text-red-600 font-extrabold'
+                                ? 'text-red-600 font-black'
                                 : ($p->stok_produk <= $p->stok_minimum
-                                    ? 'text-orange-600 font-extrabold'
-                                    : 'text-slate-800 font-bold');
+                                    ? 'text-orange-600 font-black'
+                                    : 'text-slate-800 font-extrabold');
                             $hariColor = $item['days_until_stockout'] !== null
                                 ? ($item['days_until_stockout'] <= 7
-                                    ? 'text-red-600 font-extrabold'
+                                    ? 'text-red-600 font-black'
                                     : ($item['days_until_stockout'] <= 14
-                                        ? 'text-amber-600 font-bold'
-                                        : 'text-emerald-600 font-bold'))
-                                : 'text-slate-300 font-bold';
+                                        ? 'text-amber-600 font-extrabold'
+                                        : 'text-emerald-600 font-extrabold'))
+                                : 'text-slate-300 font-extrabold';
                         @endphp
                         <tr class="ai-card transition-colors {{ $rowBg }} {{ $leftBorder }}"
                             data-risk="{{ $risk }}"
@@ -408,98 +408,115 @@
                             data-code="{{ strtolower($p->kode_produk) }}">
 
                             {{-- PRODUK --}}
-                            <td class="px-4 py-3.5">
+                            <td class="py-4 px-6">
                                 <div class="flex items-center gap-3">
                                     @if($p->foto_produk && file_exists(public_path('storage/' . $p->foto_produk)))
-                                        <img src="{{ asset('storage/' . $p->foto_produk) }}"
-                                             alt="{{ $p->nama_produk }}"
-                                             class="w-10 h-10 object-cover rounded-xl border border-slate-200 shadow-sm shrink-0">
+                                        <button type="button" 
+                                                onclick="openImageModal('{{ asset('storage/' . $p->foto_produk) }}', '{{ addslashes($p->nama_produk) }}')" 
+                                                class="group relative w-11 h-11 rounded-xl overflow-hidden border border-slate-200 shadow-xs hover:ring-2 hover:ring-indigo-500 hover:scale-105 transition-all shrink-0 cursor-pointer"
+                                                title="Klik untuk melihat foto lebih besar">
+                                            <img src="{{ asset('storage/' . $p->foto_produk) }}"
+                                                 alt="{{ $p->nama_produk }}"
+                                                 class="w-full h-full object-cover">
+                                            <span class="absolute inset-0 bg-slate-900/35 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+                                                </svg>
+                                            </span>
+                                        </button>
                                     @else
-                                        <div class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-300 shrink-0">
+                                        <div class="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-300 shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
                                         </div>
                                     @endif
                                     <div class="min-w-0">
-                                        <p class="font-bold text-slate-800 text-sm truncate max-w-[180px]">{{ $p->nama_produk }}</p>
-                                        <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ $p->kode_produk }} &bull; {{ $p->category->nama_kategori ?? 'Tanpa Kategori' }}</p>
+                                        <p class="font-extrabold text-slate-900 text-sm sm:text-[15px] leading-tight truncate max-w-[200px]">{{ $p->nama_produk }}</p>
+                                        <div class="flex items-center gap-1.5 mt-1 flex-wrap">
+                                            <span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded-md">
+                                                {{ $p->kode_produk }}
+                                            </span>
+                                            <span class="text-xs font-semibold text-slate-500 truncate max-w-[120px]">
+                                                {{ $p->category->nama_kategori ?? 'Tanpa Kategori' }}
+                                            </span>
+                                        </div>
                                         @if($isFast)
-                                            <span class="inline-flex mt-1 items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-violet-100 text-violet-700 border border-violet-200">🚀 Fast</span>
+                                            <span class="inline-flex mt-1 items-center px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-violet-100 text-violet-700 border border-violet-200">🚀 Fast Moving</span>
                                         @endif
                                         @if($isSlow)
-                                            <span class="inline-flex mt-1 items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-slate-100 text-slate-600 border border-slate-200">📦 Slow</span>
+                                            <span class="inline-flex mt-1 items-center px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-slate-100 text-slate-600 border border-slate-200">📦 Slow Moving</span>
                                         @endif
                                     </div>
                                 </div>
                             </td>
 
                             {{-- STATUS --}}
-                            <td class="px-3 py-3.5 text-center">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold border {{ $badgeClass }} whitespace-nowrap">
+                            <td class="py-4 px-4 text-center">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-extrabold border {{ $badgeClass }} whitespace-nowrap shadow-2xs">
                                     {{ $badgeLabel }}
                                 </span>
                             </td>
 
                             {{-- STOK SAAT INI --}}
-                            <td class="px-3 py-3.5 text-center">
-                                <span class="text-lg {{ $stokColor }}">{{ $p->stok_produk }}</span>
-                                <p class="text-[10px] text-slate-400 mt-0.5">{{ $p->satuan_terkecil ?? 'pcs' }}</p>
+                            <td class="py-4 px-4 text-center">
+                                <span class="text-xl {{ $stokColor }}">{{ $p->stok_produk }}</span>
+                                <p class="text-[11px] font-bold text-slate-500 mt-0.5">{{ $p->satuan_terkecil ?? 'pcs' }}</p>
                             </td>
 
                             {{-- STOK MINIMUM --}}
-                            <td class="px-3 py-3.5 text-center">
-                                <span class="text-base font-semibold text-slate-600">{{ $p->stok_minimum }}</span>
-                                <p class="text-[10px] text-slate-400 mt-0.5">{{ $p->satuan_terkecil ?? 'pcs' }}</p>
+                            <td class="py-4 px-4 text-center">
+                                <span class="text-base font-extrabold text-slate-700">{{ $p->stok_minimum }}</span>
+                                <p class="text-[11px] font-bold text-slate-400 mt-0.5">{{ $p->satuan_terkecil ?? 'pcs' }}</p>
                             </td>
 
                             {{-- TERJUAL/30 HARI --}}
-                            <td class="px-3 py-3.5 text-center">
-                                <span class="text-base font-bold text-indigo-600">{{ $item['sold_30'] }}</span>
-                                <p class="text-[10px] text-slate-400 mt-0.5">unit</p>
+                            <td class="py-4 px-4 text-center">
+                                <span class="text-base font-extrabold text-indigo-600">{{ $item['sold_30'] }}</span>
+                                <p class="text-[11px] font-bold text-slate-400 mt-0.5">unit</p>
                             </td>
 
                             {{-- HARI TERSISA --}}
-                            <td class="px-3 py-3.5 text-center">
+                            <td class="py-4 px-4 text-center">
                                 @if($item['days_until_stockout'] !== null)
-                                    <span class="text-lg {{ $hariColor }}">{{ $item['days_until_stockout'] }}</span>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">hari</p>
+                                    <span class="text-xl {{ $hariColor }}">{{ $item['days_until_stockout'] }}</span>
+                                    <p class="text-[11px] font-bold text-slate-400 mt-0.5">hari</p>
                                 @else
-                                    <span class="text-base font-bold text-slate-300">—</span>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">hari</p>
+                                    <span class="text-base font-extrabold text-slate-300">—</span>
+                                    <p class="text-[11px] font-bold text-slate-400 mt-0.5">hari</p>
                                 @endif
                             </td>
 
                             {{-- KECEPATAN JUAL --}}
-                            <td class="px-3 py-3.5 text-center">
-                                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-indigo-50 border border-indigo-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                    <span class="text-xs font-bold text-indigo-700">{{ $item['velocity'] }}/hari</span>
+                            <td class="py-4 px-4 text-center">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 border border-indigo-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                                    <span class="text-xs font-extrabold text-indigo-700 whitespace-nowrap">{{ $item['velocity'] }}/hari</span>
                                 </div>
                             </td>
 
                             {{-- REORDER QTY --}}
-                            <td class="px-3 py-3.5 text-center">
-                                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-violet-50 border border-violet-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                                    <span class="text-xs font-bold text-violet-700">{{ $item['reorder_qty'] }} {{ $p->satuan_terkecil ?? 'pcs' }}</span>
+                            <td class="py-4 px-4 text-center">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-50 border border-violet-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                    <span class="text-xs font-extrabold text-violet-700 whitespace-nowrap">{{ $item['reorder_qty'] }} {{ $p->satuan_terkecil ?? 'pcs' }}</span>
                                 </div>
                             </td>
 
                             {{-- EST. BIAYA REORDER --}}
-                            <td class="px-3 py-3.5 text-center">
+                            <td class="py-4 px-4 text-center">
                                 @if($p->harga_beli_terakhir > 0)
-                                    <span class="text-sm font-bold text-emerald-600">Rp {{ number_format($item['reorder_qty'] * $p->harga_beli_terakhir, 0, ',', '.') }}</span>
+                                    <span class="text-sm sm:text-base font-black text-emerald-600 whitespace-nowrap">Rp {{ number_format($item['reorder_qty'] * $p->harga_beli_terakhir, 0, ',', '.') }}</span>
                                 @else
-                                    <span class="text-sm text-slate-300 font-semibold">—</span>
+                                    <span class="text-sm text-slate-300 font-extrabold">—</span>
                                 @endif
                             </td>
 
-                            {{-- REKOMENDASI AI --}}
-                            <td class="px-4 py-3.5">
-                                <div class="flex items-start gap-2">
-                                    <div class="shrink-0 w-5 h-5 rounded-lg bg-indigo-600 flex items-center justify-center mt-0.5">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73C10.4 5.39 10 4.74 10 4a2 2 0 012-2z"/></svg>
+                            {{-- REKOMENDASI AI (Diberi margin/padding kiri agar posisinya pas ke kanan) --}}
+                            <td class="py-4 pl-12 pr-6 min-w-[340px]">
+                                <div class="flex items-start gap-2.5">
+                                    <div class="shrink-0 w-6 h-6 rounded-lg bg-indigo-600 flex items-center justify-center mt-0.5 shadow-xs">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73C10.4 5.39 10 4.74 10 4a2 2 0 012-2z"/></svg>
                                     </div>
-                                    <div class="text-[11px] text-slate-600 leading-relaxed bg-indigo-50/70 border border-indigo-100 rounded-xl px-2.5 py-2 flex-1">
+                                    <div class="text-xs font-medium text-slate-800 leading-relaxed bg-indigo-50/80 border border-indigo-200/80 rounded-2xl px-3.5 py-2.5 flex-1 shadow-2xs">
                                         {!! $item['ai_message'] !!}
                                     </div>
                                 </div>
@@ -523,6 +540,40 @@
 
         @endif
 
+    </div>
+
+    {{-- ========================================================= --}}
+    {{-- MODAL PREVIEW FOTO PRODUK (POPUP ZOOM)                    --}}
+    {{-- ========================================================= --}}
+    <div id="image-preview-modal" 
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs hidden transition-opacity" 
+         onclick="closeImageModal(event)">
+        <div class="relative bg-white rounded-3xl shadow-2xl p-5 max-w-lg w-full overflow-hidden border border-slate-100 transition-all scale-100" 
+             onclick="event.stopPropagation()">
+            
+            {{-- Close Button --}}
+            <button type="button" 
+                    onclick="closeImageModal()" 
+                    class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center transition cursor-pointer z-10" 
+                    title="Tutup (Esc)">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            {{-- Title Info --}}
+            <div class="mb-3.5 pr-12">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md inline-block mb-1">Pratinjau Foto Produk</span>
+                <h4 id="modal-image-title" class="font-black text-slate-900 text-base sm:text-lg truncate"></h4>
+            </div>
+
+            {{-- Image Box --}}
+            <div class="w-full aspect-square bg-slate-50/80 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-200/80 p-2">
+                <img id="modal-image-preview" src="" alt="Foto Produk" class="max-w-full max-h-full object-contain rounded-xl drop-shadow-sm">
+            </div>
+
+            <p class="text-center text-xs text-slate-400 mt-3 font-medium">Klik di luar area atau tombol Esc untuk menutup</p>
+        </div>
     </div>
 
     @push('scripts')
@@ -578,6 +629,33 @@
             const noResult = document.getElementById('no-result');
             if (noResult) noResult.classList.toggle('hidden', visible > 0);
         }
+
+        // ── Modal Preview Foto Produk ────────────────────────────────
+        function openImageModal(imgSrc, title) {
+            const modal = document.getElementById('image-preview-modal');
+            const img   = document.getElementById('modal-image-preview');
+            const ttl   = document.getElementById('modal-image-title');
+            if (modal && img) {
+                img.src = imgSrc;
+                if (ttl) ttl.textContent = title;
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-preview-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
     </script>
     @endpush
 </x-layout>
