@@ -87,7 +87,7 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs font-extrabold text-slate-700 uppercase tracking-wider">
-                            <th class="py-3.5 px-6">Kode & Nama Produk</th>
+                            <th class="py-3.5 px-6">Produk</th>
                             <th class="py-3.5 px-6">Kategori</th>
                             <th class="py-3.5 px-6">Stok Saat Ini</th>
                             <th class="py-3.5 px-6">Satuan</th>
@@ -99,14 +99,35 @@
                     <tbody class="divide-y divide-slate-100 text-sm">
                         @forelse ($products as $item)
                             <tr class="hover:bg-slate-50/60 transition {{ request('edit') == $item->id_produk ? 'bg-amber-50/70 border-l-4 border-amber-500' : '' }}">
-                                <!-- Kode & Nama -->
+                                <!-- Foto, Kode & Nama -->
                                 <td class="py-4 px-6">
-                                    <div class="flex flex-col gap-1">
-                                        <span class="font-bold text-slate-900 text-[15px] leading-tight">{{ $item->nama_produk }}</span>
-                                        <span class="inline-flex items-center gap-1 font-mono text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md w-fit">
-                                            <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                                            {{ $item->kode_produk }}
-                                        </span>
+                                    <div class="flex items-center gap-3">
+                                        @if($item->foto_produk && file_exists(public_path('storage/' . $item->foto_produk)))
+                                            <button type="button" 
+                                                    onclick="openImageModal('{{ asset('storage/' . $item->foto_produk) }}', '{{ addslashes($item->nama_produk) }}')" 
+                                                    class="group relative w-11 h-11 rounded-xl overflow-hidden border border-slate-200 shadow-2xs hover:ring-2 hover:ring-indigo-500 hover:scale-105 transition-all shrink-0 cursor-pointer"
+                                                    title="Klik untuk melihat foto lebih besar">
+                                                <img src="{{ asset('storage/' . $item->foto_produk) }}"
+                                                     alt="{{ $item->nama_produk }}"
+                                                     class="w-full h-full object-cover">
+                                                <span class="absolute inset-0 bg-slate-900/35 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
+                                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        @else
+                                            <div class="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-300 shrink-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
+                                            </div>
+                                        @endif
+                                        <div class="flex flex-col gap-1 min-w-0">
+                                            <span class="font-bold text-slate-900 text-[15px] leading-tight truncate">{{ $item->nama_produk }}</span>
+                                            <span class="inline-flex items-center gap-1 font-mono text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md w-fit">
+                                                <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                                                {{ $item->kode_produk }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
 
@@ -922,8 +943,67 @@
         </div>
     </div>
 
+    {{-- MODAL PREVIEW FOTO PRODUK (POPUP ZOOM) --}}
+    <div id="image-preview-modal" 
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs hidden transition-opacity" 
+         onclick="closeImageModal(event)">
+        <div class="relative bg-white rounded-3xl shadow-2xl p-5 max-w-lg w-full overflow-hidden border border-slate-100 transition-all scale-100" 
+             onclick="event.stopPropagation()">
+            
+            {{-- Close Button --}}
+            <button type="button" 
+                    onclick="closeImageModal()" 
+                    class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center transition cursor-pointer z-10" 
+                    title="Tutup (Esc)">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            {{-- Title Info --}}
+            <div class="mb-3.5 pr-12">
+                <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md inline-block mb-1">Pratinjau Foto Produk</span>
+                <h4 id="modal-image-title" class="font-black text-slate-900 text-base sm:text-lg truncate"></h4>
+            </div>
+
+            {{-- Image Box --}}
+            <div class="w-full aspect-square bg-slate-50/80 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-200/80 p-2">
+                <img id="modal-image-preview" src="" alt="Foto Produk" class="max-w-full max-h-full object-contain rounded-xl drop-shadow-sm">
+            </div>
+
+            <p class="text-center text-xs text-slate-400 mt-3 font-medium">Klik di luar area atau tombol Esc untuk menutup</p>
+        </div>
+    </div>
+
     <!-- Modals & Cropper Script -->
     <script>
+        // ── Modal Preview Foto Produk (Pop Out Zoom) ─────────────────
+        function openImageModal(imgSrc, title) {
+            const modal = document.getElementById('image-preview-modal');
+            const img   = document.getElementById('modal-image-preview');
+            const ttl   = document.getElementById('modal-image-title');
+            if (modal && img) {
+                img.src = imgSrc;
+                if (ttl) ttl.textContent = title;
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-preview-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+
         // Modal references
         const createModal = document.getElementById('create-product-modal');
         const editModal = document.getElementById('edit-product-modal');
