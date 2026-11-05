@@ -334,144 +334,191 @@
         </div>
 
         {{-- ========================================================= --}}
-        {{-- AI RECOMMENDATION CARDS                                    --}}
+        {{-- AI RECOMMENDATION TABLE                                    --}}
         {{-- ========================================================= --}}
-        <div id="cards-container" class="space-y-3">
-            @foreach($analyzed as $index => $item)
-            @php
-                $p = $item['product'];
-                $risk = $item['risk_level'];
-                $borderClass = match($risk) {
-                    'out'      => 'border-red-300 bg-red-50/40',
-                    'critical' => 'border-orange-300 bg-orange-50/40',
-                    'warning'  => 'border-amber-200 bg-amber-50/30',
-                    default    => 'border-slate-100 bg-white',
-                };
-                $badgeClass = match($risk) {
-                    'out'      => 'bg-red-100 text-red-700 border-red-200',
-                    'critical' => 'bg-orange-100 text-orange-700 border-orange-200',
-                    'warning'  => 'bg-amber-100 text-amber-700 border-amber-200',
-                    default    => 'bg-emerald-100 text-emerald-700 border-emerald-200',
-                };
-                $badgeLabel = match($risk) {
-                    'out'      => '⛔ STOK HABIS',
-                    'critical' => '🔴 KRITIS',
-                    'warning'  => '🟡 WASPADA',
-                    default    => '✅ AMAN',
-                };
-                $isFast = $item['is_fast_mover'];
-                $isSlow = $item['is_slow_mover'];
-            @endphp
-            <div class="ai-card float-in border rounded-2xl shadow-xs p-4 sm:p-5 transition-all hover:shadow-md {{ $borderClass }}"
-                 data-risk="{{ $risk }}"
-                 data-fast="{{ $isFast ? '1' : '0' }}"
-                 data-slow="{{ $isSlow ? '1' : '0' }}"
-                 data-name="{{ strtolower($p->nama_produk) }}"
-                 data-code="{{ strtolower($p->kode_produk) }}">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-xs overflow-hidden float-in">
 
-                <div class="flex flex-col sm:flex-row gap-4">
+            {{-- Table wrapper dengan scroll horizontal --}}
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border-collapse" id="cards-container">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-slate-50 to-indigo-50/40 border-b border-slate-200">
+                            <th class="text-left px-4 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 w-[260px]">Produk</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Status</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Stok Saat Ini</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Stok Min.</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Terjual/30 Hari</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Hari Tersisa</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Kecepatan Jual</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Reorder</th>
+                            <th class="text-center px-3 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Est. Biaya</th>
+                            <th class="text-left px-4 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 min-w-[220px]">Rekomendasi AI</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach($analyzed as $index => $item)
+                        @php
+                            $p       = $item['product'];
+                            $risk    = $item['risk_level'];
+                            $isFast  = $item['is_fast_mover'];
+                            $isSlow  = $item['is_slow_mover'];
 
-                    {{-- Foto produk --}}
-                    <div class="shrink-0">
-                        @if($p->foto_produk && file_exists(public_path('storage/' . $p->foto_produk)))
-                            <img src="{{ asset('storage/' . $p->foto_produk) }}"
-                                 alt="{{ $p->nama_produk }}"
-                                 class="w-16 h-16 object-cover rounded-xl border border-slate-200 shadow-sm">
-                        @else
-                            <div class="w-16 h-16 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
-                            </div>
-                        @endif
-                    </div>
+                            $rowBg = match($risk) {
+                                'out'      => 'bg-red-50/60 hover:bg-red-50',
+                                'critical' => 'bg-orange-50/50 hover:bg-orange-50',
+                                'warning'  => 'bg-amber-50/40 hover:bg-amber-50',
+                                default    => 'bg-white hover:bg-indigo-50/30',
+                            };
+                            $leftBorder = match($risk) {
+                                'out'      => 'border-l-4 border-l-red-400',
+                                'critical' => 'border-l-4 border-l-orange-400',
+                                'warning'  => 'border-l-4 border-l-amber-400',
+                                default    => 'border-l-4 border-l-emerald-400',
+                            };
+                            $badgeClass = match($risk) {
+                                'out'      => 'bg-red-100 text-red-700 border-red-200',
+                                'critical' => 'bg-orange-100 text-orange-700 border-orange-200',
+                                'warning'  => 'bg-amber-100 text-amber-700 border-amber-200',
+                                default    => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                            };
+                            $badgeLabel = match($risk) {
+                                'out'      => '⛔ Stok Habis',
+                                'critical' => '🔴 Kritis',
+                                'warning'  => '🟡 Waspada',
+                                default    => '✅ Aman',
+                            };
+                            $stokColor = $p->stok_produk <= 0
+                                ? 'text-red-600 font-extrabold'
+                                : ($p->stok_produk <= $p->stok_minimum
+                                    ? 'text-orange-600 font-extrabold'
+                                    : 'text-slate-800 font-bold');
+                            $hariColor = $item['days_until_stockout'] !== null
+                                ? ($item['days_until_stockout'] <= 7
+                                    ? 'text-red-600 font-extrabold'
+                                    : ($item['days_until_stockout'] <= 14
+                                        ? 'text-amber-600 font-bold'
+                                        : 'text-emerald-600 font-bold'))
+                                : 'text-slate-300 font-bold';
+                        @endphp
+                        <tr class="ai-card transition-colors {{ $rowBg }} {{ $leftBorder }}"
+                            data-risk="{{ $risk }}"
+                            data-fast="{{ $isFast ? '1' : '0' }}"
+                            data-slow="{{ $isSlow ? '1' : '0' }}"
+                            data-name="{{ strtolower($p->nama_produk) }}"
+                            data-code="{{ strtolower($p->kode_produk) }}">
 
-                    {{-- Info produk --}}
-                    <div class="flex-1 min-w-0">
-                        <div class="flex flex-wrap items-center gap-2 mb-2">
-                            {{-- Status badge --}}
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border {{ $badgeClass }}">
-                                {{ $badgeLabel }}
-                            </span>
-                            {{-- Fast/Slow badge --}}
-                            @if($isFast)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-100 text-violet-700 border border-violet-200">🚀 Fast Moving</span>
-                            @endif
-                            @if($isSlow)
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">📦 Slow Moving</span>
-                            @endif
-                            {{-- AI Badge --}}
-                            <span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 border border-indigo-200">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73C10.4 5.39 10 4.74 10 4a2 2 0 012-2z"/></svg>
-                                AI Analysis
-                            </span>
-                        </div>
+                            {{-- PRODUK --}}
+                            <td class="px-4 py-3.5">
+                                <div class="flex items-center gap-3">
+                                    @if($p->foto_produk && file_exists(public_path('storage/' . $p->foto_produk)))
+                                        <img src="{{ asset('storage/' . $p->foto_produk) }}"
+                                             alt="{{ $p->nama_produk }}"
+                                             class="w-10 h-10 object-cover rounded-xl border border-slate-200 shadow-sm shrink-0">
+                                    @else
+                                        <div class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-300 shrink-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="2"/></svg>
+                                        </div>
+                                    @endif
+                                    <div class="min-w-0">
+                                        <p class="font-bold text-slate-800 text-sm truncate max-w-[180px]">{{ $p->nama_produk }}</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ $p->kode_produk }} &bull; {{ $p->category->nama_kategori ?? 'Tanpa Kategori' }}</p>
+                                        @if($isFast)
+                                            <span class="inline-flex mt-1 items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-violet-100 text-violet-700 border border-violet-200">🚀 Fast</span>
+                                        @endif
+                                        @if($isSlow)
+                                            <span class="inline-flex mt-1 items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-slate-100 text-slate-600 border border-slate-200">📦 Slow</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
 
-                        <h3 class="font-bold text-slate-800 text-sm sm:text-base truncate">{{ $p->nama_produk }}</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">{{ $p->kode_produk }} &bull; {{ $p->category->nama_kategori ?? 'Tanpa Kategori' }}</p>
+                            {{-- STATUS --}}
+                            <td class="px-3 py-3.5 text-center">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold border {{ $badgeClass }} whitespace-nowrap">
+                                    {{ $badgeLabel }}
+                                </span>
+                            </td>
 
-                        {{-- Stats row --}}
-                        <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <div class="bg-white/70 rounded-xl p-2 border border-white text-center">
-                                <p class="text-lg font-extrabold {{ $p->stok_produk <= 0 ? 'text-red-600' : ($p->stok_produk <= $p->stok_minimum ? 'text-orange-600' : 'text-slate-800') }}">{{ $p->stok_produk }}</p>
-                                <p class="text-[10px] text-slate-400">Stok Saat Ini</p>
-                            </div>
-                            <div class="bg-white/70 rounded-xl p-2 border border-white text-center">
-                                <p class="text-lg font-extrabold text-slate-600">{{ $p->stok_minimum }}</p>
-                                <p class="text-[10px] text-slate-400">Stok Minimum</p>
-                            </div>
-                            <div class="bg-white/70 rounded-xl p-2 border border-white text-center">
-                                <p class="text-lg font-extrabold text-slate-600">{{ $item['sold_30'] }}</p>
-                                <p class="text-[10px] text-slate-400">Terjual/30 Hari</p>
-                            </div>
-                            <div class="bg-white/70 rounded-xl p-2 border border-white text-center">
+                            {{-- STOK SAAT INI --}}
+                            <td class="px-3 py-3.5 text-center">
+                                <span class="text-lg {{ $stokColor }}">{{ $p->stok_produk }}</span>
+                                <p class="text-[10px] text-slate-400 mt-0.5">{{ $p->satuan_terkecil ?? 'pcs' }}</p>
+                            </td>
+
+                            {{-- STOK MINIMUM --}}
+                            <td class="px-3 py-3.5 text-center">
+                                <span class="text-base font-semibold text-slate-600">{{ $p->stok_minimum }}</span>
+                                <p class="text-[10px] text-slate-400 mt-0.5">{{ $p->satuan_terkecil ?? 'pcs' }}</p>
+                            </td>
+
+                            {{-- TERJUAL/30 HARI --}}
+                            <td class="px-3 py-3.5 text-center">
+                                <span class="text-base font-bold text-indigo-600">{{ $item['sold_30'] }}</span>
+                                <p class="text-[10px] text-slate-400 mt-0.5">unit</p>
+                            </td>
+
+                            {{-- HARI TERSISA --}}
+                            <td class="px-3 py-3.5 text-center">
                                 @if($item['days_until_stockout'] !== null)
-                                    <p class="text-lg font-extrabold {{ $item['days_until_stockout'] <= 7 ? 'text-red-600' : ($item['days_until_stockout'] <= 14 ? 'text-amber-600' : 'text-emerald-600') }}">
-                                        {{ $item['days_until_stockout'] }}
-                                    </p>
-                                    <p class="text-[10px] text-slate-400">Hari Tersisa</p>
+                                    <span class="text-lg {{ $hariColor }}">{{ $item['days_until_stockout'] }}</span>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">hari</p>
                                 @else
-                                    <p class="text-lg font-extrabold text-slate-300">—</p>
-                                    <p class="text-[10px] text-slate-400">Hari Tersisa</p>
+                                    <span class="text-base font-bold text-slate-300">—</span>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">hari</p>
                                 @endif
-                            </div>
-                        </div>
+                            </td>
 
-                        {{-- AI Message bubble --}}
-                        <div class="mt-3 flex items-start gap-2.5">
-                            <div class="shrink-0 w-7 h-7 rounded-xl bg-indigo-600 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73C10.4 5.39 10 4.74 10 4a2 2 0 012-2z"/></svg>
-                            </div>
-                            <div class="flex-1 bg-indigo-50 border border-indigo-100 rounded-xl rounded-tl-none px-3.5 py-2.5 text-xs text-slate-700 leading-relaxed">
-                                {!! $item['ai_message'] !!}
-                            </div>
-                        </div>
+                            {{-- KECEPATAN JUAL --}}
+                            <td class="px-3 py-3.5 text-center">
+                                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-indigo-50 border border-indigo-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                                    <span class="text-xs font-bold text-indigo-700">{{ $item['velocity'] }}/hari</span>
+                                </div>
+                            </td>
 
-                        {{-- Velocity + Reorder info --}}
-                        <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                            <span class="flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                Kecepatan jual: <strong>{{ $item['velocity'] }}/hari</strong>
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                                Rekomendasi reorder: <strong>{{ $item['reorder_qty'] }} {{ $p->satuan_terkecil ?? 'pcs' }}</strong>
-                            </span>
-                            @if($p->harga_beli_terakhir > 0)
-                            <span class="flex items-center gap-1 text-emerald-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                Est. biaya reorder: <strong>Rp {{ number_format($item['reorder_qty'] * $p->harga_beli_terakhir, 0, ',', '.') }}</strong>
-                            </span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+                            {{-- REORDER QTY --}}
+                            <td class="px-3 py-3.5 text-center">
+                                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-violet-50 border border-violet-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                    <span class="text-xs font-bold text-violet-700">{{ $item['reorder_qty'] }} {{ $p->satuan_terkecil ?? 'pcs' }}</span>
+                                </div>
+                            </td>
+
+                            {{-- EST. BIAYA REORDER --}}
+                            <td class="px-3 py-3.5 text-center">
+                                @if($p->harga_beli_terakhir > 0)
+                                    <span class="text-sm font-bold text-emerald-600">Rp {{ number_format($item['reorder_qty'] * $p->harga_beli_terakhir, 0, ',', '.') }}</span>
+                                @else
+                                    <span class="text-sm text-slate-300 font-semibold">—</span>
+                                @endif
+                            </td>
+
+                            {{-- REKOMENDASI AI --}}
+                            <td class="px-4 py-3.5">
+                                <div class="flex items-start gap-2">
+                                    <div class="shrink-0 w-5 h-5 rounded-lg bg-indigo-600 flex items-center justify-center mt-0.5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1H2a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73C10.4 5.39 10 4.74 10 4a2 2 0 012-2z"/></svg>
+                                    </div>
+                                    <div class="text-[11px] text-slate-600 leading-relaxed bg-indigo-50/70 border border-indigo-100 rounded-xl px-2.5 py-2 flex-1">
+                                        {!! $item['ai_message'] !!}
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                        @endforeach
+
+                        {{-- No result row --}}
+                        <tr id="no-result" class="hidden">
+                            <td colspan="10" class="text-center py-16 text-slate-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <p class="font-semibold">Tidak ada produk dengan kategori ini.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            @endforeach
 
-            {{-- No result after filter --}}
-            <div id="no-result" class="hidden text-center py-12 text-slate-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                <p class="font-semibold">Tidak ada produk dengan kategori ini.</p>
-            </div>
         </div>
 
         @endif
