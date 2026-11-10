@@ -129,7 +129,7 @@
     <!-- POP OUT DIALOG BOX (MODAL TAMBAH AKUN) -->
     <div id="account-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 {{ ($errors->any() && !old('_method')) ? '' : 'hidden' }}" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
-        <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
         <!-- Dialog Box Container -->
         <div class="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all z-10">
@@ -299,7 +299,7 @@
     <!-- POP OUT DIALOG BOX (MODAL EDIT AKUN) -->
     <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 {{ ($errors->any() && old('_method') === 'PUT') ? '' : 'hidden' }}" aria-labelledby="edit-modal-title" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
-        <div id="edit-modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="edit-modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
         <!-- Dialog Box Container -->
         <div class="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all z-10">
@@ -479,7 +479,7 @@
     <!-- POP OUT DIALOG BOX (MODAL KONFIRMASI HAPUS) -->
     <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 hidden" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
-        <div id="delete-modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="delete-modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
         <!-- Dialog Box Container -->
         <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all z-10">
@@ -523,7 +523,7 @@
     <!-- POP OUT DIALOG BOX (KONFIRMASI LOGOUT KARENA UBAH ROLE AKUN SENDIRI) -->
     <div id="role-logout-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 hidden" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
-        <div id="role-logout-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="role-logout-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
         <!-- Dialog Box Container -->
         <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all z-10">
