@@ -324,7 +324,7 @@
             </div>
 
             <!-- Form -->
-            <form id="edit-form" action="{{ (old('_method') === 'PUT' && old('edit_id')) ? url('/account/' . old('edit_id')) : '' }}" method="POST" class="p-6 space-y-4" onsubmit="return validatePhoneOnSubmit('edit_no_telepon','phone-hint-edit')">
+            <form id="edit-form" action="{{ (old('_method') === 'PUT' && old('edit_id')) ? url('/account/' . old('edit_id')) : '' }}" method="POST" class="p-6 space-y-4">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="edit_id" id="edit_id" value="{{ old('edit_id') }}">
@@ -413,6 +413,16 @@
                         <option value="kasir">Kasir (Transaksi & Penjualan)</option>
                         <option value="owner">Owner (Pemilik / Semua Hak Akses)</option>
                     </select>
+
+                    <!-- Warning Banner jika mengubah role akun sendiri -->
+                    <div id="self-role-warning-banner" class="hidden mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-xs text-amber-800 flex items-start gap-2.5">
+                        <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div>
+                            <span class="font-bold">Perhatian:</span> Ini adalah akun yang sedang Anda gunakan saat ini. Mengubah role akun ini akan <span class="font-bold text-amber-900 underline">otomatis logout</span> setelah perubahan disimpan.
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Password (opsional) -->
@@ -510,6 +520,54 @@
         </div>
     </div>
 
+    <!-- POP OUT DIALOG BOX (KONFIRMASI LOGOUT KARENA UBAH ROLE AKUN SENDIRI) -->
+    <div id="role-logout-modal" class="fixed inset-0 z-60 flex items-center justify-center p-4 sm:p-6 hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop Blur Overlay -->
+        <div id="role-logout-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
+
+        <!-- Dialog Box Container -->
+        <div class="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all z-10">
+            <!-- Icon & Body -->
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center mx-auto mb-4 text-amber-500 shadow-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-1.5">Peringatan: Akan Logout Otomatis</h3>
+                <p class="text-sm text-slate-600 mb-3">
+                    Anda sedang mengubah role/hak akses akun yang sedang Anda gunakan (<strong id="role-logout-target-name">Akun Anda</strong>).
+                </p>
+                <div class="p-3.5 bg-amber-50/90 rounded-2xl border border-amber-200 text-xs text-amber-900 font-medium mb-4 text-left flex items-start gap-2.5">
+                    <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>Setelah perubahan disimpan, sistem akan <strong>logout secara otomatis</strong> dan Anda harus masuk kembali menggunakan hak akses baru.</span>
+                </div>
+                <p class="text-xs text-slate-500">Apakah Anda yakin ingin menyimpan perubahan dan logout?</p>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="flex border-t border-slate-100">
+                <button 
+                    id="btn-cancel-role-logout" 
+                    type="button" 
+                    class="flex-1 py-3.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition cursor-pointer rounded-bl-3xl"
+                >
+                    Batal
+                </button>
+                <div class="w-px bg-slate-100"></div>
+                <button 
+                    id="btn-confirm-role-logout" 
+                    type="button" 
+                    class="flex-1 py-3.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition cursor-pointer rounded-br-3xl"
+                >
+                    Ya, Simpan &amp; Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Pop Out Dialog Script -->
     <script>
         (function() {
@@ -557,16 +615,41 @@
             const editBackdrop = document.getElementById('edit-modal-backdrop');
             const closeEditBtn = document.getElementById('btn-close-edit-modal');
             const cancelEditBtn = document.getElementById('btn-cancel-edit-modal');
+            const editRoleSelect = document.getElementById('edit_role');
+            const selfRoleWarningBanner = document.getElementById('self-role-warning-banner');
+
+            // Akun yang sedang login
+            const currentAccountId = {{ json_encode(session('account_id')) }};
+            const currentAccountEmail = {{ json_encode(strtolower(session('account_email', ''))) }};
+
+            let currentEditingIsSelf = false;
+            let currentEditingOriginalRole = '';
+            let bypassRoleLogoutConfirm = false;
 
             function openEditModal(btn) {
-                document.getElementById('edit_id').value = btn.dataset.id || '';
-                document.getElementById('edit_nama_akun').value = btn.dataset.nama || '';
+                const id = btn.dataset.id || '';
+                const nama = btn.dataset.nama || '';
+                const email = (btn.dataset.email || '').toLowerCase();
+                const role = btn.dataset.role || 'kasir';
+
+                document.getElementById('edit_id').value = id;
+                document.getElementById('edit_nama_akun').value = nama;
                 document.getElementById('edit_email_akun').value = btn.dataset.email || '';
                 document.getElementById('edit_no_telepon').value = btn.dataset.telepon || '';
                 document.getElementById('edit_password').value = '';
                 resetPasswordToggle(editModal);
-                document.getElementById('edit_role').value = btn.dataset.role || 'kasir';
-                editForm.action = '/account/' + btn.dataset.id;
+                if (editRoleSelect) editRoleSelect.value = role;
+
+                // Cek apakah akun yang diedit adalah akun yang sedang login saat ini
+                currentEditingIsSelf = (id == currentAccountId || email === currentAccountEmail);
+                currentEditingOriginalRole = role;
+                bypassRoleLogoutConfirm = false;
+
+                if (selfRoleWarningBanner) {
+                    selfRoleWarningBanner.classList.add('hidden');
+                }
+
+                editForm.action = '/account/' + id;
                 editModal.classList.remove('hidden');
                 document.body.classList.add('overflow-hidden');
                 setTimeout(() => {
@@ -578,6 +661,7 @@
                 editModal.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden');
                 resetPasswordToggle(editModal);
+                closeRoleLogoutModal();
             }
 
             document.querySelectorAll('.btn-edit').forEach(btn => {
@@ -586,6 +670,74 @@
             if (closeEditBtn) closeEditBtn.addEventListener('click', closeEditModal);
             if (cancelEditBtn) cancelEditBtn.addEventListener('click', closeEditModal);
             if (editBackdrop) editBackdrop.addEventListener('click', closeEditModal);
+
+            // ── MODAL KONFIRMASI ROLE LOGOUT (AKUN SENDIRI) ─────────
+            const roleLogoutModal = document.getElementById('role-logout-modal');
+            const roleLogoutBackdrop = document.getElementById('role-logout-backdrop');
+            const cancelRoleLogoutBtn = document.getElementById('btn-cancel-role-logout');
+            const confirmRoleLogoutBtn = document.getElementById('btn-confirm-role-logout');
+            const roleLogoutTargetName = document.getElementById('role-logout-target-name');
+
+            function openRoleLogoutModal() {
+                if (!roleLogoutModal) return;
+                const nama = document.getElementById('edit_nama_akun')?.value || 'Akun Anda';
+                if (roleLogoutTargetName) roleLogoutTargetName.textContent = `"${nama}"`;
+                roleLogoutModal.classList.remove('hidden');
+            }
+
+            function closeRoleLogoutModal() {
+                if (!roleLogoutModal) return;
+                roleLogoutModal.classList.add('hidden');
+            }
+
+            if (editRoleSelect) {
+                editRoleSelect.addEventListener('change', function() {
+                    if (currentEditingIsSelf && this.value !== currentEditingOriginalRole) {
+                        if (selfRoleWarningBanner) selfRoleWarningBanner.classList.remove('hidden');
+                        openRoleLogoutModal();
+                    } else {
+                        if (selfRoleWarningBanner) selfRoleWarningBanner.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (cancelRoleLogoutBtn) {
+                cancelRoleLogoutBtn.addEventListener('click', function() {
+                    closeRoleLogoutModal();
+                    // Kembalikan pilihan role ke original jika user menekan batal pada dialog
+                    if (editRoleSelect && currentEditingIsSelf) {
+                        editRoleSelect.value = currentEditingOriginalRole;
+                        if (selfRoleWarningBanner) selfRoleWarningBanner.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (roleLogoutBackdrop) {
+                roleLogoutBackdrop.addEventListener('click', closeRoleLogoutModal);
+            }
+
+            if (confirmRoleLogoutBtn) {
+                confirmRoleLogoutBtn.addEventListener('click', function() {
+                    bypassRoleLogoutConfirm = true;
+                    closeRoleLogoutModal();
+                    editForm.submit();
+                });
+            }
+
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    if (!validatePhoneOnSubmit('edit_no_telepon','phone-hint-edit')) {
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    if (currentEditingIsSelf && editRoleSelect && editRoleSelect.value !== currentEditingOriginalRole && !bypassRoleLogoutConfirm) {
+                        e.preventDefault();
+                        openRoleLogoutModal();
+                        return false;
+                    }
+                });
+            }
 
             // ── MODAL HAPUS ───────────────────────────────────────
             const deleteModal = document.getElementById('delete-modal');

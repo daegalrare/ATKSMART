@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
@@ -90,7 +91,22 @@ class AccountController extends Controller
             $updateData['password_hashed'] = Hash::make($validated['password']);
         }
 
+        $isSelf = (
+            session('account_id') == $akun->id_akun ||
+            strtolower(session('account_email', '')) === strtolower($akun->email_akun)
+        );
+        $roleChanged = ($akun->role !== $validated['role']);
+
         $akun->update($updateData);
+
+        // Jika akun yang diubah adalah akun yang sedang login dan rolenya berubah, logout otomatis
+        if ($isSelf && $roleChanged) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->with('success', 'Role akun Anda berhasil diubah. Anda telah keluar otomatis, silakan login kembali dengan hak akses baru.');
+        }
 
         return redirect()->route('account.index')->with('success', 'Akun pengguna berhasil diperbarui!');
     }
