@@ -198,7 +198,7 @@
 
                     <div>
                         <label for="no_telepon" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                            No. Telepon / WA
+                            No. Telepon / WA <span class="text-rose-500">*</span>
                         </label>
                         <input 
                             type="text" 
@@ -212,6 +212,7 @@
                             maxlength="12"
                             oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                             class="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition {{ $errors->has('no_telepon') ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200' }}"
+                            required
                         >
                         <p id="phone-hint-create" class="text-[11px] mt-1 text-rose-500 font-semibold hidden"></p>
                         @error('no_telepon')
@@ -360,7 +361,7 @@
 
                     <div>
                         <label for="edit_no_telepon" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                            No. Telepon / WA
+                            No. Telepon / WA <span class="text-rose-500">*</span>
                         </label>
                         <input 
                             type="text" 
@@ -373,6 +374,7 @@
                             maxlength="12"
                             oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
+                            required
                         >
                         <p id="phone-hint-edit" class="text-[11px] mt-1 text-rose-500 font-semibold hidden"></p>
                     </div>
