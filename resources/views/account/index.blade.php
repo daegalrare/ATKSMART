@@ -619,8 +619,8 @@
             const selfRoleWarningBanner = document.getElementById('self-role-warning-banner');
 
             // Akun yang sedang login
-            const currentAccountId = {{ json_encode(session('account_id')) }};
-            const currentAccountEmail = {{ json_encode(strtolower(session('account_email', ''))) }};
+            const currentAccountId = @json(session('account_id'));
+            const currentAccountEmail = @json(strtolower(session('account_email', '')));
 
             let currentEditingIsSelf = false;
             let currentEditingOriginalRole = '';
