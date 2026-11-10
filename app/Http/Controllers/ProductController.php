@@ -85,11 +85,28 @@ class ProductController extends Controller
             'nama_produk.required'  => 'Nama produk wajib diisi.',
             'harga_jual.required'   => 'Harga jual wajib diisi.',
             'harga_jual.numeric'    => 'Harga jual harus berupa angka.',
+            'harga_jual.min'        => 'Harga jual tidak boleh minus (minimal 0).',
+            'harga_beli_terakhir.min' => 'Harga beli tidak boleh minus (minimal 0).',
+            'stok_produk.min'       => 'Jumlah stok tidak boleh minus (minimal 0).',
+            'stok_minimum.min'      => 'Stok minimum tidak boleh minus (minimal 0).',
             'foto_produk.required'  => 'Foto produk wajib diunggah.',
             'foto_produk.image'     => 'File harus berupa gambar.',
             'foto_produk.mimes'     => 'Format gambar harus jpg, jpeg, png, atau webp.',
             'foto_produk.max'       => 'Ukuran gambar maksimal 2MB.',
         ]);
+
+        if (isset($validated['stok_produk'])) {
+            $validated['stok_produk'] = max(0, (int) $validated['stok_produk']);
+        }
+        if (isset($validated['stok_minimum'])) {
+            $validated['stok_minimum'] = max(0, (int) $validated['stok_minimum']);
+        }
+        if (isset($validated['harga_beli_terakhir'])) {
+            $validated['harga_beli_terakhir'] = max(0, (float) $validated['harga_beli_terakhir']);
+        }
+        if (isset($validated['harga_jual'])) {
+            $validated['harga_jual'] = max(0, (float) $validated['harga_jual']);
+        }
 
         if ($request->hasFile('foto_produk')) {
             $path = $request->file('foto_produk')->store('products', 'public');
@@ -124,10 +141,27 @@ class ProductController extends Controller
             'nama_produk.required'  => 'Nama produk wajib diisi.',
             'harga_jual.required'   => 'Harga jual wajib diisi.',
             'harga_jual.numeric'    => 'Harga jual harus berupa angka.',
+            'harga_jual.min'        => 'Harga jual tidak boleh minus (minimal 0).',
+            'harga_beli_terakhir.min' => 'Harga beli tidak boleh minus (minimal 0).',
+            'stok_produk.min'       => 'Jumlah stok tidak boleh minus (minimal 0).',
+            'stok_minimum.min'      => 'Stok minimum tidak boleh minus (minimal 0).',
             'foto_produk.image'     => 'File harus berupa gambar.',
             'foto_produk.mimes'     => 'Format gambar harus jpg, jpeg, png, atau webp.',
             'foto_produk.max'       => 'Ukuran gambar maksimal 2MB.',
         ]);
+
+        if (isset($validated['stok_produk'])) {
+            $validated['stok_produk'] = max(0, (int) $validated['stok_produk']);
+        }
+        if (isset($validated['stok_minimum'])) {
+            $validated['stok_minimum'] = max(0, (int) $validated['stok_minimum']);
+        }
+        if (isset($validated['harga_beli_terakhir'])) {
+            $validated['harga_beli_terakhir'] = max(0, (float) $validated['harga_beli_terakhir']);
+        }
+        if (isset($validated['harga_jual'])) {
+            $validated['harga_jual'] = max(0, (float) $validated['harga_jual']);
+        }
 
         if ($request->hasFile('foto_produk')) {
             // Hapus foto lama jika ada

@@ -470,6 +470,7 @@
                             name="harga_beli_terakhir" 
                             value="{{ old('harga_beli_terakhir') }}"
                             placeholder="0" 
+                            min="0"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                         >
                     </div>
@@ -482,6 +483,7 @@
                             name="harga_jual" 
                             value="{{ old('harga_jual') }}"
                             placeholder="0" 
+                            min="0"
                             class="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition {{ $errors->has('harga_jual') ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200' }}"
                             required
                         >
@@ -498,9 +500,15 @@
                         <input 
                             type="number" 
                             name="stok_produk" 
+                            id="add_stok_produk"
                             value="{{ old('stok_produk', 0) }}"
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                            oninput="if(this.value < 0) this.value = 0;"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                         >
+                        @error('stok_produk') <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -509,9 +517,15 @@
                         <input 
                             type="number" 
                             name="stok_minimum" 
+                            id="add_stok_minimum"
                             value="{{ old('stok_minimum', 5) }}"
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                            oninput="if(this.value < 0) this.value = 0;"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                         >
+                        @error('stok_minimum') <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -751,6 +765,8 @@
                             type="number" 
                             name="harga_beli_terakhir" 
                             id="edit_harga_beli_terakhir"
+                            min="0"
+                            placeholder="0"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                         >
                     </div>
@@ -762,6 +778,8 @@
                             type="number" 
                             name="harga_jual" 
                             id="edit_harga_jual"
+                            min="0"
+                            placeholder="0"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                             required
                         >
@@ -778,6 +796,10 @@
                             type="number" 
                             name="stok_produk" 
                             id="edit_stok_produk"
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                            oninput="if(this.value < 0) this.value = 0;"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                         >
                     </div>
@@ -789,6 +811,10 @@
                             type="number" 
                             name="stok_minimum" 
                             id="edit_stok_minimum"
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                            oninput="if(this.value < 0) this.value = 0;"
                             class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                         >
                     </div>
@@ -1168,8 +1194,10 @@
                 document.getElementById('edit_satuan_besar').value = btn.dataset.satuanBesar || '';
                 document.getElementById('edit_isi_per_satuan_besar').value = btn.dataset.isi || '';
                 document.getElementById('edit_lokasi_produk').value = btn.dataset.lokasi || '';
-                document.getElementById('edit_stok_minimum').value = btn.dataset.stokMin || '';
-                document.getElementById('edit_stok_produk').value = btn.dataset.stok || '';
+                const rawStokMin = parseInt(btn.dataset.stokMin || 0);
+                document.getElementById('edit_stok_minimum').value = (isNaN(rawStokMin) || rawStokMin < 0) ? 0 : rawStokMin;
+                const rawStok = parseInt(btn.dataset.stok || 0);
+                document.getElementById('edit_stok_produk').value = (isNaN(rawStok) || rawStok < 0) ? 0 : rawStok;
                 document.getElementById('edit_harga_beli_terakhir').value = btn.dataset.hargaBeli || '';
                 document.getElementById('edit_harga_jual').value = btn.dataset.hargaJual || '';
 
@@ -1239,6 +1267,22 @@
                 deleteModal.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden');
             });
+        });
+
+        // Cegah input minus/negatif pada input angka non-negatif
+        document.querySelectorAll('#create-product-modal input[type="number"], #edit-product-modal input[type="number"]').forEach(input => {
+            if (input.hasAttribute('min') && Number(input.getAttribute('min')) >= 0) {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === '-' || e.key === 'e' || e.key === 'E') {
+                        e.preventDefault();
+                    }
+                });
+                input.addEventListener('input', function() {
+                    if (this.value !== '' && Number(this.value) < 0) {
+                        this.value = 0;
+                    }
+                });
+            }
         });
 
         // Close on Escape Key
