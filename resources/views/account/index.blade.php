@@ -521,7 +521,7 @@
     </div>
 
     <!-- POP OUT DIALOG BOX (KONFIRMASI LOGOUT KARENA UBAH ROLE AKUN SENDIRI) -->
-    <div id="role-logout-modal" class="fixed inset-0 z-60 flex items-center justify-center p-4 sm:p-6 hidden" role="dialog" aria-modal="true">
+    <div id="role-logout-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 hidden" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
         <div id="role-logout-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
@@ -593,8 +593,8 @@
                 if (passInput) passInput.type = 'password';
                 const eyeOpen = modalEl.querySelector('.eye-open');
                 const eyeClosed = modalEl.querySelector('.eye-closed');
-                if (eyeOpen) eyeOpen.classList.remove('hidden');
-                if (eyeClosed) eyeClosed.classList.add('hidden');
+                if (eyeOpen) eyeOpen.classList.add('hidden');
+                if (eyeClosed) eyeClosed.classList.remove('hidden');
             }
 
             function closeModal() {
