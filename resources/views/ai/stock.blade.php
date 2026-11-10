@@ -235,11 +235,11 @@
                         <p class="text-sm font-bold">{{ now()->format('d M Y, H:i') }}</p>
                     </div>
                     <div class="flex gap-2">
-                        <span class="px-3 py-1 rounded-full bg-red-500/80 border border-red-400/50 text-xs font-bold">
-                            {{ $summary['out'] + $summary['critical'] }} Kritis
+                        <span class="px-3 py-1 rounded-full bg-orange-500/80 border border-orange-400/50 text-xs font-bold">
+                            {{ $summary['critical'] }} Kritis
                         </span>
-                        <span class="px-3 py-1 rounded-full bg-amber-500/80 border border-amber-400/50 text-xs font-bold">
-                            {{ $summary['warning'] }} Waspada
+                        <span class="px-3 py-1 rounded-full bg-red-500/80 border border-red-400/50 text-xs font-bold">
+                            {{ $summary['out'] }} Habis
                         </span>
                     </div>
                 </div>
