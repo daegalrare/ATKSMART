@@ -23,7 +23,7 @@
                     </div>
                     <div>
                         <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ number_format($statPenjualan) }}</h3>
-                        <p class="text-xs font-medium text-slate-400 mt-0.5">Total Penjualan</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-500 mt-0.5">Total Penjualan</p>
                     </div>
                 </div>
                 <button type="button" class="text-slate-300 group-hover:text-purple-600 group-hover:bg-purple-50 rounded-xl transition p-1.5" title="Lihat Riwayat Penjualan">
@@ -42,7 +42,7 @@
                     </div>
                     <div>
                         <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ number_format($statProduk) }}</h3>
-                        <p class="text-xs font-medium text-slate-400 mt-0.5">Produk Aktif</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-500 mt-0.5">Produk Aktif</p>
                     </div>
                 </div>
                 <button type="button" class="text-slate-300 group-hover:text-sky-600 group-hover:bg-sky-50 rounded-xl transition p-1.5" title="Lihat Daftar Produk Aktif">
@@ -67,7 +67,7 @@
                                 Rp {{ number_format($statAvgBayar, 0, ',', '.') }}
                             @endif
                         </h3>
-                        <p class="text-xs font-medium text-slate-400 mt-0.5">Rata-rata Transaksi</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-500 mt-0.5">Rata-rata Transaksi</p>
                     </div>
                 </div>
                 <button type="button" class="text-slate-300 group-hover:text-amber-600 group-hover:bg-amber-50 rounded-xl transition p-1.5" title="Lihat Analisis Transaksi">
@@ -86,7 +86,7 @@
                     </div>
                     <div>
                         <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ number_format($statMenipis) }}</h3>
-                        <p class="text-xs font-medium text-slate-400 mt-0.5">Stok Perlu Restock</p>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-500 mt-0.5">Stok Perlu Restock</p>
                     </div>
                 </div>
                 <button type="button" class="text-slate-300 group-hover:text-rose-600 group-hover:bg-rose-50 rounded-xl transition p-1.5" title="Lihat Produk Perlu Restock">
@@ -170,17 +170,17 @@
                 <!-- Header -->
                 <div class="flex items-center justify-between pb-4">
                     <div>
-                        <h3 class="text-base font-bold text-slate-800">Tren Penjualan & Pendapatan</h3>
-                        <p class="text-xs text-slate-400 mt-0.5">Perbandingan performa transaksi berkala</p>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-800">Tren Penjualan & Pendapatan</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Perbandingan performa transaksi berkala</p>
                     </div>
                     <div class="relative inline-block text-left" id="trend-filter-wrapper">
-                        <button id="trend-filter-btn" type="button" class="flex items-center gap-1.5 text-xs text-slate-600 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl font-medium cursor-pointer hover:bg-slate-100 transition shadow-2xs">
+                        <button id="trend-filter-btn" type="button" class="flex items-center gap-1.5 text-xs sm:text-sm text-slate-700 bg-slate-50 border border-slate-200/80 px-3.5 py-1.5 rounded-xl font-semibold cursor-pointer hover:bg-slate-100 transition shadow-2xs">
                             <span id="trend-filter-label">6 Bulan Terakhir</span>
-                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
-                        <div id="trend-filter-menu" class="absolute right-0 mt-1 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 hidden z-30 text-xs">
+                        <div id="trend-filter-menu" class="absolute right-0 mt-1 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 hidden z-30 text-xs sm:text-sm">
                             <button type="button" onclick="switchTrendMode('today')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700 cursor-pointer flex items-center justify-between">
                                 <span>Hari Ini</span>
                             </button>
@@ -200,46 +200,49 @@
                     </div>
                 </div>
 
-                <!-- Chart Grid: Bar Chart + Radial Progress -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-2">
+                <!-- Chart Grid: Bar Chart + Kartu Transaksi Ungu -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch pt-2">
                     
                     <!-- Dual Bar Chart -->
-                    <div class="md:col-span-8 flex flex-col justify-between">
-                        <div class="h-56 relative w-full">
+                    <div class="md:col-span-7 flex flex-col justify-between">
+                        <div class="h-60 relative w-full">
                             <canvas id="trendBarChart"></canvas>
                         </div>
                         <!-- Legend bawah bar -->
-                        <div class="flex items-center justify-center gap-6 pt-4 pb-1 text-xs">
+                        <div class="flex items-center justify-center gap-6 pt-3 pb-1 text-xs sm:text-sm font-semibold">
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block shadow-2xs"></span>
-                                <span class="text-slate-600 font-medium">Pendapatan</span>
+                                <span class="w-3 h-3 rounded-full bg-purple-600 inline-block shadow-xs"></span>
+                                <span class="text-slate-700">Pendapatan</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-2xs"></span>
-                                <span class="text-slate-600 font-medium">Transaksi</span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block shadow-xs"></span>
+                                <span class="text-slate-700">Transaksi</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Circular Progress Gauge (28% Donut di kanan bar) -->
-                    <div class="md:col-span-4 flex flex-col items-center justify-center p-3 border-t md:border-t-0 md:border-l border-slate-100">
-                        <div class="relative w-36 h-36 flex items-center justify-center">
-                            <canvas id="circularGaugeChart"></canvas>
-                            <!-- Center Icon & badge -->
-                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                <div class="w-8 h-8 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center">
-                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <!-- Black floating badge dynamic % -->
-                            <span class="absolute top-2 left-1 bg-slate-900 text-white text-[11px] font-bold px-2 py-0.5 rounded-md shadow-sm">
-                                {{ $targetPercentage }}%
-                            </span>
+                    <!-- Glowing Purple/Blue Card (Transaksi) -->
+                    <div class="md:col-span-5 bg-gradient-to-br from-indigo-700 via-purple-700 to-violet-800 rounded-2xl p-5 text-white shadow-lg shadow-purple-600/20 relative overflow-hidden flex flex-col justify-between min-h-[250px]">
+                        <!-- Top Stat -->
+                        <div class="relative z-10">
+                            <h2 id="purple-card-count" class="text-3xl sm:text-4xl font-extrabold tracking-tight">{{ number_format($purpleData['months_6']['total'] ?? $bulanIniTotal) }}</h2>
+                            <p id="purple-card-desc" class="text-xs sm:text-sm text-purple-100 mt-1 font-semibold">{{ $purpleData['months_6']['desc'] ?? 'Transaksi 6 bulan terakhir' }}</p>
                         </div>
-                        <p class="text-xs font-semibold text-slate-700 mt-2">Target Penjualan</p>
-                        <p class="text-[11px] text-slate-400">Tercapai bulan ini ({{ $bulanIniTotal }}/{{ $targetTransaksi }})</p>
+
+                        <!-- Sparkline Wave in White -->
+                        <div class="h-28 relative my-2 z-10">
+                            <canvas id="purpleSparklineChart"></canvas>
+                        </div>
+
+                        <!-- Bottom X-axis Dates -->
+                        <div id="purple-card-labels" class="flex items-center justify-between text-xs sm:text-sm font-bold text-white/90 px-1 relative z-10">
+                            @foreach (($purpleData['months_6']['labels'] ?? $sparklineLabels) as $sLabel)
+                                <span>{{ $sLabel }}</span>
+                            @endforeach
+                        </div>
+
+                        <!-- Background Subtle Glow Effect -->
+                        <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-purple-500/30 rounded-full blur-2xl pointer-events-none"></div>
                     </div>
 
                 </div>
@@ -248,8 +251,8 @@
             <!-- KANAN (4 COLS): Patients by Gender / Distribusi Kategori -->
             <div class="lg:col-span-4 bg-white rounded-3xl border border-slate-100 shadow-xs p-6 flex flex-col justify-between">
                 <div>
-                    <h3 class="text-base font-bold text-slate-800">Distribusi Kategori</h3>
-                    <p class="text-xs text-slate-400 mt-0.5">Proporsi penjualan per kategori</p>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800">Distribusi Kategori</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Proporsi penjualan per kategori</p>
                 </div>
 
                 <!-- Donut Chart -->
@@ -266,14 +269,14 @@
                 </div>
 
                 <!-- Legend below donut -->
-                <div class="flex flex-wrap items-center justify-center gap-4 pt-2 text-xs">
+                <div class="flex flex-wrap items-center justify-center gap-4 pt-2 text-xs sm:text-sm font-semibold">
                     @php
                         $catColors = ['bg-amber-500', 'bg-purple-600', 'bg-cyan-500', 'bg-emerald-500', 'bg-pink-500'];
                     @endphp
                     @foreach ($kategoriLabels as $idx => $cLabel)
                         <div class="flex items-center gap-1.5">
-                            <span class="w-2.5 h-2.5 rounded-full {{ $catColors[$idx % count($catColors)] }} inline-block"></span>
-                            <span class="text-slate-600 font-medium">{{ $cLabel }} ({{ $kategoriSeries[$idx] ?? 0 }}%)</span>
+                            <span class="w-3 h-3 rounded-full {{ $catColors[$idx % count($catColors)] }} inline-block"></span>
+                            <span class="text-slate-700">{{ $cLabel }} ({{ $kategoriSeries[$idx] ?? 0 }}%)</span>
                         </div>
                     @endforeach
                 </div>
@@ -282,27 +285,27 @@
         </div>
 
         <!-- ======================================================== -->
-        <!-- ROW 3: TIME ADMITTED, PATIENTS BY DIVISION, PURPLE CARD  -->
+        <!-- ROW 3: TIME ADMITTED & KATEGORI POPULER                  -->
         <!-- ======================================================== -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-            <!-- KIRI (5 COLS): Time Admitted / Waktu Transaksi -->
-            <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-100 shadow-xs p-6 flex flex-col justify-between">
+            <!-- KIRI (7 COLS): Time Admitted / Waktu Transaksi -->
+            <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-100 shadow-xs p-6 flex flex-col justify-between">
                 <!-- Header -->
                 <div class="flex items-center justify-between pb-3">
                     <div>
-                        <h3 class="text-base font-bold text-slate-800">Waktu Transaksi</h3>
-                        <p id="time-filter-desc" class="text-xs text-slate-400 mt-0.5">Frekuensi transaksi 6 bulan terakhir</p>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-800">Waktu Transaksi</h3>
+                        <p id="time-filter-desc" class="text-xs sm:text-sm text-slate-500 mt-0.5">Frekuensi transaksi 6 bulan terakhir</p>
                     </div>
                     <!-- Dropdown Filter Waktu Transaksi -->
                     <div class="relative inline-block text-left" id="time-filter-wrapper">
-                        <button id="time-filter-btn" type="button" class="flex items-center gap-1.5 text-xs text-slate-600 bg-slate-50 border border-slate-200/80 px-3 py-1.5 rounded-xl font-medium cursor-pointer hover:bg-slate-100 transition shadow-2xs">
+                        <button id="time-filter-btn" type="button" class="flex items-center gap-1.5 text-xs sm:text-sm text-slate-700 bg-slate-50 border border-slate-200/80 px-3.5 py-1.5 rounded-xl font-semibold cursor-pointer hover:bg-slate-100 transition shadow-2xs">
                             <span id="time-filter-label">6 Bulan Terakhir</span>
-                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
-                        <div id="time-filter-menu" class="absolute right-0 mt-1 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 hidden z-30 text-xs">
+                        <div id="time-filter-menu" class="absolute right-0 mt-1 w-44 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 hidden z-30 text-xs sm:text-sm">
                             <button type="button" onclick="switchTimeMode('today')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 font-medium text-slate-700 cursor-pointer flex items-center justify-between">
                                 <span>Hari Ini</span>
                             </button>
@@ -323,68 +326,44 @@
                 </div>
 
                 <!-- Orange Spline Wave Chart -->
-                <div class="h-44 relative mt-2">
+                <div class="h-60 relative mt-2">
                     <canvas id="timeAdmittedChart"></canvas>
                 </div>
             </div>
 
-            <!-- TENGAH (4 COLS): Patients By Division / Kategori Populer -->
-            <div class="lg:col-span-4 bg-white rounded-3xl border border-slate-100 shadow-xs p-6 flex flex-col justify-between">
+            <!-- KANAN (5 COLS): Patients By Division / Kategori Populer -->
+            <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-100 shadow-xs p-6 flex flex-col justify-between">
                 <!-- Header -->
                 <div class="flex items-center justify-between pb-3">
-                    <h3 class="text-base font-bold text-slate-800">Kategori Populer</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800">Kategori Populer</h3>
                     <svg class="w-4 h-4 text-slate-400 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </div>
 
                 <!-- Sub-header -->
-                <div class="flex items-center justify-between text-[11px] font-semibold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider pb-2 border-b border-slate-100">
                     <div class="flex items-center gap-2">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                         <span>KATEGORI</span>
                     </div>
                     <span>TERJUAL</span>
                 </div>
 
                 <!-- List Rows -->
-                <div class="divide-y divide-slate-100 text-xs">
+                <div class="divide-y divide-slate-100">
                     @forelse ($kategoriPopuler as $idx => $kp)
-                        <div class="py-3 flex items-center justify-between">
+                        <div class="py-3.5 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <x-category-icon :name="$kp->nama_kategori" class="w-8 h-8 rounded-xl" icon-class="w-4 h-4" />
-                                <span class="font-medium text-slate-700">{{ $kp->nama_kategori }}</span>
+                                <x-category-icon :name="$kp->nama_kategori" class="w-9 h-9 rounded-xl" icon-class="w-4 h-4" />
+                                <span class="font-bold text-sm sm:text-base text-slate-800">{{ $kp->nama_kategori }}</span>
                             </div>
-                            <span class="font-bold text-slate-900">{{ number_format($kp->terjual) }}</span>
+                            <span class="font-extrabold text-sm sm:text-base text-slate-900">{{ number_format($kp->terjual) }}</span>
                         </div>
                     @empty
-                        <p class="py-4 text-center text-xs text-slate-400 italic">Belum ada data penjualan kategori</p>
+                        <p class="py-6 text-center text-sm text-slate-400 italic">Belum ada data penjualan kategori</p>
                     @endforelse
                 </div>
-            </div>
-
-            <!-- KANAN (3 COLS): Glowing Purple Card (3,240 Transaksi) -->
-            <div class="lg:col-span-3 bg-gradient-to-br from-indigo-700 via-purple-700 to-violet-800 rounded-3xl p-6 text-white shadow-xl shadow-purple-600/20 relative overflow-hidden flex flex-col justify-between">
-                <!-- Top Stat -->
-                <div class="relative z-10">
-                    <h2 id="purple-card-count" class="text-4xl font-extrabold tracking-tight">{{ number_format($purpleData['months_6']['total'] ?? $bulanIniTotal) }}</h2>
-                    <p id="purple-card-desc" class="text-xs text-purple-200 mt-1 font-medium">{{ $purpleData['months_6']['desc'] ?? 'Transaksi 6 bulan terakhir' }}</p>
-                </div>
-
-                <!-- Sparkline Wave in White -->
-                <div class="h-28 relative my-2 z-10">
-                    <canvas id="purpleSparklineChart"></canvas>
-                </div>
-
-                <!-- Bottom X-axis Dates -->
-                <div id="purple-card-labels" class="flex items-center justify-between text-[11px] font-semibold text-purple-200/80 px-1 relative z-10">
-                    @foreach (($purpleData['months_6']['labels'] ?? $sparklineLabels) as $sLabel)
-                        <span>{{ $sLabel }}</span>
-                    @endforeach
-                </div>
-
-                <!-- Background Subtle Glow Effect -->
-                <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-purple-500/30 rounded-full blur-2xl pointer-events-none"></div>
             </div>
 
         </div>
@@ -770,7 +749,10 @@
                     scales: {
                         x: {
                             grid: { display: false },
-                            ticks: { font: { size: 10 }, color: '#94a3b8' }
+                            ticks: { 
+                                font: { size: 12, weight: '600' }, 
+                                color: '#334155' 
+                            }
                         },
                         y: {
                             type: 'linear',
@@ -780,8 +762,8 @@
                             border: { dash: [4, 4] },
                             grid: { color: '#f1f5f9' },
                             ticks: {
-                                font: { size: 10 },
-                                color: '#94a3b8',
+                                font: { size: 12, weight: '700' },
+                                color: '#059669',
                                 precision: 0,
                                 callback: val => val.toLocaleString('id-ID')
                             }
@@ -793,8 +775,8 @@
                             beginAtZero: true,
                             grid: { display: false },
                             ticks: {
-                                font: { size: 10 },
-                                color: '#94a3b8',
+                                font: { size: 12, weight: '700' },
+                                color: '#7c3aed',
                                 callback: val => {
                                     if (val >= 1000000) return 'Rp ' + (val/1000000).toFixed(1) + 'M';
                                     if (val >= 1000) return 'Rp ' + (val/1000).toLocaleString('id-ID') + 'k';
@@ -843,12 +825,14 @@
                     timeAdmittedChart.data.datasets[0].data = dataArr;
                     timeAdmittedChart.data.datasets[0].pointRadius = pointRadii;
                     timeAdmittedChart.options.scales.x.ticks.font = (ctx) => ({
-                        weight: (peakIndex !== -1 && ctx.index === peakIndex) ? 'bold' : 'normal',
-                        size: 10
+                        weight: (peakIndex !== -1 && ctx.index === peakIndex) ? '800' : '600',
+                        size: 12
                     });
-                    timeAdmittedChart.options.scales.x.ticks.color = (ctx) => (peakIndex !== -1 && ctx.index === peakIndex) ? ORANGE : '#94a3b8';
+                    timeAdmittedChart.options.scales.x.ticks.color = (ctx) => (peakIndex !== -1 && ctx.index === peakIndex) ? ORANGE : '#334155';
                     timeAdmittedChart.options.scales.y.suggestedMax = Math.max(3, maxVal + 1);
                     timeAdmittedChart.options.scales.y.ticks.stepSize = maxVal > 4 ? Math.ceil(maxVal / 4) : 1;
+                    timeAdmittedChart.options.scales.y.ticks.font = { size: 12, weight: '700' };
+                    timeAdmittedChart.options.scales.y.ticks.color = '#334155';
                     timeAdmittedChart.update();
 
                     const timeFilterLabelEl = document.getElementById('time-filter-label');
@@ -857,7 +841,7 @@
                     if (timeFilterDescEl && timeSelected.desc) timeFilterDescEl.textContent = timeSelected.desc;
                 }
 
-                // 3. Update Kartu Transaksi Kanan Bawah (Ungu)
+                // 3. Update Kartu Transaksi Ungu/Biru (di Row 2)
                 const purpleSelected = purpleDatasets[mode];
                 if (purpleSelected) {
                     const purpleCountEl = document.getElementById('purple-card-count');
@@ -893,30 +877,7 @@
             window.switchTimeMode = window.switchDashboardPeriod;
 
             // ==========================================
-            // 2. CIRCULAR GAUGE (Target Penjualan Donut)
-            // ==========================================
-            const ctxGauge = document.getElementById('circularGaugeChart').getContext('2d');
-            const targetPct = {{ $targetPercentage }};
-            new Chart(ctxGauge, {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [targetPct, Math.max(0, 100 - targetPct)],
-                        backgroundColor: [EMERALD, '#f1f5f9'],
-                        borderWidth: 0,
-                        cutout: '76%',
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
-                    animation: { animateRotate: true }
-                }
-            });
-
-            // ==========================================
-            // 3. GENDER / KATEGORI DONUT
+            // 2. GENDER / KATEGORI DONUT
             // ==========================================
             const ctxDonut = document.getElementById('genderDonutChart').getContext('2d');
             const catColors = [ORANGE, PURPLE, CYAN, EMERALD, '#ec4899'];
@@ -1004,10 +965,10 @@
                             grid: { display: false },
                             ticks: {
                                 font: (ctx) => ({
-                                    weight: (initialPeakIndex !== -1 && ctx.index === initialPeakIndex) ? 'bold' : 'normal',
-                                    size: 10
+                                    weight: (initialPeakIndex !== -1 && ctx.index === initialPeakIndex) ? '800' : '600',
+                                    size: 12
                                 }),
-                                color: (ctx) => (initialPeakIndex !== -1 && ctx.index === initialPeakIndex) ? ORANGE : '#94a3b8'
+                                color: (ctx) => (initialPeakIndex !== -1 && ctx.index === initialPeakIndex) ? ORANGE : '#334155'
                             }
                         },
                         y: {
@@ -1015,8 +976,8 @@
                             border: { dash: [4, 4] },
                             grid: { color: '#f1f5f9' },
                             ticks: {
-                                font: { size: 9 },
-                                color: '#94a3b8',
+                                font: { size: 12, weight: '700' },
+                                color: '#334155',
                                 precision: 0,
                                 stepSize: initialMaxVal > 4 ? Math.ceil(initialMaxVal / 4) : 1
                             },
