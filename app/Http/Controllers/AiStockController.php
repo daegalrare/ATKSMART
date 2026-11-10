@@ -41,6 +41,7 @@ class AiStockController extends Controller
             $soldLast30 = $salesLast30[$product->id_produk] ?? 0;
             $soldLast7  = $salesLast7[$product->id_produk] ?? 0;
             $velocity   = round($soldLast30 / 30, 2); // unit per hari
+            $velocityWeekly = round(($soldLast30 / 30) * 7, 2); // unit per minggu
 
             if ($velocity > 0) {
                 $totalVelocity += $velocity;
@@ -48,7 +49,6 @@ class AiStockController extends Controller
             }
 
             $daysUntilStockout = $velocity > 0 ? floor($product->stok_produk / $velocity) : null;
-            $reorderQty = max(ceil($velocity * 30), 1); // 30 hari supply
 
             // Klasifikasi risiko
             if ($product->stok_produk <= 0) {
@@ -63,11 +63,25 @@ class AiStockController extends Controller
                 $riskLevel = 'safe';
             }
 
+            // Kebutuhan reorder cerdas:
+            // Produk yang statusnya 'safe' (stok masih aman & cukup) tidak memerlukan reorder (0).
+            // Hanya produk 'out', 'critical', atau 'warning' yang disarankan untuk reorder.
+            if ($riskLevel === 'out') {
+                $reorderQty = max(ceil($velocity * 30), $product->stok_minimum, 1);
+            } elseif ($riskLevel === 'critical' || $riskLevel === 'warning') {
+                $target = max(ceil($velocity * 30), $product->stok_minimum * 2, 1);
+                $needed = $target - $product->stok_produk;
+                $reorderQty = max($needed, 1);
+            } else {
+                $reorderQty = 0;
+            }
+
             return [
                 'product'           => $product,
                 'sold_30'           => $soldLast30,
                 'sold_7'            => $soldLast7,
                 'velocity'          => $velocity,
+                'velocity_weekly'   => $velocityWeekly,
                 'days_until_stockout' => $daysUntilStockout,
                 'reorder_qty'       => $reorderQty,
                 'risk_level'        => $riskLevel,
@@ -112,13 +126,13 @@ class AiStockController extends Controller
 
     private function generateAiMessage(array $item): string
     {
-        $name = $item['product']->nama_produk;
-        $stok = $item['product']->stok_produk;
-        $min  = $item['product']->stok_minimum;
-        $vel  = $item['velocity'];
-        $days = $item['days_until_stockout'];
-        $qty  = $item['reorder_qty'];
-        $satuan = $item['product']->satuan_terkecil ?? 'pcs';
+        $name       = $item['product']->nama_produk;
+        $stok       = $item['product']->stok_produk;
+        $min        = $item['product']->stok_minimum;
+        $velWeekly  = $item['velocity_weekly'];
+        $days       = $item['days_until_stockout'];
+        $qty        = $item['reorder_qty'];
+        $satuan     = $item['product']->satuan_terkecil ?? 'pcs';
 
         if ($item['risk_level'] === 'out') {
             return "⚠️ Stok <strong>{$name}</strong> telah <strong>habis</strong>! AI mendeteksi produk ini tidak dapat dijual. Segera lakukan pembelian stok minimal <strong>{$qty} {$satuan}</strong> untuk memenuhi permintaan.";
@@ -126,23 +140,24 @@ class AiStockController extends Controller
 
         if ($item['risk_level'] === 'critical') {
             if ($stok <= $min) {
-                return "🚨 Stok <strong>{$name}</strong> = <strong>{$stok} {$satuan}</strong> sudah berada di bawah batas minimum ({$min} {$satuan}). AI merekomendasikan pembelian <strong>{$qty} {$satuan}</strong> segera untuk mencegah kehabisan.";
+                return "🚨 Stok <strong>{$name}</strong> tersisa <strong>{$stok} {$satuan}</strong> (di bawah batas minimum {$min} {$satuan}). Rekomendasi AI: lakukan reorder <strong>{$qty} {$satuan}</strong> segera untuk mencegah kehabisan.";
             }
-            return "🔴 AI memperkirakan stok <strong>{$name}</strong> akan habis dalam <strong>{$days} hari</strong> (kecepatan jual: {$vel}/hari). Rekomendasi: beli <strong>{$qty} {$satuan}</strong> untuk persediaan 30 hari.";
+            return "🔴 AI memperkirakan stok <strong>{$name}</strong> akan habis dalam <strong>{$days} hari</strong> (kecepatan jual: <strong>{$velWeekly}/minggu</strong>). Rekomendasi: beli <strong>{$qty} {$satuan}</strong> untuk persediaan 30 hari.";
         }
 
         if ($item['risk_level'] === 'warning') {
-            return "🟡 Perhatian: stok <strong>{$name}</strong> diperkirakan habis dalam <strong>{$days} hari</strong>. AI menyarankan mulai rencanakan pembelian <strong>{$qty} {$satuan}</strong> dalam waktu dekat.";
+            return "🟡 Perhatian: stok <strong>{$name}</strong> diperkirakan habis dalam <strong>{$days} hari</strong> (kecepatan jual: <strong>{$velWeekly}/minggu</strong>). AI menyarankan mulai rencanakan reorder <strong>{$qty} {$satuan}</strong>.";
         }
 
         if ($item['is_fast_mover']) {
-            return "🚀 <strong>{$name}</strong> adalah produk <em>fast-moving</em> dengan kecepatan jual <strong>{$vel}/hari</strong>. Stok aman ({$stok} {$satuan}), namun AI menyarankan pantau terus dan siapkan reorder {$qty} {$satuan}.";
+            $daysText = $days !== null ? "cukup untuk ~{$days} hari" : "stok mencukupi";
+            return "🚀 <strong>{$name}</strong> adalah produk <em>fast-moving</em> dengan kecepatan jual <strong>{$velWeekly}/minggu</strong>. Stok saat ini aman (<strong>{$stok} {$satuan}</strong>, {$daysText}). Belum perlu reorder saat ini.";
         }
 
         if ($item['is_slow_mover']) {
-            return "📦 <strong>{$name}</strong> belum terjual dalam 30 hari terakhir. AI mendeteksi potensi overstock. Pertimbangkan promosi atau penyesuaian harga untuk menggerakkan barang ini.";
+            return "📦 <strong>{$name}</strong> belum terjual dalam 30 hari terakhir (kecepatan: <strong>0/minggu</strong>). AI mendeteksi potensi overstock. Pertimbangkan promosi atau penyesuaian harga untuk menggerakkan barang ini.";
         }
 
-        return "✅ Stok <strong>{$name}</strong> dalam kondisi aman ({$stok} {$satuan}). AI tidak mendeteksi risiko signifikan saat ini.";
+        return "✅ Stok <strong>{$name}</strong> dalam kondisi aman (<strong>{$stok} {$satuan}</strong>). AI tidak mendeteksi risiko saat ini.";
     }
 }

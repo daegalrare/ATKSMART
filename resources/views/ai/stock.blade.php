@@ -486,18 +486,24 @@
 
                             {{-- KECEPATAN JUAL --}}
                             <td class="py-3 px-2 text-center whitespace-nowrap">
-                                <div class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-200">
+                                <div class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-200" title="Rata-rata penjualan per minggu">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                                    <span class="text-[11px] font-extrabold text-indigo-700">{{ $item['velocity'] }}/hr</span>
+                                    <span class="text-[11px] font-extrabold text-indigo-700">{{ $item['velocity_weekly'] }}/mgg</span>
                                 </div>
                             </td>
 
                             {{-- REORDER QTY --}}
                             <td class="py-3 px-2 text-center whitespace-nowrap">
-                                <div class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-violet-50 border border-violet-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                                    <span class="text-[11px] font-extrabold text-violet-700">{{ $item['reorder_qty'] }} {{ $p->satuan_terkecil ?? 'pcs' }}</span>
-                                </div>
+                                @if($item['reorder_qty'] > 0)
+                                    <div class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-violet-50 border border-violet-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                        <span class="text-[11px] font-extrabold text-violet-700">{{ $item['reorder_qty'] }} {{ $p->satuan_terkecil ?? 'pcs' }}</span>
+                                    </div>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-100 text-slate-500 text-[10px] font-bold border border-slate-200/80" title="Stok saat ini masih aman dan mencukupi">
+                                        0 {{ $p->satuan_terkecil ?? 'pcs' }} (Cukup)
+                                    </span>
+                                @endif
                             </td>
 
                             {{-- REKOMENDASI AI (Menggantikan Est. Biaya) --}}
