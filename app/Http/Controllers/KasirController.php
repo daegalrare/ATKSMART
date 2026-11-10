@@ -188,6 +188,11 @@ class KasirController extends Controller
         $startDate  = $request->get('start_date');
         $endDate    = $request->get('end_date');
 
+        // Restriction: Jika tanggal dibalik, tukar posisinya agar filter tetap valid
+        if ($startDate && $endDate && $startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
+
         $now = \Carbon\Carbon::now();
 
         // Tentukan rentang tanggal berdasarkan preset

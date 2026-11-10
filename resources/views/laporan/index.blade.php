@@ -126,10 +126,12 @@
                 <form action="{{ route('laporan.index') }}" method="GET" class="flex flex-wrap items-center gap-2 flex-1">
                     <input type="hidden" name="periode" value="custom">
                     <span class="text-xs text-slate-500 font-medium">Dari</span>
-                    <input type="date" name="start_date" value="{{ $startDate }}"
+                    <input type="date" name="start_date" id="laporan_start_date" value="{{ $startDate }}"
+                           @if(!empty($endDate)) max="{{ $endDate }}" @endif
                            class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-400/30 focus:border-indigo-400 focus:outline-none transition">
                     <span class="text-xs text-slate-400">s/d</span>
-                    <input type="date" name="end_date" value="{{ $endDate }}"
+                    <input type="date" name="end_date" id="laporan_end_date" value="{{ $endDate }}"
+                           @if(!empty($startDate)) min="{{ $startDate }}" @endif
                            class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-400/30 focus:border-indigo-400 focus:outline-none transition">
                     <button type="submit" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer">
                         Terapkan

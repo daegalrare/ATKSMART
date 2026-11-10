@@ -60,6 +60,11 @@ class LaporanController extends Controller
                 break;
         }
 
+        // Restriction: Jika tanggal dibalik, tukar posisinya agar filter tetap valid
+        if ($startDate && $endDate && $startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
+
         $startDateTime = Carbon::parse($startDate)->startOfDay();
         $endDateTime = Carbon::parse($endDate)->endOfDay();
 
@@ -216,6 +221,11 @@ class LaporanController extends Controller
         $startDate = $request->query('start_date', Carbon::now()->startOfMonth()->toDateString());
         $endDate = $request->query('end_date', Carbon::now()->toDateString());
 
+        // Restriction: Jika tanggal dibalik, tukar posisinya agar filter tetap valid
+        if ($startDate && $endDate && $startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
+
         $startDateTime = Carbon::parse($startDate)->startOfDay();
         $endDateTime = Carbon::parse($endDate)->endOfDay();
 
@@ -278,6 +288,11 @@ class LaporanController extends Controller
 
         $startDate = $request->query('start_date', Carbon::now()->startOfMonth()->toDateString());
         $endDate = $request->query('end_date', Carbon::now()->toDateString());
+
+        // Restriction: Jika tanggal dibalik, tukar posisinya agar filter tetap valid
+        if ($startDate && $endDate && $startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
 
         $startDateTime = Carbon::parse($startDate)->startOfDay();
         $endDateTime = Carbon::parse($endDate)->endOfDay();

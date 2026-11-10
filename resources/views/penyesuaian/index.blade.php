@@ -178,7 +178,9 @@
                     <input 
                         type="date" 
                         name="start_date" 
+                        id="penyesuaian_start_date"
                         value="{{ request('start_date') }}" 
+                        @if(request('end_date')) max="{{ request('end_date') }}" @endif
                         class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                     >
                 </div>
@@ -189,7 +191,9 @@
                     <input 
                         type="date" 
                         name="end_date" 
+                        id="penyesuaian_end_date"
                         value="{{ request('end_date') }}" 
+                        @if(request('start_date')) min="{{ request('start_date') }}" @endif
                         class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
                     >
                 </div>

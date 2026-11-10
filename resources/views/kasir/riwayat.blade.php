@@ -48,12 +48,14 @@
                 <form action="{{ route('kasir.riwayat') }}" method="GET" class="flex flex-wrap items-center gap-2">
                     <input type="hidden" name="periode" value="custom">
                     <span class="text-xs text-slate-500 font-medium">Dari:</span>
-                    <input type="date" name="start_date"
+                    <input type="date" name="start_date" id="kasir_start_date"
                            value="{{ $startDate ?? ($start ? $start->format('Y-m-d') : '') }}"
+                           @if(!empty($endDate) || !empty($end)) max="{{ $endDate ?? $end->format('Y-m-d') }}" @endif
                            class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/20 focus:outline-none">
                     <span class="text-xs text-slate-500">s/d</span>
-                    <input type="date" name="end_date"
+                    <input type="date" name="end_date" id="kasir_end_date"
                            value="{{ $endDate ?? ($end ? $end->format('Y-m-d') : '') }}"
+                           @if(!empty($startDate) || !empty($start)) min="{{ $startDate ?? $start->format('Y-m-d') }}" @endif
                            class="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/20 focus:outline-none">
                     <button type="submit"
                             class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-xl transition cursor-pointer">

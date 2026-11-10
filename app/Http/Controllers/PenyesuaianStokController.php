@@ -23,6 +23,11 @@ class PenyesuaianStokController extends Controller
         $endDate = $request->query('end_date');
         $jenis = $request->query('jenis'); // 'tambah', 'kurang', or null
 
+        // Restriction: Jika tanggal dibalik, tukar posisinya agar filter tetap valid
+        if ($startDate && $endDate && $startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
+
         $query = PenyesuaianStok::with(['product.category'])
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($subQ) use ($search) {

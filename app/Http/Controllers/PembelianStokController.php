@@ -22,6 +22,11 @@ class PembelianStokController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
+        // Restriction: Jika tanggal dibalik, tukar posisinya agar filter tetap valid
+        if ($startDate && $endDate && $startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
+
         // Query dasar dengan relasi product & category
         $query = PembelianStok::with(['product.category'])
             ->when($search, function ($q) use ($search) {

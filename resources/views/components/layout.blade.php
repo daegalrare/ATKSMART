@@ -433,6 +433,81 @@
                     }
                 });
             }
+
+            // ========================================================
+            // GLOBAL DATE RANGE RESTRICTION (Cegah Tanggal Dibalik)
+            // ========================================================
+            function initDateRangeRestrictions() {
+                const forms = document.querySelectorAll('form');
+                forms.forEach(form => {
+                    // Cari pasangan input tanggal mulai & tanggal akhir
+                    const startInput = form.querySelector('input[type="date"][name*="start"], input[type="date"][name*="dari"], input[type="date"][name*="mulai"], input[type="date"][data-range="start"]');
+                    const endInput   = form.querySelector('input[type="date"][name*="end"], input[type="date"][name*="sampai"], input[type="date"][name*="selesai"], input[type="date"][name*="akhir"], input[type="date"][data-range="end"]');
+
+                    if (!startInput || !endInput) return;
+
+                    // Sinkronisasi batas min & max berdasarkan nilai yang ada
+                    function syncLimits() {
+                        if (startInput.value) {
+                            endInput.min = startInput.value;
+                        } else {
+                            endInput.removeAttribute('min');
+                        }
+
+                        if (endInput.value) {
+                            startInput.max = endInput.value;
+                        } else {
+                            startInput.removeAttribute('max');
+                        }
+                    }
+
+                    syncLimits();
+
+                    // Event saat Dari Tanggal (startInput) berubah
+                    startInput.addEventListener('change', function() {
+                        if (this.value) {
+                            endInput.min = this.value;
+                            // Jika tanggal akhir lebih awal dari tanggal mulai, otomatis sesuaikan tanggal akhir
+                            if (endInput.value && endInput.value < this.value) {
+                                endInput.value = this.value;
+                            }
+                        } else {
+                            endInput.removeAttribute('min');
+                        }
+                    });
+
+                    // Event saat Sampai Tanggal (endInput) berubah
+                    endInput.addEventListener('change', function() {
+                        if (this.value) {
+                            startInput.max = this.value;
+                            // Jika tanggal mulai melebihi tanggal akhir, otomatis sesuaikan tanggal mulai
+                            if (startInput.value && startInput.value > this.value) {
+                                startInput.value = this.value;
+                            }
+                        } else {
+                            startInput.removeAttribute('max');
+                        }
+                    });
+
+                    // Validasi saat form disubmit
+                    form.addEventListener('submit', function(e) {
+                        if (startInput.value && endInput.value) {
+                            if (startInput.value > endInput.value) {
+                                e.preventDefault();
+                                alert('Perhatian: "Dari Tanggal" tidak boleh lebih besar dari "Sampai Tanggal"!');
+                                endInput.focus();
+                                return false;
+                            }
+                        }
+                    });
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initDateRangeRestrictions);
+            } else {
+                initDateRangeRestrictions();
+            }
         })();
     </script>
 
