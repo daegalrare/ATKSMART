@@ -127,7 +127,7 @@
     </div>
 
     <!-- POP OUT DIALOG BOX (MODAL TAMBAH AKUN) -->
-    <div id="account-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 {{ $errors->any() ? '' : 'hidden' }}" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div id="account-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 {{ ($errors->any() && !old('_method')) ? '' : 'hidden' }}" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
         <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
@@ -297,7 +297,7 @@
     </div>
 
     <!-- POP OUT DIALOG BOX (MODAL EDIT AKUN) -->
-    <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 hidden" aria-labelledby="edit-modal-title" role="dialog" aria-modal="true">
+    <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 {{ ($errors->any() && old('_method') === 'PUT') ? '' : 'hidden' }}" aria-labelledby="edit-modal-title" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
         <div id="edit-modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
 
@@ -324,9 +324,10 @@
             </div>
 
             <!-- Form -->
-            <form id="edit-form" action="" method="POST" class="p-6 space-y-4" onsubmit="return validatePhoneOnSubmit('edit_no_telepon','phone-hint-edit')">
+            <form id="edit-form" action="{{ (old('_method') === 'PUT' && old('edit_id')) ? url('/account/' . old('edit_id')) : '' }}" method="POST" class="p-6 space-y-4" onsubmit="return validatePhoneOnSubmit('edit_no_telepon','phone-hint-edit')">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="edit_id" id="edit_id" value="{{ old('edit_id') }}">
 
                 <!-- Nama Lengkap -->
                 <div>
@@ -337,10 +338,16 @@
                         type="text" 
                         name="nama_akun" 
                         id="edit_nama_akun" 
+                        value="{{ old('_method') === 'PUT' ? old('nama_akun') : '' }}"
                         placeholder="Contoh: Budi Santoso"
-                        class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
+                        class="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition {{ (old('_method') === 'PUT' && $errors->has('nama_akun')) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200' }}"
                         required
                     >
+                    @if(old('_method') === 'PUT')
+                        @error('nama_akun')
+                            <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                    @endif
                 </div>
 
                 <!-- Email & No Telepon Grid -->
@@ -353,10 +360,16 @@
                             type="email" 
                             name="email_akun" 
                             id="edit_email_akun" 
+                            value="{{ old('_method') === 'PUT' ? old('email_akun') : '' }}"
                             placeholder="nama@email.com"
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
+                            class="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition {{ (old('_method') === 'PUT' && $errors->has('email_akun')) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200' }}"
                             required
                         >
+                        @if(old('_method') === 'PUT')
+                            @error('email_akun')
+                                <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                            @enderror
+                        @endif
                     </div>
 
                     <div>
@@ -367,16 +380,22 @@
                             type="text" 
                             name="no_telepon" 
                             id="edit_no_telepon" 
+                            value="{{ old('_method') === 'PUT' ? old('no_telepon') : '' }}"
                             placeholder="08xxxxxxxxxx"
                             inputmode="numeric"
                             pattern="^08\d{9,10}$"
                             minlength="11"
                             maxlength="12"
                             oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition"
+                            class="w-full px-4 py-2.5 bg-slate-50 border rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition {{ (old('_method') === 'PUT' && $errors->has('no_telepon')) ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200' }}"
                             required
                         >
                         <p id="phone-hint-edit" class="text-[11px] mt-1 text-rose-500 font-semibold hidden"></p>
+                        @if(old('_method') === 'PUT')
+                            @error('no_telepon')
+                                <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                            @enderror
+                        @endif
                     </div>
                 </div>
 
@@ -540,6 +559,7 @@
             const cancelEditBtn = document.getElementById('btn-cancel-edit-modal');
 
             function openEditModal(btn) {
+                document.getElementById('edit_id').value = btn.dataset.id || '';
                 document.getElementById('edit_nama_akun').value = btn.dataset.nama || '';
                 document.getElementById('edit_email_akun').value = btn.dataset.email || '';
                 document.getElementById('edit_no_telepon').value = btn.dataset.telepon || '';
