@@ -235,9 +235,9 @@
                         </div>
 
                         <!-- Bottom X-axis Dates -->
-                        <div id="purple-card-labels" class="flex items-center justify-between text-xs sm:text-sm font-bold text-white/90 px-1 relative z-10">
+                        <div id="purple-card-labels" class="flex items-center justify-between text-[11px] sm:text-xs font-bold text-white/90 px-0.5 relative z-10 gap-1 overflow-hidden">
                             @foreach (($purpleData['months_6']['labels'] ?? $sparklineLabels) as $sLabel)
-                                <span>{{ $sLabel }}</span>
+                                <span class="whitespace-nowrap text-center">{{ $sLabel }}</span>
                             @endforeach
                         </div>
 
@@ -862,7 +862,7 @@
                     purpleChart.update();
 
                     if (purpleLabelsEl && purpleSelected.labels) {
-                        purpleLabelsEl.innerHTML = purpleSelected.labels.map(l => `<span>${l}</span>`).join('');
+                        purpleLabelsEl.innerHTML = purpleSelected.labels.map(l => `<span class="whitespace-nowrap text-center">${l}</span>`).join('');
                     }
                 }
 

@@ -36,16 +36,13 @@ class DashboardController extends Controller
 
         // 2. Data Periode Waktu (Hari Ini, Seminggu Terakhir, 1 Bulan Terakhir, 6 Bulan Terakhir, 1 Tahun Terakhir)
 
-        // A. Hari Ini (Slot Jam Operasional 08:00 - 22:00)
+        // A. Hari Ini (Slot Jam Operasional 08.00 - 22.00)
         $jamSlots = [
-            ['label' => '08:00', 'start' => 8, 'end' => 9],
-            ['label' => '10:00', 'start' => 10, 'end' => 11],
-            ['label' => '12:00', 'start' => 12, 'end' => 13],
-            ['label' => '14:00', 'start' => 14, 'end' => 15],
-            ['label' => '16:00', 'start' => 16, 'end' => 17],
-            ['label' => '18:00', 'start' => 18, 'end' => 19],
-            ['label' => '20:00', 'start' => 20, 'end' => 21],
-            ['label' => '22:00', 'start' => 22, 'end' => 23],
+            ['label' => '08.00', 'start' => 0,  'end' => 10], // mencakup pagi s/d jam 10
+            ['label' => '11.00', 'start' => 11, 'end' => 13], // siang 11.00 - 13.59
+            ['label' => '14.00', 'start' => 14, 'end' => 16], // sore 14.00 - 16.59
+            ['label' => '17.00', 'start' => 17, 'end' => 19], // petang 17.00 - 19.59
+            ['label' => '20.00', 'start' => 20, 'end' => 23], // malam 20.00 - tutup
         ];
 
         $todayPenjualan = Penjualan::whereDate('tanggal_penjualan', Carbon::today())->get();
@@ -79,7 +76,7 @@ class DashboardController extends Controller
             $semingguPendapatan[] = (float) $sum;
         }
 
-        // C. 1 Bulan Terakhir (4 Rentang Minggu)
+        // C. 1 Bulan Terakhir (4 Rentang Minggu yang Ringkas & Rapi)
         $sebulanLabels = [];
         $sebulanPenjualan = [];
         $sebulanPendapatan = [];
@@ -88,7 +85,12 @@ class DashboardController extends Controller
             $startW = Carbon::today()->subDays(($w * 7) + 6)->startOfDay();
             $endW = Carbon::today()->subDays($w * 7)->endOfDay();
 
-            $sebulanLabels[] = $startW->translatedFormat('d M') . ' - ' . $endW->translatedFormat('d M');
+            // Format ringkas: jika bulan sama "15–21 Okt", jika beda bulan "29 Okt–4 Nov"
+            if ($startW->month === $endW->month) {
+                $sebulanLabels[] = $startW->format('j') . '–' . $endW->translatedFormat('j M');
+            } else {
+                $sebulanLabels[] = $startW->translatedFormat('j M') . '–' . $endW->translatedFormat('j M');
+            }
 
             $count = Penjualan::whereBetween('tanggal_penjualan', [$startW, $endW])->count();
             $sum = Penjualan::whereBetween('tanggal_penjualan', [$startW, $endW])->sum('total_bayar');
