@@ -126,6 +126,7 @@
                             <th class="py-3.5 px-6">Satuan</th>
                             <th class="py-3.5 px-6">Harga Beli</th>
                             <th class="py-3.5 px-6">Harga Jual</th>
+                            <th class="py-3.5 px-6">Terakhir Diubah</th>
                             @else
                             <th class="py-3.5 px-6">Harga Jual</th>
                             <th class="py-3.5 px-6">Dihapus Pada</th>
@@ -308,6 +309,23 @@
                                     Rp {{ number_format($item->harga_jual ?? 0, 0, ',', '.') }}
                                 </td>
 
+                                <!-- Terakhir Diubah -->
+                                <td class="py-4 px-6 whitespace-nowrap">
+                                    @php
+                                        $lastModified = $item->updated_at ?? $item->created_at;
+                                    @endphp
+                                    @if($lastModified)
+                                        <div class="text-xs font-semibold text-slate-700">
+                                            {{ $lastModified->locale('id')->translatedFormat('d M Y') }}
+                                        </div>
+                                        <div class="text-[11px] text-slate-400 font-normal">
+                                            {{ $lastModified->format('H.i') }} WIB &bull; {{ $lastModified->locale('id')->diffForHumans() }}
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-slate-400">-</span>
+                                    @endif
+                                </td>
+
                                 <!-- Tombol Aksi -->
                                 <td class="py-4 px-6 text-center">
                                     <div class="flex items-center justify-center gap-2">
@@ -352,7 +370,7 @@
                             @endif
                         @empty
                             <tr>
-                                <td colspan="7" class="py-12 text-center text-slate-500">
+                                <td colspan="{{ $showTrash ? 5 : 8 }}" class="py-12 text-center text-slate-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -20,19 +20,20 @@ class ProductController extends Controller
             ->leftJoin('categories', 'product.id_kategori', '=', 'categories.id_kategori')
             ->select('product.*');
 
-        if ($showTrash) {
-            $query->onlyTrashed();
-        }
-
         $query->when($search, function ($q, $search) {
                 $q->where(function ($q2) use ($search) {
                     $q2->where('product.nama_produk', 'like', "%{$search}%")
                        ->orWhere('product.kode_produk', 'like', "%{$search}%")
                        ->orWhere('categories.nama_kategori', 'like', "%{$search}%");
                 });
-            })
-            ->orderByRaw('CASE WHEN categories.nama_kategori IS NULL THEN 1 ELSE 0 END, categories.nama_kategori ASC')
-            ->orderBy('product.nama_produk', 'asc');
+            });
+
+        if ($showTrash) {
+            $query->onlyTrashed()->orderBy('product.deleted_at', 'desc');
+        } else {
+            $query->orderByRaw('COALESCE(product.updated_at, product.created_at) DESC')
+                  ->orderBy('product.id_produk', 'desc');
+        }
 
         $products  = $query->paginate(15)->withQueryString();
         $categories = Category::query()->orderBy('nama_kategori', 'asc')->get();
