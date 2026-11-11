@@ -388,6 +388,17 @@
                     </div>
                 @endif
 
+                @if (session('info'))
+                    <div class="mb-6 p-4 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 text-xs font-semibold flex items-center gap-2.5 animate-fadeIn">
+                        <div class="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center shrink-0 text-sky-600">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <span>{{ session('info') }}</span>
+                    </div>
+                @endif
+
                 @if (session('error'))
                     <div class="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center gap-2.5 animate-fadeIn">
                         <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0 text-amber-600">

@@ -97,6 +97,7 @@
                                             title="Hapus akun"
                                             data-id="{{ $item->id_akun }}"
                                             data-nama="{{ $item->nama_akun }}"
+                                            data-email="{{ $item->email_akun }}"
                                         >
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -520,6 +521,57 @@
         </div>
     </div>
 
+    <!-- POP OUT DIALOG BOX (MODAL KONFIRMASI HAPUS AKUN SENDIRI DENGAN PERINGATAN LOGOUT OTOMATIS) -->
+    <div id="self-delete-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop Blur Overlay -->
+        <div id="self-delete-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"></div>
+
+        <!-- Dialog Box Container -->
+        <div class="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all z-10">
+            <!-- Icon & Body -->
+            <div class="p-6 text-center">
+                <div class="w-14 h-14 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center mx-auto mb-4 text-rose-500 shadow-xs">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-1">Hapus Akun Sendiri?</h3>
+                <p class="text-sm text-slate-500 mb-1">Anda akan menghapus akun yang sedang aktif:</p>
+                <p id="self-delete-nama-target" class="text-sm font-semibold text-rose-600 mb-3">-</p>
+
+                <div class="p-3.5 bg-amber-50/90 rounded-2xl border border-amber-200 text-xs text-amber-900 font-medium mb-3 text-left flex items-start gap-2.5">
+                    <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>Peringatan: Ini adalah akun yang sedang Anda gunakan. Setelah akun ini dihapus, Anda akan <strong>logout secara otomatis</strong> dari sistem.</span>
+                </div>
+                <p class="text-xs text-slate-400">Tindakan ini tidak dapat dibatalkan.</p>
+            </div>
+
+            <!-- Tombol Batal / Hapus & Logout -->
+            <div class="flex border-t border-slate-100">
+                <button 
+                    id="btn-cancel-self-delete" 
+                    type="button" 
+                    class="flex-1 py-3.5 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition cursor-pointer rounded-bl-3xl"
+                >
+                    Tidak, Batal
+                </button>
+                <div class="w-px bg-slate-100"></div>
+                <form id="self-delete-form" action="" method="POST" class="flex-1">
+                    @csrf
+                    @method('DELETE')
+                    <button 
+                        type="submit" 
+                        class="w-full py-3.5 text-sm font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 transition cursor-pointer rounded-br-3xl"
+                    >
+                        Ya, Hapus & Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- POP OUT DIALOG BOX (KONFIRMASI LOGOUT KARENA UBAH ROLE AKUN SENDIRI) -->
     <div id="role-logout-modal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 hidden" role="dialog" aria-modal="true">
         <!-- Backdrop Blur Overlay -->
@@ -746,10 +798,28 @@
             const cancelDeleteBtn = document.getElementById('btn-cancel-delete');
             const deleteNamaEl = document.getElementById('delete-nama-target');
 
+            // ── MODAL HAPUS AKUN SENDIRI ──────────────────────────
+            const selfDeleteModal = document.getElementById('self-delete-modal');
+            const selfDeleteForm = document.getElementById('self-delete-form');
+            const selfDeleteBackdrop = document.getElementById('self-delete-backdrop');
+            const cancelSelfDeleteBtn = document.getElementById('btn-cancel-self-delete');
+            const selfDeleteNamaEl = document.getElementById('self-delete-nama-target');
+
             function openDeleteModal(btn) {
-                deleteNamaEl.textContent = btn.dataset.nama || 'akun ini';
-                deleteForm.action = '/account/' + btn.dataset.id;
-                deleteModal.classList.remove('hidden');
+                const deletingId = btn.dataset.id;
+                const deletingNama = btn.dataset.nama || 'akun ini';
+                const deletingEmail = (btn.dataset.email || '').toLowerCase();
+                const isSelf = (deletingId == currentAccountId || (deletingEmail && deletingEmail === currentAccountEmail));
+
+                if (isSelf) {
+                    if (selfDeleteNamaEl) selfDeleteNamaEl.textContent = deletingNama;
+                    if (selfDeleteForm) selfDeleteForm.action = '/account/' + deletingId;
+                    if (selfDeleteModal) selfDeleteModal.classList.remove('hidden');
+                } else {
+                    deleteNamaEl.textContent = deletingNama;
+                    deleteForm.action = '/account/' + deletingId;
+                    deleteModal.classList.remove('hidden');
+                }
                 document.body.classList.add('overflow-hidden');
             }
 
@@ -758,11 +828,18 @@
                 document.body.classList.remove('overflow-hidden');
             }
 
+            function closeSelfDeleteModal() {
+                if (selfDeleteModal) selfDeleteModal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+
             document.querySelectorAll('.btn-hapus').forEach(btn => {
                 btn.addEventListener('click', () => openDeleteModal(btn));
             });
             if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeDeleteModal);
             if (deleteBackdrop) deleteBackdrop.addEventListener('click', closeDeleteModal);
+            if (cancelSelfDeleteBtn) cancelSelfDeleteBtn.addEventListener('click', closeSelfDeleteModal);
+            if (selfDeleteBackdrop) selfDeleteBackdrop.addEventListener('click', closeSelfDeleteModal);
 
             // ── ESCAPE KEY ────────────────────────────────────────
             document.addEventListener('keydown', function(e) {
@@ -770,6 +847,8 @@
                     if (modal && !modal.classList.contains('hidden')) closeModal();
                     if (editModal && !editModal.classList.contains('hidden')) closeEditModal();
                     if (deleteModal && !deleteModal.classList.contains('hidden')) closeDeleteModal();
+                    if (selfDeleteModal && !selfDeleteModal.classList.contains('hidden')) closeSelfDeleteModal();
+                    if (roleLogoutModal && !roleLogoutModal.classList.contains('hidden')) closeRoleLogoutModal();
                 }
             });
         })();

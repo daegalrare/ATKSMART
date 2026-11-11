@@ -111,14 +111,28 @@ class AccountController extends Controller
         return redirect()->route('account.index')->with('success', 'Akun pengguna berhasil diperbarui!');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(Request $request, $id): RedirectResponse
     {
         $akun = Account::find($id);
+        $isSelf = false;
+
         if ($akun) {
+            $isSelf = (
+                session('account_id') == $akun->id_akun ||
+                strtolower(session('account_email', '')) === strtolower($akun->email_akun)
+            );
             $akun->delete();
         }
 
         $this->reorderAccountIds();
+
+        if ($isSelf) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->with('success', 'Akun Anda berhasil dihapus. Anda telah logout otomatis dari sistem.');
+        }
 
         return redirect()->route('account.index')->with('success', 'Akun pengguna berhasil dihapus!');
     }
